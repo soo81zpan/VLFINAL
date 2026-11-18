@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -5,238 +6,683 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>사천성 - 나만의 이미지 패</title>
 <style>
-:root{font-family:system-ui,-apple-system,'Apple SD Gothic Neo',sans-serif;color-scheme:dark}
-*{box-sizing:border-box}body{margin:0;background:#14252c;color:#f6faf9;display:flex;justify-content:center}
-main{width:min(100%,920px);padding:20px 12px}h1{text-align:center;font-size:clamp(22px,4vw,32px);margin:8px 0 18px}
-.stats,.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
-.stat{background:#263d45;padding:12px;border-radius:11px;text-align:center;flex:1;min-width:80px}
-.stat small{display:block;color:#b5cbd0;margin-bottom:5px}
-button,select{border:0;border-radius:9px;padding:10px 12px;font-size:14px;cursor:pointer}
-.controls button,.controls select{background:#d6ebe6;color:#163238}
-#board{--cols:10;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));--tile-ratio:1;gap:5px;padding:10px;background:#263d45;border-radius:14px}
-.tile{position:relative;aspect-ratio:var(--tile-ratio);background:#fff8e9;border:2px solid #d7d0c1;display:grid;place-items:center;border-radius:7px;padding:2px;min-width:0;overflow:hidden;color:#39474a}
-.tile img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;user-select:none}
-.tile.selected{background:#8ddbd0;border-color:#fff;outline:2px solid #8ddbd0}
-.tile.hint{background:#f7d875;border-color:#ffac32;outline:2px solid #ffac32}
-.tile.empty{visibility:hidden}.tile:disabled{cursor:default}
-#message{text-align:center;min-height:24px;color:#b9ded6;line-height:1.5}
-.note{color:#9db8bf;font-size:12px;text-align:center}
-@media(max-width:500px){main{padding:12px 5px}#board{gap:3px;padding:5px}.tile{border-width:1px;border-radius:4px;padding:1px}.stat{padding:9px 5px}}
+:root {
+  font-family: system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #14252c;
+  color: #f6faf9;
+  display: flex;
+  justify-content: center;
+}
+main {
+  width: min(100%, 920px);
+  padding: 10px 12px;
+}
+h1 {
+  text-align: center;
+  font-size: clamp(20px, 3vw, 26px);
+  margin: 2px 0 8px;
+}
+.stats, .controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 7px 0;
+}
+.stat {
+  background: #263d45;
+  padding: 7px;
+  border-radius: 11px;
+  text-align: center;
+  flex: 1;
+  min-width: 80px;
+}
+.stat small {
+  display: block;
+  color: #b5cbd0;
+  margin-bottom: 5px;
+}
+button, select {
+  border: 0;
+  border-radius: 9px;
+  padding: 8px 11px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.controls button, .controls select {
+  background: #d6ebe6;
+  color: #163238;
+}
+#board {
+  --cols: 8;
+  --tile-width: 76px;
+  --tile-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--tile-width));
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+  gap: 4px;
+  padding: 8px;
+  background: #263d45;
+  border-radius: 14px;
+}
+.tile {
+  position: relative;
+  aspect-ratio: var(--tile-ratio);
+  background: #fff8e9;
+  border: 2px solid #d7d0c1;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  padding: 2px;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  color: #39474a;
+}
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+.tile.selected {
+  background: #8ddbd0;
+  border-color: #fff;
+  outline: 2px solid #8ddbd0;
+}
+.tile.hint {
+  background: #f7d875;
+  border-color: #ffac32;
+  outline: 2px solid #ffac32;
+}
+.tile.empty { visibility: hidden; }
+.tile:disabled { cursor: default; }
+#message {
+  text-align: center;
+  min-height: 22px;
+  margin: 8px 0 4px;
+  color: #b9ded6;
+  line-height: 1.4;
+}
+.note {
+  color: #9db8bf;
+  font-size: 11px;
+  text-align: center;
+  margin: 4px 0;
+}
+@media(max-width:500px) {
+  main { padding: 7px 5px; }
+  #board { gap: 3px; padding: 5px; }
+  .tile {
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 1px;
+  }
+  .stat { padding: 9px 5px; }
+}
 </style>
 </head>
+
 <body>
 <main>
 <h1>사천성 퍼즐</h1>
+
 <div class="stats">
- <div class="stat"><small>점수</small><strong id="score">0</strong></div>
- <div class="stat"><small>남은 시간</small><strong id="time">05:00</strong></div>
- <div class="stat"><small>남은 패</small><strong id="remaining">0</strong></div>
+  <div class="stat">
+    <small>점수</small>
+    <strong id="score">0</strong>
+  </div>
+  <div class="stat">
+    <small>남은 시간</small>
+    <strong id="time">05:00</strong>
+  </div>
+  <div class="stat">
+    <small>남은 패</small>
+    <strong id="remaining">0</strong>
+  </div>
 </div>
+
 <div class="controls">
- <select id="difficulty" aria-label="난이도">
-  <option value="easy">쉬움</option><option value="normal" selected>보통</option><option value="hard">어려움</option>
- </select>
- <button type="button" id="newBtn">새 게임</button>
- <button type="button" id="hintBtn">힌트</button>
- <button type="button" id="shuffleBtn">섞기</button>
- <button type="button" id="pauseBtn">일시정지</button>
+  <select id="difficulty" aria-label="난이도">
+    <option value="easy">쉬움</option>
+    <option value="normal" selected>보통</option>
+    <option value="hard">어려움</option>
+  </select>
+  <button type="button" id="newBtn">새 게임</button>
+  <button type="button" id="hintBtn">힌트</button>
+  <button type="button" id="shuffleBtn">섞기</button>
+  <button type="button" id="pauseBtn">일시정지</button>
 </div>
+
 <div id="board" aria-label="게임판"></div>
-<p id="message" role="status">같은 이미지의 패 두 개를 선택하세요.</p>
-<p class="note">이미지 파일: images/tile01.jpg ~ images/tile18.jpg · 첫 번째 JPG의 원본 비율을 기준으로 패 크기를 자동 조정합니다. 이미지가 잘리지 않습니다.</p>
+
+<p id="message" role="status">
+  같은 이미지의 패 두 개를 선택하세요.
+</p>
+<p class="note">
+  JPG 18종 · 원본 비율 유지 · 한 화면 맞춤
+</p>
 </main>
+
 <script>
 'use strict';
-// 이 부분을 수정하면 내 JPG 파일을 게임 패로 사용할 수 있습니다.
-// 직접 디자인한 JPG 18개만 사용합니다. 부족한 패 수는 동일 디자인을 반복합니다.
-const TILE_IMAGES = Array.from({length:18},(_,i)=>
-  `images/tile${String(i+1).padStart(2,'0')}.jpg`
+
+// 직접 디자인한 JPG 패 18종
+const TILE_IMAGES = Array.from(
+  {length:18},
+  (_,i) =>
+    `images/tile${String(i+1).padStart(2,'0')}.jpg`
 );
-const LEVELS={
-  easy:{rows:6,cols:8,time:420},
-  normal:{rows:8,cols:10,time:300},
-  hard:{rows:10,cols:12,time:240}
+
+// 난이도별 패 개수 및 게임 시간
+const LEVELS = {
+  easy:   {rows:4,cols:6,time:300},
+  normal: {rows:5,cols:8,time:300},
+  hard:   {rows:6,cols:10,time:300}
 };
-let rows=0,cols=0,board=[],score=0,seconds=0;
-let selected=null,paused=false,finished=false,timer=null,hints=[];
+
+let rows=0, cols=0, board=[];
+let score=0, seconds=0;
+let selected=null;
+let paused=false, finished=false;
+let timer=null, hints=[];
+
 const $=id=>document.getElementById(id);
-// JPG 첫 번째 이미지의 고유 가로·세로 비율을 패 크기에 적용합니다.
-// 이미지별 비율이 다를 때도 object-fit:contain으로 원본을 자르지 않습니다.
+
+// JPG 원본 비율 자동 적용
 function detectTileRatio(){
   const probe=new Image();
+
   probe.onload=()=>{
     if(!probe.naturalWidth||!probe.naturalHeight)return;
+
     const ratio=probe.naturalWidth/probe.naturalHeight;
-    // 예: 450×600 이미지 → aspect-ratio: 0.75
-    $('board').style.setProperty('--tile-ratio',String(ratio));
+
+    $('board').style.setProperty(
+      '--tile-ratio',
+      String(ratio)
+    );
+    fitBoardToScreen();
   };
+
   probe.onerror=()=>{
-    // 이미지가 아직 업로드되지 않았다면 임시 정사각형으로 표시.
-    // JPG 업로드 후 다시 열면 실제 원본 비율이 적용됩니다.
     $('board').style.setProperty('--tile-ratio','1');
+    fitBoardToScreen();
   };
+
   probe.src=TILE_IMAGES[0];
 }
 
+// 게임판을 현재 화면 너비와 높이에 맞게 조절
+function fitBoardToScreen(){
+  if(!rows||!cols)return;
+
+  const root=$('board');
+  const style=getComputedStyle(root);
+
+  const gap=parseFloat(style.columnGap)||0;
+  const rowGap=parseFloat(style.rowGap)||gap;
+
+  const padX=
+    (parseFloat(style.paddingLeft)||0)+
+    (parseFloat(style.paddingRight)||0);
+
+  const padY=
+    (parseFloat(style.paddingTop)||0)+
+    (parseFloat(style.paddingBottom)||0);
+
+  const ratio=
+    parseFloat(style.getPropertyValue('--tile-ratio'))||1;
+
+  const availableWidth=Math.max(
+    0,
+    Math.min(
+      root.parentElement.clientWidth,
+      window.innerWidth-10
+    )
+  );
+
+  const boardTop=root.getBoundingClientRect().top;
+  const availableHeight=Math.max(
+    0,
+    window.innerHeight-boardTop-66
+  );
+
+  const byWidth=
+    (availableWidth-padX-gap*(cols-1))/cols;
+
+  const byHeight=
+    (availableHeight-padY-rowGap*(rows-1))*ratio/rows;
+
+  const size=Math.max(
+    1,
+    Math.min(90,byWidth,byHeight)
+  );
+
+  root.style.setProperty(
+    '--tile-width',
+    size+'px'
+  );
+}
+
+window.addEventListener('resize',fitBoardToScreen);
+
 const index=(r,c)=>r*cols+c;
-const coords=i=>[Math.floor(i/cols),i%cols];
+const coords=i=>[
+  Math.floor(i/cols),
+  i%cols
+];
+
+// 배열 무작위 섞기
 function shuffle(array){
   for(let i=array.length-1;i>0;i--){
-    let j=Math.floor(Math.random()*(i+1));
+    const j=Math.floor(Math.random()*(i+1));
     [array[i],array[j]]=[array[j],array[i]];
   }
   return array;
 }
-// 연결 판정: 경로가 패를 통과하지 않고 최대 두 번 꺾일 수 있음.
-// 게임판 바깥의 빈 한 칸도 통과 가능.
+
+// 사천성 연결 판정
+// 같은 그림이며 최대 2번 꺾이는 경로만 허용
 function canConnect(a,b){
-  if(a===b||board[a]===null||board[a]!==board[b])return false;
+  if(
+    a===b||
+    board[a]===null||
+    board[a]!==board[b]
+  )return false;
+
   const h=rows+2,w=cols+2;
-  const grid=Array.from({length:h},()=>Array(w).fill(null));
-  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)grid[r+1][c+1]=board[index(r,c)];
-  const [ar,ac]=coords(a),[br,bc]=coords(b);
-  const sr=ar+1,sc=ac+1,tr=br+1,tc=bc+1;
-  const dr=[-1,0,1,0],dc=[0,1,0,-1];
-  const best=Array.from({length:h},()=>Array.from({length:w},()=>[3,3,3,3]));
+
+  const grid=Array.from(
+    {length:h},
+    ()=>Array(w).fill(null)
+  );
+
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      grid[r+1][c+1]=board[index(r,c)];
+    }
+  }
+
+  const [ar,ac]=coords(a);
+  const [br,bc]=coords(b);
+
+  const sr=ar+1,sc=ac+1;
+  const tr=br+1,tc=bc+1;
+
+  const dr=[-1,0,1,0];
+  const dc=[0,1,0,-1];
+
+  const best=Array.from(
+    {length:h},
+    ()=>Array.from(
+      {length:w},
+      ()=>[3,3,3,3]
+    )
+  );
+
   const queue=[];
-  for(let d=0;d<4;d++){best[sr][sc][d]=0;queue.push([sr,sc,d,0]);}
+
+  for(let d=0;d<4;d++){
+    best[sr][sc][d]=0;
+    queue.push([sr,sc,d,0]);
+  }
+
   let head=0;
+
   while(head<queue.length){
     const [r,c,d,turns]=queue[head++];
+
     if(turns!==best[r][c][d])continue;
     if(r===tr&&c===tc)return true;
+
     for(let nd=0;nd<4;nd++){
-      const nt=turns+(nd===d?0:1),nr=r+dr[nd],nc=c+dc[nd];
-      if(nt>2||nr<0||nr>=h||nc<0||nc>=w)continue;
-      if(grid[nr][nc]!==null&&!(nr===tr&&nc===tc))continue;
+      const nt=turns+(nd===d?0:1);
+      const nr=r+dr[nd];
+      const nc=c+dc[nd];
+
+      if(
+        nt>2||
+        nr<0||nr>=h||
+        nc<0||nc>=w
+      )continue;
+
+      if(
+        grid[nr][nc]!==null&&
+        !(nr===tr&&nc===tc)
+      )continue;
+
       if(nt>=best[nr][nc][nd])continue;
+
       best[nr][nc][nd]=nt;
       queue.push([nr,nc,nd,nt]);
     }
   }
+
   return false;
 }
+
+// 연결 가능한 패 찾기
 function findPair(){
   for(let a=0;a<board.length;a++){
     if(board[a]===null)continue;
-    for(let b=a+1;b<board.length;b++)if(board[a]===board[b]&&canConnect(a,b))return[a,b];
+
+    for(let b=a+1;b<board.length;b++){
+      if(
+        board[a]===board[b]&&
+        canConnect(a,b)
+      )return[a,b];
+    }
   }
   return null;
 }
-function message(txt){$('message').textContent=txt;}
+
+function message(txt){
+  $('message').textContent=txt;
+}
+
+// 게임판 표시
 function render(){
-  const root=$('board');root.style.setProperty('--cols',cols);
+  const root=$('board');
+
+  root.style.setProperty('--cols',cols);
+
   const frag=document.createDocumentFragment();
+
   board.forEach((id,i)=>{
-    const button=document.createElement('button');button.type='button';button.className='tile';
-    if(id===null)button.classList.add('empty');
-    if(selected===i)button.classList.add('selected');
-    if(hints.includes(i))button.classList.add('hint');
+    const button=document.createElement('button');
+
+    button.type='button';
+    button.className='tile';
+
+    if(id===null)
+      button.classList.add('empty');
+
+    if(selected===i)
+      button.classList.add('selected');
+
+    if(hints.includes(i))
+      button.classList.add('hint');
+
     if(id!==null){
       const img=document.createElement('img');
-      img.src=TILE_IMAGES[id];img.alt=`디자인 패 ${id+1}`;
+
+      img.src=TILE_IMAGES[id];
+      img.alt=`디자인 패 ${id+1}`;
       img.draggable=false;
-      img.onerror=()=>{img.alt=`이미지 없음: ${TILE_IMAGES[id]}`;};
+
+      img.onerror=()=>{
+        img.alt=`이미지 없음: ${TILE_IMAGES[id]}`;
+      };
+
       button.append(img);
     }
-    button.disabled=id===null||paused||finished;
-    button.addEventListener('click',()=>pick(i));frag.append(button);
+
+    button.disabled=
+      id===null||paused||finished;
+
+    button.addEventListener(
+      'click',
+      ()=>pick(i)
+    );
+
+    frag.append(button);
   });
+
   root.replaceChildren(frag);
-  $('score').textContent=score.toLocaleString('ko-KR');
-  $('remaining').textContent=board.filter(v=>v!==null).length;
-  $('time').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
+
+  $('score').textContent=
+    score.toLocaleString('ko-KR');
+
+  $('remaining').textContent=
+    board.filter(v=>v!==null).length;
+
+  $('time').textContent=
+    `${String(Math.floor(seconds/60)).padStart(2,'0')}:`+
+    `${String(seconds%60).padStart(2,'0')}`;
 }
+
+// 게임 종료
 function finish(win){
-  finished=true;clearInterval(timer);timer=null;
-  message(win?'축하합니다! 모든 패를 제거했습니다.':'시간이 종료되었습니다. 다시 도전하세요.');render();
+  finished=true;
+  clearInterval(timer);
+  timer=null;
+
+  message(
+    win
+    ? '축하합니다! 모든 패를 제거했습니다.'
+    : '시간이 종료되었습니다. 다시 도전하세요.'
+  );
+
+  render();
 }
+
+// 패 선택 및 제거
 function pick(i){
   if(paused||finished||board[i]===null)return;
+
   hints=[];
-  if(selected===null){selected=i;render();return;}
-  if(selected===i){selected=null;render();return;}
+
+  if(selected===null){
+    selected=i;
+    render();
+    return;
+  }
+
+  if(selected===i){
+    selected=null;
+    render();
+    return;
+  }
+
   if(canConnect(selected,i)){
-    board[selected]=null;board[i]=null;score+=100;
+    board[selected]=null;
+    board[i]=null;
+    score+=100;
+
     message('정답! +100점');
-    if(board.every(v=>v===null)){selected=null;finish(true);return;}
+
+    if(board.every(v=>v===null)){
+      selected=null;
+      finish(true);
+      return;
+    }
+
     if(!findPair()){
       selected=null;
       shuffleBoard(true);
       return;
     }
-  }else message('연결할 수 없는 패입니다.');
-  selected=null;render();
+  }else{
+    message('연결할 수 없는 패입니다.');
+  }
+
+  selected=null;
+  render();
 }
+
+// 패 섞기
 function shuffleBoard(automatic=false){
   if(paused||finished)return;
-  const indices=board.flatMap((v,i)=>v===null?[]:[i]);
+
+  const indices=board.flatMap(
+    (v,i)=>v===null?[]:[i]
+  );
+
   const values=indices.map(i=>board[i]);
+
   if(indices.length<2)return;
-  // 재배치 후 반드시 최소 하나의 연결 가능한 쌍을 확보한다.
+
   let possible=false;
+
   for(let attempt=0;attempt<600;attempt++){
-    shuffle(values);indices.forEach((i,k)=>board[i]=values[k]);
-    if(findPair()){possible=true;break;}
+    shuffle(values);
+
+    indices.forEach(
+      (i,k)=>board[i]=values[k]
+    );
+
+    if(findPair()){
+      possible=true;
+      break;
+    }
   }
+
   if(!possible){
-    message('유효한 패 배치를 찾지 못했습니다. 새 게임을 시작합니다.');
-    newGame();return;
+    message('유효한 배치를 찾지 못했습니다.');
+    newGame();
+    return;
   }
-  selected=null;hints=[];
-  if(!automatic)score=Math.max(0,score-50);
-  message(automatic?'연결 가능한 패가 없어 자동으로 섞었습니다.':'패를 섞었습니다. -50점');render();
+
+  selected=null;
+  hints=[];
+
+  if(!automatic)
+    score=Math.max(0,score-50);
+
+  message(
+    automatic
+    ? '연결 가능한 패가 없어 자동으로 섞었습니다.'
+    : '패를 섞었습니다. -50점'
+  );
+
+  render();
 }
+
+// 힌트
 function showHint(){
   if(paused||finished)return;
+
   let pair=findPair();
-  if(!pair){shuffleBoard(true);pair=findPair();}
+
+  if(!pair){
+    shuffleBoard(true);
+    pair=findPair();
+  }
+
   if(!pair)return;
-  hints=pair;selected=null;score=Math.max(0,score-30);
-  message('노란색으로 표시된 패를 확인하세요. -30점');render();
+
+  hints=pair;
+  selected=null;
+
+  score=Math.max(0,score-30);
+
+  message('노란색 패를 확인하세요. -30점');
+  render();
 }
+
+// 일시정지
 function togglePause(){
   if(finished)return;
+
   paused=!paused;
-  $('pauseBtn').textContent=paused?'계속하기':'일시정지';
-  message(paused?'일시정지 중입니다.':'게임을 계속합니다.');render();
+
+  $('pauseBtn').textContent=
+    paused?'계속하기':'일시정지';
+
+  message(
+    paused
+    ? '일시정지 중입니다.'
+    : '게임을 계속합니다.'
+  );
+
+  render();
 }
+
+// 새 게임 시작
 function newGame(){
   clearInterval(timer);
+
   const config=LEVELS[$('difficulty').value];
-  rows=config.rows;cols=config.cols;seconds=config.time;
-  score=0;selected=null;paused=false;finished=false;hints=[];
+
+  rows=config.rows;
+  cols=config.cols;
+  seconds=config.time;
+
+  score=0;
+  selected=null;
+  paused=false;
+  finished=false;
+  hints=[];
+
   $('pauseBtn').textContent='일시정지';
+
   const count=rows*cols;
-  // JPG 18종을 사용하고, 난이도별 필요한 수량만큼 4장 단위로 반복합니다.
+
   board=[];
+
+  // JPG 18종을 필요한 패 수만큼 4장씩 반복
   for(let i=0;i<count/4;i++){
     const imageId=i%TILE_IMAGES.length;
-    board.push(imageId,imageId,imageId,imageId);
+
+    board.push(
+      imageId,imageId,imageId,imageId
+    );
   }
+
   shuffle(board);
-  // 전체가 채워진 초기 판에서 최소 한 쌍이 바로 연결 가능하도록 보장.
-  // 같은 종류 2장을 인접한 칸으로 옮겨 놓는다.
+
+  // 최소 하나의 연결 가능한 쌍 확보
   if(!findPair()){
-    const match=board.findIndex((v,i)=>i>0&&v===board[0]);
-    if(match>=0)[board[1],board[match]]=[board[match],board[1]];
+    const match=board.findIndex(
+      (v,i)=>i>0&&v===board[0]
+    );
+
+    if(match>=0){
+      [board[1],board[match]]=
+        [board[match],board[1]];
+    }
   }
-  message('같은 이미지의 패 두 개를 선택하세요.');render();
+
+  message('같은 이미지의 패 두 개를 선택하세요.');
+
+  render();
+  fitBoardToScreen();
+
   timer=setInterval(()=>{
     if(paused||finished)return;
+
     seconds=Math.max(0,seconds-1);
-    if(seconds===0)finish(false);else{
-      const m=String(Math.floor(seconds/60)).padStart(2,'0');
-      const s=String(seconds%60).padStart(2,'0');
+
+    if(seconds===0){
+      finish(false);
+    }else{
+      const m=String(
+        Math.floor(seconds/60)
+      ).padStart(2,'0');
+
+      const s=String(
+        seconds%60
+      ).padStart(2,'0');
+
       $('time').textContent=`${m}:${s}`;
     }
   },1000);
 }
+
+// 버튼 연결
 $('newBtn').addEventListener('click',newGame);
 $('hintBtn').addEventListener('click',showHint);
-$('shuffleBtn').addEventListener('click',()=>shuffleBoard(false));
-$('pauseBtn').addEventListener('click',togglePause);
-$('difficulty').addEventListener('change',newGame);
+$('shuffleBtn').addEventListener(
+  'click',()=>shuffleBoard(false)
+);
+$('pauseBtn').addEventListener(
+  'click',togglePause
+);
+$('difficulty').addEventListener(
+  'change',newGame
+);
+
+// 실행
 detectTileRatio();
 newGame();
 </script>
