@@ -7,2128 +7,1930 @@
 <title>Pattern Connect | 사천성</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+:root{
+ font-family:-apple-system,BlinkMacSystemFont,
+ "Apple SD Gothic Neo",sans-serif;
+ color:#222;
 }
 
-:root {
-  font-family: -apple-system, BlinkMacSystemFont,
-    "Apple SD Gothic Neo", sans-serif;
-  color: #222;
+body{margin:0;background:#fff}
+button,select{font:inherit;cursor:pointer}
+button:disabled{opacity:.35;cursor:default}
+[hidden]{display:none!important}
+.screen{min-height:100dvh}
+
+/* =========================
+   HOME SCREEN
+========================= */
+
+#home{
+ background:#eae8e9;
+ position:relative;
+ overflow:hidden;
+ height:100dvh;
+ min-height:450px;
 }
 
-body {
-  margin: 0;
-  background: #fff;
+/* 그래픽 그룹 중앙 정렬 */
+.home-scene{
+ position:absolute;
+ left:50%;
+ top:37%;
+ width:min(94vw,1040px,calc(100dvh * 1.5));
+ aspect-ratio:848/490;
+ transform:translate(-50%,-50%);
+ transform-origin:center;
+ overflow:visible;
+ pointer-events:none;
 }
 
-button, select {
-  font: inherit;
-  cursor: pointer;
+.motif{
+ position:absolute;
+ width:var(--w);
+ height:auto;
+ left:var(--x);
+ top:var(--y);
+ translate:-50% -50%;
+ transform-origin:center;
+ transform:rotate(var(--angle,0deg));
+ transition:transform .16s cubic-bezier(.15,.85,.25,1);
+ pointer-events:none;
+ user-select:none;
 }
 
-button:disabled {
-  opacity: .35;
-  cursor: default;
+/* 타이틀 + 버튼 하단 중앙 */
+.home-menu{
+ position:absolute;
+ z-index:100;
+ left:50%;
+ bottom:4%;
+ transform:translateX(-50%);
+ width:min(92vw,440px);
+ text-align:center;
+ padding:12px 0;
+ background:transparent;
 }
 
-[hidden] {
-  display: none !important;
+.kicker{
+ font-size:10px;
+ letter-spacing:3px;
+ color:#777;
 }
 
-.screen {
-  min-height: 100dvh;
+.home-menu h1{
+ font-weight:500;
+ font-size:clamp(27px,4vw,42px);
+ letter-spacing:-1.5px;
+ margin:10px 0;
 }
 
-/* =====================================
-   1 DEPTH — HOME SCREEN
-===================================== */
-
-#home {
-  background: #eae8e9;
-  position: relative;
-  overflow: hidden;
-  height: 100dvh;
-  min-height: 450px;
-}
-
-/* 전체 그래픽 위치와 축소 비율 */
-.home-scene {
-  position: absolute;
-  left: 40%;
-  top: 43%;
-  width: min(100vw, calc(100dvh * 848 / 490));
-  aspect-ratio: 848 / 490;
-  transform: translate(-50%, -50%) scale(.80);
-  transform-origin: center;
-  overflow: visible;
-  pointer-events: none;
-}
-
-/* 독립 그래픽 */
-.motif {
-  position: absolute;
-  width: var(--w);
-  height: auto;
-  left: var(--x);
-  top: var(--y);
-  translate: -50% -50%;
-  transform-origin: center center;
-  transform: rotate(var(--angle, 0deg));
-  transition: transform .16s cubic-bezier(.15,.85,.25,1);
-  pointer-events: none;
-  user-select: none;
-}
-
-/* 우측 하단 타이틀과 버튼 */
-.home-menu {
-  position: absolute;
-  z-index: 100;
-  right: 4.5%;
-  bottom: 7%;
-  left: auto;
-  top: auto;
-  transform: none;
-  width: min(34vw,410px);
-  text-align: right;
-  padding: 12px 0;
-  background: transparent;
-  border-radius: 0;
-  backdrop-filter: none;
-}
-
-.kicker {
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: #777;
-}
-
-.home-menu h1 {
-  font-weight: 500;
-  font-size: clamp(27px,4vw,42px);
-  letter-spacing: -1.5px;
-  margin: 10px 0;
-}
-
-.home-menu p {
-  font-size: 12px;
-  color: #666;
-  margin: 0 0 20px;
+.home-menu p{
+ font-size:12px;
+ color:#666;
+ margin:0 0 20px;
 }
 
 .home-actions,
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.modal-actions{
+ display:flex;
+ justify-content:center;
+ gap:10px;
 }
 
-.home-menu .home-actions {
-  justify-content: flex-end;
+.pill{
+ border:1px solid #282828;
+ border-radius:30px;
+ padding:12px 23px;
+ background:transparent;
+ color:#222;
+ font-size:13px;
 }
 
-.pill {
-  border: 1px solid #282828;
-  border-radius: 30px;
-  padding: 12px 23px;
-  background: transparent;
-  color: #222;
-  font-size: 13px;
+.pill.dark{
+ background:#222;
+ color:white;
 }
 
-.pill.dark {
-  background: #222;
-  color: #fff;
+.pill:hover{opacity:.75}
+
+/* =========================
+   GAME SCREEN
+========================= */
+
+#game{
+ height:100dvh;
+ min-height:440px;
+ display:flex;
+ flex-direction:column;
+ padding:12px clamp(8px,3vw,28px) 15px;
+ max-width:1300px;
+ margin:auto;
 }
 
-.pill:hover {
-  opacity: .75;
+.game-header{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ flex:none;
+ min-height:44px;
 }
 
-/* =====================================
-   2 DEPTH — GAME SCREEN
-===================================== */
-
-#game {
-  height: 100dvh;
-  min-height: 440px;
-  display: flex;
-  flex-direction: column;
-  padding: 12px clamp(8px,3vw,28px) 15px;
-  max-width: 1300px;
-  margin: auto;
+.iconbtn{
+ border:0;
+ background:transparent;
+ padding:9px 10px;
+ color:#222;
+ font-size:20px;
 }
 
-.game-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex: none;
-  min-height: 44px;
+.game-heading{
+ text-align:center;
+ flex:none;
+ margin:1px 0 9px;
 }
 
-.iconbtn {
-  border: 0;
-  background: transparent;
-  padding: 9px 10px;
-  color: #222;
-  font-size: 20px;
+.game-heading h2{
+ font-size:24px;
+ font-weight:500;
+ margin:4px 0;
 }
 
-.game-heading {
-  text-align: center;
-  flex: none;
-  margin: 1px 0 9px;
+.game-heading p{
+ font-size:11px;
+ color:#888;
+ margin:0;
 }
 
-.game-heading h2 {
-  font-size: 24px;
-  font-weight: 500;
-  margin: 4px 0;
+.stats{
+ display:flex;
+ justify-content:center;
+ gap:clamp(12px,4vw,38px);
+ margin:7px 0;
+ flex:none;
+ text-align:center;
 }
 
-.game-heading p {
-  font-size: 11px;
-  color: #888;
-  margin: 0;
+.stats small{
+ display:block;
+ color:#999;
+ font-size:10px;
+ margin-bottom:3px;
 }
 
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: clamp(12px,4vw,38px);
-  margin: 7px 0;
-  flex: none;
-  text-align: center;
+.stats strong{
+ font-size:15px;
+ font-weight:500;
+ font-variant-numeric:tabular-nums;
 }
 
-.stats small {
-  display: block;
-  color: #999;
-  font-size: 10px;
-  margin-bottom: 3px;
+.game-area{
+ flex:1;
+ min-height:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:7px 0;
 }
 
-.stats strong {
-  font-size: 15px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
+.board{
+ position:relative;
+ display:grid;
+ grid-template-columns:
+ repeat(var(--cols),var(--tile-width));
+ gap:var(--gap);
+ width:max-content;
+ max-width:100%;
+ margin:auto;
 }
 
-.game-area {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 0;
+.tile{
+ width:var(--tile-width);
+ aspect-ratio:var(--ratio);
+ padding:0;
+ border:0;
+ background:none;
+ display:block;
+ position:relative;
+ transition:transform .15s,opacity .15s;
 }
 
-.board {
-  position: relative;
-  display: grid;
-  grid-template-columns:
-    repeat(var(--cols), var(--tile-width));
-  gap: var(--gap);
-  width: max-content;
-  max-width: 100%;
-  margin: auto;
+.tile img{
+ width:100%;
+ height:100%;
+ object-fit:contain;
+ display:block;
+ user-select:none;
+ pointer-events:none;
 }
 
-.tile {
-  width: var(--tile-width);
-  aspect-ratio: var(--ratio);
-  padding: 0;
-  border: 0;
-  background: none;
-  display: block;
-  position: relative;
-  transition: transform .15s, opacity .15s;
+.tile.selected{
+ outline:2px solid #47a99c;
+ outline-offset:2px;
+ transform:scale(.94);
 }
 
-.tile img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  user-select: none;
-  pointer-events: none;
+.tile.hint{
+ outline:2px solid #e8bb57;
+ outline-offset:2px;
 }
 
-.tile.selected {
-  outline: 2px solid #47a99c;
-  outline-offset: 2px;
-  transform: scale(.94);
+.tile.empty{visibility:hidden}
+
+.route{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ pointer-events:none;
+ overflow:visible;
+ z-index:3;
 }
 
-.tile.hint {
-  outline: 2px solid #e8bb57;
-  outline-offset: 2px;
+.game-footer{text-align:center;flex:none}
+
+#message{
+ font-size:12px;
+ color:#777;
+ margin:3px 0 9px;
+ min-height:17px;
 }
 
-.tile.empty {
-  visibility: hidden;
+.tools{
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:7px;
 }
 
-.route {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-  z-index: 3;
+.tool{
+ background:white;
+ border:1px solid #ddd;
+ border-radius:25px;
+ padding:9px 13px;
+ font-size:12px;
+ color:#222;
 }
 
-.game-footer {
-  text-align: center;
-  flex: none;
+.tool.emphasis{
+ background:#222;
+ border-color:#222;
+ color:white;
 }
 
-#message {
-  font-size: 12px;
-  color: #777;
-  margin: 3px 0 9px;
-  min-height: 17px;
+/* =========================
+   MODAL
+========================= */
+
+.overlay{
+ position:fixed;
+ inset:0;
+ z-index:200;
+ background:rgba(234,232,233,.94);
+ backdrop-filter:blur(9px);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
 }
 
-.tools {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 7px;
+.dialog{
+ width:min(100%,430px);
+ padding:32px 24px;
+ background:white;
+ border-radius:18px;
+ text-align:center;
+ box-shadow:0 12px 50px #00000012;
 }
 
-.tool {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 25px;
-  padding: 9px 13px;
-  font-size: 12px;
-  color: #222;
+.dialog h2{
+ font-weight:500;
+ font-size:26px;
+ margin:12px 0 20px;
 }
 
-.tool.emphasis {
-  background: #222;
-  border-color: #222;
-  color: white;
+.dialog p{
+ font-size:13px;
+ line-height:1.9;
+ color:#666;
+ white-space:pre-line;
 }
 
-/* =====================================
-   3 DEPTH — MODAL
-===================================== */
+.modal-actions{margin-top:25px}
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(234,232,233,.94);
-  backdrop-filter: blur(9px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+ .home-scene{
+  left:50%;
+  top:34%;
+  width:110vw;
+  transform:translate(-50%,-50%);
+ }
+
+ .home-menu{
+  left:50%;
+  bottom:5%;
+  width:min(92vw,350px);
+  text-align:center;
+  padding:8px 0;
+ }
+
+ .home-menu h1{
+  font-size:clamp(26px,7vw,36px);
+ }
+
+ .home-menu p{font-size:11px}
+ .pill{padding:10px 16px}
+ .game-heading h2{font-size:20px}
+ .stats{gap:14px}
+ .tool{font-size:11px;padding:8px 10px}
 }
 
-.dialog {
-  width: min(100%,430px);
-  padding: 32px 24px;
-  background: white;
-  border-radius: 18px;
-  text-align: center;
-  box-shadow: 0 12px 50px #00000012;
-}
-
-.dialog h2 {
-  font-weight: 500;
-  font-size: 26px;
-  margin: 12px 0 20px;
-}
-
-.dialog p {
-  font-size: 13px;
-  line-height: 1.9;
-  color: #666;
-  white-space: pre-line;
-}
-
-.modal-actions {
-  margin-top: 25px;
-}
-
-/* =====================================
-   RESPONSIVE
-===================================== */
-
-@media (max-width:700px) {
-  .home-scene {
-    left: 45%;
-    top: 37%;
-    width: 135vw;
-    transform: translate(-50%,-50%) scale(.78);
-  }
-
-  .home-menu {
-    right: 5%;
-    bottom: 7%;
-    width: min(82vw,350px);
-    text-align: right;
-    padding: 8px 0;
-  }
-
-  .home-menu h1 {
-    font-size: clamp(26px,7vw,36px);
-  }
-
-  .home-menu p {
-    font-size: 11px;
-  }
-
-  .pill {
-    padding: 10px 16px;
-  }
-
-  .game-heading h2 {
-    font-size: 20px;
-  }
-
-  .stats {
-    gap: 14px;
-  }
-
-  .tool {
-    font-size: 11px;
-    padding: 8px 10px;
-  }
-}
-
-@media (prefers-reduced-motion:reduce) {
-  .motif,
-  .tile {
-    transition: none;
-  }
+@media(prefers-reduced-motion:reduce){
+ .motif,.tile{transition:none}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =====================================
+<!-- =========================
      HOME
-===================================== -->
+========================= -->
 
 <section id="home" class="screen">
 
-  <div
-    class="home-scene"
-    id="homeScene"
-    aria-hidden="true">
+ <div
+  class="home-scene"
+  id="homeScene"
+  aria-hidden="true">
+ </div>
+
+ <div class="home-menu">
+  <h1>Pattern Connect</h1>
+
+  <p>
+   Find the same patterns.
+   Connect the moments.
+  </p>
+
+  <div class="home-actions">
+   <button class="pill" id="howBtn">
+    How to Play
+   </button>
+
+   <button class="pill dark" id="startBtn">
+    Start Game
+   </button>
   </div>
-
-  <div class="home-menu">
-    <h1>Pattern Connect</h1>
-
-    <p>
-      Find the same patterns.
-      Connect the moments.
-    </p>
-
-    <div class="home-actions">
-      <button class="pill" id="howBtn">
-        How to Play
-      </button>
-
-      <button class="pill dark" id="startBtn">
-        Start Game
-      </button>
-    </div>
-  </div>
+ </div>
 
 </section>
 
-<!-- =====================================
+<!-- =========================
      GAME
-===================================== -->
+========================= -->
 
 <section id="game" class="screen" hidden>
 
-  <header class="game-header">
+ <header class="game-header">
 
-    <button
-      class="iconbtn"
-      id="homeBtn"
-      aria-label="홈으로">
-      ←
-    </button>
+  <button class="iconbtn" id="homeBtn">
+   ←
+  </button>
 
-    <span class="kicker" id="stageLabel">
-      STAGE 01
-    </span>
+  <span class="kicker" id="stageLabel">
+   STAGE 01
+  </span>
 
-    <button
-      class="iconbtn"
-      id="recordBtn"
-      aria-label="최고 기록">
-      ♡
-    </button>
-  </header>
+  <button class="iconbtn" id="recordBtn">
+   ♡
+  </button>
 
-  <div class="game-heading">
-    <h2>사천성 퍼즐</h2>
-    <p id="groupLabel"></p>
+ </header>
+
+ <div class="game-heading">
+  <h2>사천성 퍼즐</h2>
+  <p id="groupLabel"></p>
+ </div>
+
+ <div class="stats">
+
+  <div>
+   <small>SCORE</small>
+   <strong id="score">0</strong>
   </div>
 
-  <div class="stats">
-
-    <div>
-      <small>SCORE</small>
-      <strong id="score">0</strong>
-    </div>
-
-    <div>
-      <small>TIME</small>
-      <strong id="time">00:00</strong>
-    </div>
-
-    <div>
-      <small>TILES</small>
-      <strong id="remaining">0</strong>
-    </div>
-
-    <div>
-      <small>BEST</small>
-      <strong id="bestScore">—</strong>
-    </div>
-
+  <div>
+   <small>TIME</small>
+   <strong id="time">00:00</strong>
   </div>
 
-  <div class="game-area" id="gameArea">
-
-    <div class="board" id="board">
-      <svg
-        id="route"
-        class="route"
-        aria-hidden="true">
-      </svg>
-    </div>
-
+  <div>
+   <small>TILES</small>
+   <strong id="remaining">0</strong>
   </div>
 
-  <div class="game-footer">
-
-    <p id="message" role="status">
-      같은 패 두 개를 연결하세요.
-    </p>
-
-    <div class="tools">
-
-      <select
-        id="difficulty"
-        class="tool"
-        aria-label="난이도">
-
-        <option value="easy">쉬움</option>
-
-        <option value="normal" selected>
-          보통
-        </option>
-
-        <option value="hard">어려움</option>
-
-      </select>
-
-      <button id="hintBtn" class="tool">
-        힌트
-      </button>
-
-      <button id="shuffleBtn" class="tool">
-        섞기
-      </button>
-
-      <button id="pauseBtn" class="tool">
-        일시정지
-      </button>
-
-      <button id="soundBtn" class="tool">
-        소리 켜짐
-      </button>
-
-      <button
-        id="restartBtn"
-        class="tool emphasis">
-        다시 시작
-      </button>
-
-    </div>
+  <div>
+   <small>BEST</small>
+   <strong id="bestScore">—</strong>
   </div>
+
+ </div>
+
+ <div class="game-area" id="gameArea">
+
+  <div class="board" id="board">
+   <svg id="route" class="route"></svg>
+  </div>
+
+ </div>
+
+ <div class="game-footer">
+
+  <p id="message">
+   같은 패 두 개를 연결하세요.
+  </p>
+
+  <div class="tools">
+
+   <select id="difficulty" class="tool">
+    <option value="easy">쉬움</option>
+    <option value="normal" selected>보통</option>
+    <option value="hard">어려움</option>
+   </select>
+
+   <button id="hintBtn" class="tool">
+    힌트
+   </button>
+
+   <button id="shuffleBtn" class="tool">
+    섞기
+   </button>
+
+   <button id="pauseBtn" class="tool">
+    일시정지
+   </button>
+
+   <button id="soundBtn" class="tool">
+    소리 켜짐
+   </button>
+
+   <button id="restartBtn" class="tool emphasis">
+    다시 시작
+   </button>
+
+  </div>
+ </div>
 
 </section>
 
-<!-- =====================================
+<!-- =========================
      MODAL
-===================================== -->
+========================= -->
 
 <div class="overlay" id="overlay" hidden>
 
-  <div
-    class="dialog"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="dialogTitle">
+ <div class="dialog"
+  role="dialog"
+  aria-modal="true">
 
-    <div
-      class="kicker"
-      id="dialogEyebrow">
-    </div>
+  <div class="kicker" id="dialogEyebrow"></div>
 
-    <h2 id="dialogTitle"></h2>
+  <h2 id="dialogTitle"></h2>
+  <p id="dialogText"></p>
 
-    <p id="dialogText"></p>
+  <div class="modal-actions">
+   <button class="pill" id="dialogSecondary">
+    닫기
+   </button>
 
-    <div class="modal-actions">
-
-      <button
-        class="pill"
-        id="dialogSecondary">
-        닫기
-      </button>
-
-      <button
-        class="pill dark"
-        id="dialogPrimary">
-        확인
-      </button>
-
-    </div>
+   <button class="pill dark" id="dialogPrimary">
+    확인
+   </button>
   </div>
+
+ </div>
 </div>
 
 <script>
 "use strict";
 
-/* =====================================
-   COMMON
-===================================== */
+const $=id=>document.getElementById(id);
 
-const $ = id => document.getElementById(id);
+/* =========================
+   HOME GRAPHICS
 
-/* =====================================
-   HOME GRAPHIC LAYOUT
+   [이미지 번호, X, Y]
+   기준 좌표계 848 × 490
 
-   기준 좌표: 848 × 490
-   [파일 번호, X, Y]
+   기존 숫자 배치도 유지
+   + 빈 공간에 추가 배치
+========================= */
 
-   Home01.png ~ Home15.png
-===================================== */
+const L=[
 
-const HOME_LAYOUT = [
+ // 최상단
+ [4,128,28],
+ [5,170,28],
+ [6,196,28],
+ [8,249,28],
+ [8,260,28],
+ [8,286,28],
+ [9,323,28],
+ [10,363,28],
+ [11,394,28],
 
-  [4,128,28],
-  [5,170,28],
-  [6,196,28],
-  [8,249,28],
-  [8,260,28],
-  [8,286,28],
-  [9,323,28],
-  [10,363,28],
-  [11,394,28],
+ // 상단 그룹
+ [2,79,90],
+ [3,103,90],
+ [7,189,90],
+ [3,222,90],
+ [12,239,90],
+ [12,273,90],
+ [12,287,90],
+ [1,441,77],
+ [2,494,100],
+ [5,632,99],
+ [6,651,89],
+ [11,810,77],
 
-  [2,79,90],
-  [3,103,90],
-  [7,189,90],
-  [3,222,90],
-  [12,239,90],
-  [12,273,90],
-  [12,287,90],
+ // 두 번째 그룹
+ [1,35,144],
+ [13,234,144],
+ [1,276,144],
+ [3,494,123],
+ [7,761,128],
 
-  [1,441,77],
-  [2,494,100],
-  [5,632,99],
-  [6,651,89],
-  [11,810,77],
+ [8,277,186],
+ [8,277,199],
+ [4,556,169],
+ [10,599,169],
+ [10,725,167],
+ [15,761,169],
 
-  [1,35,144],
-  [13,234,144],
-  [1,276,144],
-  [3,494,123],
-  [7,761,128],
+ // 가운데
+ [8,277,248],
+ [14,438,250],
+ [6,598,238],
+ [15,761,238],
 
-  [8,277,186],
-  [8,277,199],
-  [4,556,169],
-  [10,599,169],
-  [10,725,167],
-  [15,761,169],
+ [13,438,275],
+ [3,494,263],
+ [12,494,278],
+ [8,555,294],
+ [8,555,305],
 
-  [8,277,248],
-  [14,438,250],
-  [6,598,238],
-  [15,761,238],
+ [1,441,319],
+ [12,494,318],
+ [12,494,330],
+ [8,555,329],
+ [10,408,345],
 
-  [13,438,275],
-  [3,494,263],
-  [12,494,278],
-  [8,555,294],
-  [8,555,305],
+ // 하단 그룹
+ [8,277,365],
+ [4,372,368],
+ [9,557,367],
+ [7,619,365],
 
-  [1,441,319],
-  [12,494,318],
-  [12,494,330],
-  [8,555,329],
-  [10,408,345],
+ [10,556,406],
+ [11,557,436],
+ [2,587,436],
+ [2,671,436],
+ [13,705,436],
 
-  [8,277,365],
-  [4,372,368],
-  [9,557,367],
-  [7,619,365],
+ /* =====================
+    추가 그래픽 18개
+    원본 그래픽 재사용
+ ===================== */
 
-  [10,556,406],
-  [11,557,436],
-  [2,587,436],
-  [2,671,436],
-  [13,705,436]
+ // 좌측 상단 여백
+ [8,66,57],
+ [12,57,195],
+
+ // 좌측 중간
+ [6,105,345],
+ [8,150,417],
+ [3,212,323],
+ [9,185,403],
+
+ // 가운데 빈 공간
+ [8,306,441],
+ [12,333,408],
+ [5,465,403],
+ [8,485,466],
+
+ // 상단 작은 장식
+ [3,340,63],
+
+ // 우측 상단
+ [8,710,44],
+ [12,735,80],
+
+ // 우측 중간과 아래
+ [4,792,257],
+ [8,810,337],
+ [3,772,400],
+ [6,791,467],
+
+ // 좌측 하단
+ [8,96,471]
 
 ];
 
-/* =====================================
-   HOME GRAPHIC SIZE
+/* 각 PNG 기본 너비 */
 
-   개별 PNG 표시 너비
-===================================== */
-
-const HOME_WIDTH = {
-  1:74,
-  2:48,
-  3:32,
-  4:44,
-  5:53,
-  6:59,
-  7:71,
-  8:15,
-  9:52,
-  10:58,
-  11:29,
-  12:18,
-  13:57,
-  14:44,
-  15:68
+const WIDTH={
+ 1:74,
+ 2:48,
+ 3:32,
+ 4:44,
+ 5:53,
+ 6:59,
+ 7:71,
+ 8:15,
+ 9:52,
+ 10:58,
+ 11:29,
+ 12:18,
+ 13:57,
+ 14:44,
+ 15:68
 };
 
-const homeNodes = [];
-const motionTimers = new Set();
+/* =========================
+   HOME OBJECTS
+========================= */
 
-let motionOn = false;
+const homeNodes=[];
+const motionTimers=new Set();
 
-/* =====================================
-   BUILD HOME
-===================================== */
+let motionOn=false;
 
-function buildHome() {
+function buildHome(){
 
-  const fragment = document.createDocumentFragment();
+ const frag=document.createDocumentFragment();
 
-  HOME_LAYOUT.forEach(([n,x,y],i) => {
+ L.forEach(([n,x,y],i)=>{
 
-    const img = document.createElement("img");
+  const img=document.createElement("img");
 
-    img.className = "motif";
-    img.alt = "";
-    img.draggable = false;
+  img.className="motif";
+  img.alt="";
+  img.draggable=false;
 
-    img.src =
-      "images/Home" +
-      String(n).padStart(2,"0") +
-      ".png";
+  img.src=
+   "images/Home"+
+   String(n).padStart(2,"0")+
+   ".png";
 
-    img.style.setProperty(
-      "--x",
-      x / 848 * 100 + "%"
-    );
+  img.style.setProperty(
+   "--x",
+   x/848*100+"%"
+  );
 
-    img.style.setProperty(
-      "--y",
-      y / 490 * 100 + "%"
-    );
+  img.style.setProperty(
+   "--y",
+   y/490*100+"%"
+  );
 
-    img.style.setProperty(
-      "--w",
-      HOME_WIDTH[n] / 848 * 100 + "%"
-    );
+  img.style.setProperty(
+   "--w",
+   WIDTH[n]/848*100+"%"
+  );
 
-    img.style.zIndex = String(i);
-    img.dataset.rotation = "0";
+  img.style.zIndex=String(i);
+  img.dataset.rotation="0";
 
-    fragment.append(img);
-    homeNodes.push(img);
-  });
+  frag.append(img);
+  homeNodes.push(img);
 
-  $("homeScene").append(fragment);
+ });
+
+ $("homeScene").append(frag);
 }
 
-/* =====================================
-   HOME MOTION
-===================================== */
+/* =========================
+   HOME ROTATION MOTION
+========================= */
 
-function stopHomeMotion() {
+function stopHomeMotion(){
 
-  motionOn = false;
+ motionOn=false;
 
-  for(const t of motionTimers) {
-    clearTimeout(t);
-  }
+ for(const t of motionTimers){
+  clearTimeout(t);
+ }
 
-  motionTimers.clear();
+ motionTimers.clear();
 }
 
-function scheduleMotion(img) {
+function scheduleMotion(img){
 
-  if(!motionOn) return;
+ if(!motionOn)return;
 
-  const delay = 850 + Math.random() * 2700;
+ const t=setTimeout(()=>{
 
-  const t = setTimeout(() => {
+  motionTimers.delete(t);
 
-    motionTimers.delete(t);
+  if(!motionOn)return;
 
-    if(!motionOn) return;
+  const angles=[90,180,270,360];
 
-    const angles = [90,180,270,360];
+  const add=angles[
+   Math.floor(Math.random()*4)
+  ];
 
-    const add = angles[
-      Math.floor(Math.random() * angles.length)
-    ];
+  const next=
+   Number(img.dataset.rotation)+add;
 
-    const next =
-      Number(img.dataset.rotation) + add;
+  img.dataset.rotation=next;
 
-    img.dataset.rotation = next;
+  img.style.setProperty(
+   "--angle",
+   next+"deg"
+  );
 
-    img.style.setProperty(
-      "--angle",
-      next + "deg"
-    );
+  scheduleMotion(img);
 
-    scheduleMotion(img);
+ },850+Math.random()*2700);
 
-  }, delay);
-
-  motionTimers.add(t);
+ motionTimers.add(t);
 }
 
-function startHomeMotion() {
+function startHomeMotion(){
 
-  stopHomeMotion();
+ stopHomeMotion();
 
-  if(
-    matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches
-  ) return;
+ if(matchMedia(
+  "(prefers-reduced-motion: reduce)"
+ ).matches)return;
 
-  motionOn = true;
-
-  homeNodes.forEach(scheduleMotion);
+ motionOn=true;
+ homeNodes.forEach(scheduleMotion);
 }
 
-/* =====================================
+/* =========================
    SCREEN TRANSITION
-===================================== */
+========================= */
 
-function openHome() {
+function openHome(){
 
-  clearInterval(tick);
-  clearTimeout(matchTimeout);
+ clearInterval(tick);
+ clearTimeout(matchTimeout);
 
-  tick = null;
-  matchTimeout = null;
+ tick=null;
+ matchTimeout=null;
 
-  $("overlay").hidden = true;
-  $("home").hidden = false;
-  $("game").hidden = true;
+ $("overlay").hidden=true;
+ $("home").hidden=false;
+ $("game").hidden=true;
 
-  paused = false;
-  busy = false;
+ paused=false;
+ busy=false;
 
-  startHomeMotion();
+ startHomeMotion();
 }
 
-function openGame() {
+function openGame(){
 
-  stopHomeMotion();
+ stopHomeMotion();
 
-  $("home").hidden = true;
-  $("game").hidden = false;
+ $("home").hidden=true;
+ $("game").hidden=false;
 
-  stage = 1;
-  newGame();
+ stage=1;
+ newGame();
 
-  requestAnimationFrame(fitBoard);
+ requestAnimationFrame(fitBoard);
 }
 
-/* =====================================
-   MODAL SYSTEM
-===================================== */
+/* =========================
+   MODAL
+========================= */
 
-let modalPrimary = null;
-let modalSecondary = null;
+let modalPrimary=null;
+let modalSecondary=null;
 
 function modal(
-  eyebrow,
-  title,
-  text,
-  primary = "확인",
-  secondary = "닫기",
-  onPrimary = null,
-  onSecondary = null
-) {
+ eyebrow,
+ title,
+ text,
+ primary="확인",
+ secondary="닫기",
+ onPrimary=null,
+ onSecondary=null
+){
 
-  $("dialogEyebrow").textContent = eyebrow;
-  $("dialogTitle").textContent = title;
-  $("dialogText").textContent = text;
+ $("dialogEyebrow").textContent=eyebrow;
+ $("dialogTitle").textContent=title;
+ $("dialogText").textContent=text;
 
-  $("dialogPrimary").textContent = primary;
-  $("dialogSecondary").textContent = secondary;
+ $("dialogPrimary").textContent=primary;
+ $("dialogSecondary").textContent=secondary;
 
-  modalPrimary = onPrimary;
-  modalSecondary = onSecondary;
+ modalPrimary=onPrimary;
+ modalSecondary=onSecondary;
 
-  $("overlay").hidden = false;
+ $("overlay").hidden=false;
 }
 
-function closeModal() {
-  $("overlay").hidden = true;
+function closeModal(){
+ $("overlay").hidden=true;
 }
 
-$("dialogPrimary").onclick = () => {
+$("dialogPrimary").onclick=()=>{
 
-  const fn = modalPrimary;
+ const fn=modalPrimary;
+ closeModal();
 
-  closeModal();
-
-  if(fn) fn();
+ if(fn)fn();
 };
 
-$("dialogSecondary").onclick = () => {
+$("dialogSecondary").onclick=()=>{
 
-  const fn = modalSecondary;
+ const fn=modalSecondary;
+ closeModal();
 
-  closeModal();
-
-  if(fn) fn();
+ if(fn)fn();
 };
 
-/* =====================================
-   HOW TO PLAY
-===================================== */
+/* HOW TO PLAY */
 
-$("howBtn").onclick = () => {
+$("howBtn").onclick=()=>modal(
+ "HOW TO PLAY",
+ "게임 방법",
+ "① 같은 디자인의 패 두 개를 선택하세요.\n"+
+ "② 최대 두 번 꺾이는 경로로 연결해야 합니다.\n"+
+ "③ 제한 시간 안에 모든 패를 제거하세요.\n"+
+ "④ 홀수 스테이지는 01~09, 짝수 스테이지는 10~18 이미지를 사용합니다.",
+ "게임 시작",
+ "닫기",
+ openGame
+);
 
-  modal(
-    "HOW TO PLAY",
-    "게임 방법",
-    "① 같은 디자인의 패 두 개를 선택하세요.\n" +
-    "② 다른 패를 통과하지 않고 최대 두 번 꺾이는 경로로 연결해야 합니다.\n" +
-    "③ 제한 시간 안에 모든 패를 제거하면 다음 스테이지로 이동합니다.\n" +
-    "④ 홀수 스테이지는 01~09, 짝수 스테이지는 10~18 이미지를 사용합니다.",
-    "게임 시작",
-    "닫기",
-    openGame
-  );
+$("startBtn").onclick=openGame;
+$("homeBtn").onclick=openHome;
+
+/* =========================
+   GAME CONFIG
+========================= */
+
+const LEVELS={
+ easy:{rows:4,cols:6,time:360},
+ normal:{rows:5,cols:8,time:300},
+ hard:{rows:6,cols:10,time:240}
 };
 
-$("startBtn").onclick = openGame;
-$("homeBtn").onclick = openHome;
+let stage=1;
+let rows=0;
+let cols=0;
+let board=[];
 
-/* =====================================
-   GAME SETTINGS
-===================================== */
+let score=0;
+let seconds=0;
+let initialTime=0;
 
-const LEVELS = {
+let selected=null;
+let hints=[];
 
-  easy: {
-    rows:4,
-    cols:6,
-    time:360
-  },
+let paused=false;
+let finished=false;
+let busy=false;
 
-  normal: {
-    rows:5,
-    cols:8,
-    time:300
-  },
+let tick=null;
+let matchTimeout=null;
 
-  hard: {
-    rows:6,
-    cols:10,
-    time:240
-  }
+let ratio=184/223;
+let soundOn=true;
+let audio=null;
 
-};
+const imgPath=n=>
+ "images/tile"+
+ String(n).padStart(2,"0")+
+ ".jpg";
 
-let stage = 1;
+const groupForStage=n=>
+ Array.from(
+  {length:9},
+  (_,i)=>i+(n%2?1:10)
+ );
 
-let rows = 0;
-let cols = 0;
+const formatTime=s=>
+ String(Math.floor(s/60)).padStart(2,"0")+
+ ":"+
+ String(s%60).padStart(2,"0");
 
-let board = [];
+const ix=(r,c)=>r*cols+c;
 
-let score = 0;
-let seconds = 0;
-let initialTime = 0;
-
-let selected = null;
-let hints = [];
-
-let paused = false;
-let finished = false;
-let busy = false;
-
-let tick = null;
-let matchTimeout = null;
-
-let ratio = 184/223;
-
-let soundOn = true;
-let audio = null;
-
-/* =====================================
-   IMAGE PATH
-===================================== */
-
-function imgPath(n) {
-
-  return (
-    "images/tile" +
-    String(n).padStart(2,"0") +
-    ".jpg"
-  );
-}
-
-/* =====================================
-   STAGE IMAGE GROUPS
-
-   홀수: 01~09
-   짝수: 10~18
-===================================== */
-
-function groupForStage(n) {
-
-  return Array.from(
-    {length:9},
-    (_,i) => i + (n % 2 ? 1 : 10)
-  );
-}
-
-/* =====================================
-   UTILITIES
-===================================== */
-
-function formatTime(s) {
-
-  return (
-    String(Math.floor(s/60)).padStart(2,"0") +
-    ":" +
-    String(s%60).padStart(2,"0")
-  );
-}
-
-const ix = (r,c) => r*cols+c;
-
-const rc = i => [
-  Math.floor(i/cols),
-  i%cols
+const rc=i=>[
+ Math.floor(i/cols),
+ i%cols
 ];
 
-function shuffled(a) {
+function shuffled(a){
 
-  for(let i=a.length-1;i>0;i--) {
+ for(let i=a.length-1;i>0;i--){
 
-    const j = Math.floor(
-      Math.random()*(i+1)
-    );
+  const j=Math.floor(Math.random()*(i+1));
 
-    [a[i],a[j]] = [a[j],a[i]];
-  }
+  [a[i],a[j]]=[a[j],a[i]];
+ }
 
-  return a;
+ return a;
 }
 
-function say(s) {
-  $("message").textContent = s;
+function say(s){
+ $("message").textContent=s;
 }
 
-/* =====================================
+/* =========================
    SOUND
-===================================== */
+========================= */
 
-function play(type) {
+function play(type){
 
-  if(!soundOn) return;
+ if(!soundOn)return;
 
-  try {
+ try{
 
-    const AC =
-      window.AudioContext ||
-      window.webkitAudioContext;
+  const AC=
+   window.AudioContext||
+   window.webkitAudioContext;
 
-    if(!AC) return;
+  if(!AC)return;
 
-    if(!audio) {
-      audio = new AC();
-    }
+  if(!audio)audio=new AC();
 
-    if(audio.state === "suspended") {
-      audio.resume();
-    }
-
-    const patterns = {
-      pick:[440],
-      good:[660,880],
-      bad:[210],
-      hint:[560],
-      win:[523,659,784,1046],
-      lose:[350,260]
-    };
-
-    patterns[type].forEach((hz,i) => {
-
-      const t = audio.currentTime+i*.10;
-
-      const osc = audio.createOscillator();
-      const gain = audio.createGain();
-
-      osc.frequency.value = hz;
-      osc.type = "sine";
-
-      gain.gain.setValueAtTime(.0001,t);
-
-      gain.gain.exponentialRampToValueAtTime(
-        .08,t+.01
-      );
-
-      gain.gain.exponentialRampToValueAtTime(
-        .0001,t+.09
-      );
-
-      osc.connect(gain);
-      gain.connect(audio.destination);
-
-      osc.start(t);
-      osc.stop(t+.1);
-    });
-
-  } catch(e) {
-    console.warn(e);
+  if(audio.state==="suspended"){
+   audio.resume();
   }
-}
 
-/* =====================================
-   CONNECTION PATH FINDING
+  const patterns={
+   pick:[440],
+   good:[660,880],
+   bad:[210],
+   hint:[560],
+   win:[523,659,784,1046],
+   lose:[350,260]
+  };
 
-   최대 2회 꺾임
-===================================== */
+  patterns[type].forEach((hz,i)=>{
 
-function pathBetween(a,b) {
+   const t=audio.currentTime+i*.10;
 
-  if(
-    a===b ||
-    board[a]==null ||
-    board[a]!==board[b]
-  ) return null;
+   const osc=audio.createOscillator();
+   const gain=audio.createGain();
 
-  const H = rows+2;
-  const W = cols+2;
+   osc.frequency.value=hz;
+   osc.type="sine";
 
-  const grid = Array.from(
-    {length:H},
-    () => Array(W).fill(null)
-  );
+   gain.gain.setValueAtTime(.0001,t);
 
-  board.forEach((v,i) => {
+   gain.gain.exponentialRampToValueAtTime(
+    .08,t+.01
+   );
 
-    const [r,c] = rc(i);
+   gain.gain.exponentialRampToValueAtTime(
+    .0001,t+.09
+   );
 
-    grid[r+1][c+1] = v;
+   osc.connect(gain);
+   gain.connect(audio.destination);
+
+   osc.start(t);
+   osc.stop(t+.1);
+
   });
 
-  const [ar,ac] = rc(a);
-  const [br,bc] = rc(b);
-
-  const sr = ar+1;
-  const sc = ac+1;
-
-  const tr = br+1;
-  const tc = bc+1;
-
-  const dr = [-1,0,1,0];
-  const dc = [0,1,0,-1];
-
-  const best = Array.from(
-    {length:H},
-    () => Array.from(
-      {length:W},
-      () => [3,3,3,3]
-    )
-  );
-
-  const q = [];
-
-  for(let d=0;d<4;d++) {
-
-    best[sr][sc][d] = 0;
-
-    q.push({
-      r:sr,
-      c:sc,
-      d,
-      t:0,
-      p:[[sr,sc]]
-    });
-  }
-
-  for(let h=0;h<q.length;h++) {
-
-    const s = q[h];
-
-    if(
-      s.t !== best[s.r][s.c][s.d]
-    ) continue;
-
-    if(s.r===tr && s.c===tc) {
-      return s.p;
-    }
-
-    for(let nd=0;nd<4;nd++) {
-
-      const nt =
-        s.t + (nd===s.d ? 0 : 1);
-
-      const nr = s.r+dr[nd];
-      const nc = s.c+dc[nd];
-
-      if(
-        nt>2 ||
-        nr<0 ||
-        nc<0 ||
-        nr>=H ||
-        nc>=W
-      ) continue;
-
-      if(
-        grid[nr][nc]!==null &&
-        !(nr===tr && nc===tc)
-      ) continue;
-
-      if(
-        nt>=best[nr][nc][nd]
-      ) continue;
-
-      best[nr][nc][nd] = nt;
-
-      q.push({
-        r:nr,
-        c:nc,
-        d:nd,
-        t:nt,
-        p:[...s.p,[nr,nc]]
-      });
-    }
-  }
-
-  return null;
+ }catch(e){
+  console.warn(e);
+ }
 }
 
-/* =====================================
-   AVAILABLE PAIR
-===================================== */
+/* =========================
+   PATH FINDING
+========================= */
 
-function availablePair() {
+function pathBetween(a,b){
 
-  for(let a=0;a<board.length;a++) {
+ if(
+  a===b||
+  board[a]==null||
+  board[a]!==board[b]
+ )return null;
 
-    if(board[a]===null) continue;
+ const H=rows+2;
+ const W=cols+2;
 
-    for(let b=a+1;b<board.length;b++) {
+ const grid=Array.from(
+  {length:H},
+  ()=>Array(W).fill(null)
+ );
 
-      if(
-        board[a]===board[b] &&
-        pathBetween(a,b)
-      ) {
-        return [a,b];
-      }
-    }
+ board.forEach((v,i)=>{
+
+  const [r,c]=rc(i);
+  grid[r+1][c+1]=v;
+
+ });
+
+ const [ar,ac]=rc(a);
+ const [br,bc]=rc(b);
+
+ const sr=ar+1;
+ const sc=ac+1;
+ const tr=br+1;
+ const tc=bc+1;
+
+ const dr=[-1,0,1,0];
+ const dc=[0,1,0,-1];
+
+ const best=Array.from(
+  {length:H},
+  ()=>Array.from(
+   {length:W},
+   ()=>[3,3,3,3]
+  )
+ );
+
+ const q=[];
+
+ for(let d=0;d<4;d++){
+
+  best[sr][sc][d]=0;
+
+  q.push({
+   r:sr,c:sc,d,t:0,
+   p:[[sr,sc]]
+  });
+ }
+
+ for(let h=0;h<q.length;h++){
+
+  const s=q[h];
+
+  if(s.t!==best[s.r][s.c][s.d])
+   continue;
+
+  if(s.r===tr&&s.c===tc)
+   return s.p;
+
+  for(let nd=0;nd<4;nd++){
+
+   const nt=s.t+(nd===s.d?0:1);
+   const nr=s.r+dr[nd];
+   const nc=s.c+dc[nd];
+
+   if(
+    nt>2||
+    nr<0||nc<0||
+    nr>=H||nc>=W
+   )continue;
+
+   if(
+    grid[nr][nc]!==null&&
+    !(nr===tr&&nc===tc)
+   )continue;
+
+   if(nt>=best[nr][nc][nd])
+    continue;
+
+   best[nr][nc][nd]=nt;
+
+   q.push({
+    r:nr,c:nc,d:nd,t:nt,
+    p:[...s.p,[nr,nc]]
+   });
   }
+ }
 
-  return null;
+ return null;
 }
 
-/* =====================================
-   SOLVABLE BOARD GENERATION
-===================================== */
+/* =========================
+   FIND PAIR
+========================= */
 
-function buildSolvableBoard(group) {
+function availablePair(){
 
-  const num = rows*cols;
-  const pairs = num/2;
+ for(let a=0;a<board.length;a++){
 
-  const ids = shuffled(
-    Array.from(
-      {length:pairs},
-      (_,i) => group[i%group.length]
-    )
-  );
+  if(board[a]===null)continue;
 
-  for(let attempt=0;attempt<100;attempt++) {
+  for(let b=a+1;b<board.length;b++){
 
-    board = Array(num).fill(null);
+   if(
+    board[a]===board[b]&&
+    pathBetween(a,b)
+   )return[a,b];
 
-    let ok = true;
-
-    for(const id of ids) {
-
-      const empties = shuffled(
-        board.flatMap(
-          (v,i) => v===null ? [i] : []
-        )
-      );
-
-      let added = false;
-
-      for(const a of empties) {
-
-        for(const b of empties) {
-
-          if(a>=b) continue;
-
-          board[a] = id;
-          board[b] = id;
-
-          if(pathBetween(a,b)) {
-            added = true;
-            break;
-          }
-
-          board[a] = null;
-          board[b] = null;
-        }
-
-        if(added) break;
-      }
-
-      if(!added) {
-        ok = false;
-        break;
-      }
-    }
-
-    if(ok) return;
   }
+ }
 
-  // 예비 배치: 인접한 가로 쌍 생성
-  board = Array(num).fill(null);
-
-  let k = 0;
-
-  for(let r=0;r<rows;r++) {
-
-    for(let c=0;c<cols;c+=2) {
-
-      board[ix(r,c)] = ids[k];
-      board[ix(r,c+1)] = ids[k];
-
-      k++;
-    }
-  }
+ return null;
 }
 
-/* =====================================
-   RESPONSIVE GAME BOARD
-===================================== */
+/* =========================
+   BOARD GENERATION
+========================= */
 
-function fitBoard() {
+function buildSolvableBoard(group){
 
-  if(
-    !rows ||
-    !cols ||
-    $("game").hidden
-  ) return;
+ const num=rows*cols;
+ const pairs=num/2;
 
-  const area = $("gameArea");
+ const ids=shuffled(
+  Array.from(
+   {length:pairs},
+   (_,i)=>group[i%group.length]
+  )
+ );
 
-  const W = area.clientWidth;
-  const H = area.clientHeight;
+ for(let attempt=0;attempt<100;attempt++){
 
-  const gap = Math.max(
-    2,
-    Math.min(
-      18,
-      W/(cols*5),
-      H/(rows*5)
+  board=Array(num).fill(null);
+  let ok=true;
+
+  for(const id of ids){
+
+   const empties=shuffled(
+    board.flatMap(
+     (v,i)=>v===null?[i]:[]
     )
-  );
+   );
 
-  const size = Math.max(
-    1,
-    Math.min(
-      106,
-      (W-gap*(cols-1))/cols,
-      (H-gap*(rows-1))*ratio/rows
-    )
-  );
+   let added=false;
 
-  $("board").style.setProperty(
-    "--cols",cols
-  );
+   for(const a of empties){
 
-  $("board").style.setProperty(
-    "--gap",gap+"px"
-  );
+    for(const b of empties){
 
-  $("board").style.setProperty(
-    "--tile-width",size+"px"
-  );
+     if(a>=b)continue;
 
-  $("board").style.setProperty(
-    "--ratio",ratio
-  );
+     board[a]=id;
+     board[b]=id;
+
+     if(pathBetween(a,b)){
+      added=true;
+      break;
+     }
+
+     board[a]=null;
+     board[b]=null;
+    }
+
+    if(added)break;
+   }
+
+   if(!added){
+    ok=false;
+    break;
+   }
+  }
+
+  if(ok)return;
+ }
+
+ // 인접한 동일 패로 예비 배치
+ board=Array(num).fill(null);
+
+ let k=0;
+
+ for(let r=0;r<rows;r++){
+
+  for(let c=0;c<cols;c+=2){
+
+   board[ix(r,c)]=ids[k];
+   board[ix(r,c+1)]=ids[k];
+
+   k++;
+  }
+ }
+}
+
+/* =========================
+   BOARD SIZE
+========================= */
+
+function fitBoard(){
+
+ if(
+  !rows||
+  !cols||
+  $("game").hidden
+ )return;
+
+ const area=$("gameArea");
+
+ const W=area.clientWidth;
+ const H=area.clientHeight;
+
+ const gap=Math.max(
+  2,
+  Math.min(
+   18,
+   W/(cols*5),
+   H/(rows*5)
+  )
+ );
+
+ const size=Math.max(
+  1,
+  Math.min(
+   106,
+   (W-gap*(cols-1))/cols,
+   (H-gap*(rows-1))*ratio/rows
+  )
+ );
+
+ $("board").style.setProperty(
+  "--cols",cols
+ );
+
+ $("board").style.setProperty(
+  "--gap",gap+"px"
+ );
+
+ $("board").style.setProperty(
+  "--tile-width",size+"px"
+ );
+
+ $("board").style.setProperty(
+  "--ratio",ratio
+ );
 }
 
 window.addEventListener("resize",fitBoard);
 
-/* =====================================
-   CONNECTION LINE ANIMATION
-===================================== */
+/* =========================
+   CONNECTION ANIMATION
+========================= */
 
-function clearRoute() {
-  $("route").replaceChildren();
+function clearRoute(){
+ $("route").replaceChildren();
 }
 
-function drawRoute(path) {
+function drawRoute(path){
+
+ clearRoute();
+
+ const root=$("board");
+
+ const first=root.querySelector(".tile");
+
+ if(!first)return;
+
+ const css=getComputedStyle(root);
+
+ const gx=parseFloat(css.columnGap)||0;
+ const gy=parseFloat(css.rowGap)||0;
+
+ const w=first.getBoundingClientRect().width;
+ const h=first.getBoundingClientRect().height;
+
+ const pts=path.map(([r,c])=>[
+  w/2+(c-1)*(w+gx),
+  h/2+(r-1)*(h+gy)
+ ]);
+
+ const points=pts.filter((p,i)=>{
+
+  if(i===0||i===pts.length-1)
+   return true;
+
+  const a=pts[i-1];
+  const b=pts[i+1];
+
+  return(
+   (p[0]-a[0])*(b[1]-p[1])!==
+   (p[1]-a[1])*(b[0]-p[0])
+  );
+ });
+
+ const line=document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "polyline"
+ );
+
+ line.setAttribute(
+  "points",
+  points.map(p=>p.join(",")).join(" ")
+ );
+
+ line.setAttribute("fill","none");
+ line.setAttribute("stroke","#47b5a8");
+ line.setAttribute("stroke-width","3");
+ line.setAttribute("stroke-linecap","round");
+ line.setAttribute("stroke-linejoin","round");
+
+ $("route").append(line);
+
+ const len=Math.max(
+  1,line.getTotalLength()
+ );
+
+ line.animate(
+  [
+   {
+    strokeDasharray:len,
+    strokeDashoffset:len
+   },
+   {
+    strokeDasharray:len,
+    strokeDashoffset:0
+   }
+  ],
+  {
+   duration:250,
+   fill:"forwards"
+  }
+ );
+}
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+ $("board").querySelectorAll(".tile")
+  .forEach(t=>t.remove());
+
+ const frag=document.createDocumentFragment();
+
+ board.forEach((id,i)=>{
+
+  const btn=document.createElement("button");
+
+  btn.className="tile";
+  btn.type="button";
+
+  if(id===null)
+   btn.classList.add("empty");
+
+  if(i===selected)
+   btn.classList.add("selected");
+
+  if(hints.includes(i))
+   btn.classList.add("hint");
+
+  if(id!==null){
+
+   const img=document.createElement("img");
+
+   img.src=imgPath(id);
+   img.alt="패턴 "+id;
+   img.draggable=false;
+
+   btn.append(img);
+  }
+
+  btn.disabled=
+   id===null||busy||paused||finished;
+
+  btn.onclick=()=>pickTile(i);
+
+  frag.append(btn);
+ });
+
+ $("board").insertBefore(
+  frag,$("route")
+ );
+
+ $("stageLabel").textContent=
+  "STAGE "+
+  String(stage).padStart(2,"0");
+
+ $("groupLabel").textContent=
+  stage%2
+  ?"Pattern Collection 01–09"
+  :"Pattern Collection 10–18";
+
+ $("score").textContent=
+  score.toLocaleString("ko-KR");
+
+ $("remaining").textContent=
+  board.filter(v=>v!==null).length;
+
+ $("time").textContent=formatTime(seconds);
+
+ fitBoard();
+}
+
+/* =========================
+   PICK TILE
+========================= */
+
+function pickTile(i){
+
+ if(
+  paused||
+  busy||
+  finished||
+  board[i]===null
+ )return;
+
+ hints=[];
+
+ if(selected===null){
+
+  selected=i;
+  play("pick");
+  render();
+
+  return;
+ }
+
+ if(selected===i){
+
+  selected=null;
+  render();
+
+  return;
+ }
+
+ const a=selected;
+ const path=pathBetween(a,i);
+
+ selected=null;
+
+ if(!path){
+
+  play("bad");
+
+  say("연결할 수 없는 패입니다.");
+
+  render();
+  return;
+ }
+
+ busy=true;
+ score+=100;
+
+ play("good");
+
+ render();
+ drawRoute(path);
+
+ matchTimeout=setTimeout(()=>{
+
+  matchTimeout=null;
+
+  board[a]=null;
+  board[i]=null;
+
+  busy=false;
 
   clearRoute();
 
-  const root = $("board");
-  const first = root.querySelector(".tile");
+  if(board.every(v=>v===null)){
 
-  if(!first) return;
-
-  const css = getComputedStyle(root);
-
-  const gx = parseFloat(
-    css.columnGap
-  ) || 0;
-
-  const gy = parseFloat(
-    css.rowGap
-  ) || 0;
-
-  const w = first.getBoundingClientRect().width;
-  const h = first.getBoundingClientRect().height;
-
-  const pts = path.map(([r,c]) => [
-    w/2+(c-1)*(w+gx),
-    h/2+(r-1)*(h+gy)
-  ]);
-
-  const points = pts.filter((p,i) => {
-
-    if(
-      i===0 ||
-      i===pts.length-1
-    ) return true;
-
-    const a = pts[i-1];
-    const b = pts[i+1];
-
-    return (
-      (p[0]-a[0])*(b[1]-p[1]) !==
-      (p[1]-a[1])*(b[0]-p[0])
-    );
-  });
-
-  const line = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "polyline"
-  );
-
-  line.setAttribute(
-    "points",
-    points.map(p=>p.join(",")).join(" ")
-  );
-
-  line.setAttribute("fill","none");
-  line.setAttribute("stroke","#47b5a8");
-  line.setAttribute("stroke-width","3");
-  line.setAttribute("stroke-linecap","round");
-  line.setAttribute("stroke-linejoin","round");
-
-  $("route").append(line);
-
-  const len = Math.max(
-    1,
-    line.getTotalLength()
-  );
-
-  line.animate(
-    [
-      {
-        strokeDasharray:len,
-        strokeDashoffset:len
-      },
-      {
-        strokeDasharray:len,
-        strokeDashoffset:0
-      }
-    ],
-    {
-      duration:250,
-      fill:"forwards"
-    }
-  );
-}
-
-/* =====================================
-   RENDER GAME
-===================================== */
-
-function render() {
-
-  $("board")
-    .querySelectorAll(".tile")
-    .forEach(t=>t.remove());
-
-  const fragment =
-    document.createDocumentFragment();
-
-  board.forEach((id,i) => {
-
-    const btn = document.createElement("button");
-
-    btn.className = "tile";
-    btn.type = "button";
-
-    if(id===null) {
-      btn.classList.add("empty");
-    }
-
-    if(i===selected) {
-      btn.classList.add("selected");
-    }
-
-    if(hints.includes(i)) {
-      btn.classList.add("hint");
-    }
-
-    if(id!==null) {
-
-      const img = document.createElement("img");
-
-      img.src = imgPath(id);
-      img.alt = "패턴 " + id;
-      img.draggable = false;
-
-      btn.append(img);
-    }
-
-    btn.disabled =
-      id===null ||
-      busy ||
-      paused ||
-      finished;
-
-    btn.onclick = () => pickTile(i);
-
-    fragment.append(btn);
-  });
-
-  $("board").insertBefore(
-    fragment,
-    $("route")
-  );
-
-  $("stageLabel").textContent =
-    "STAGE " +
-    String(stage).padStart(2,"0");
-
-  $("groupLabel").textContent =
-    stage%2
-      ? "Pattern Collection 01–09"
-      : "Pattern Collection 10–18";
-
-  $("score").textContent =
-    score.toLocaleString("ko-KR");
-
-  $("remaining").textContent =
-    board.filter(v=>v!==null).length;
-
-  $("time").textContent =
-    formatTime(seconds);
-
-  fitBoard();
-}
-
-/* =====================================
-   TILE SELECTION
-===================================== */
-
-function pickTile(i) {
-
-  if(
-    paused ||
-    busy ||
-    finished ||
-    board[i]===null
-  ) return;
-
-  hints = [];
-
-  if(selected===null) {
-
-    selected = i;
-
-    play("pick");
-    render();
-
-    return;
+   finish(true);
+   return;
   }
 
-  if(selected===i) {
-
-    selected = null;
-    render();
-
-    return;
-  }
-
-  const a = selected;
-  const path = pathBetween(a,i);
-
-  selected = null;
-
-  if(!path) {
-
-    play("bad");
-
-    say("연결할 수 없는 패입니다.");
-
-    render();
-    return;
-  }
-
-  busy = true;
-  score += 100;
-
-  play("good");
+  say("연결 성공! +100점");
 
   render();
-  drawRoute(path);
 
-  matchTimeout = setTimeout(() => {
+  if(!availablePair()){
+   shuffleTiles(true);
+  }
 
-    matchTimeout = null;
-
-    board[a] = null;
-    board[i] = null;
-
-    busy = false;
-
-    clearRoute();
-
-    if(board.every(v=>v===null)) {
-
-      finish(true);
-      return;
-    }
-
-    say("연결 성공! +100점");
-    render();
-
-    if(!availablePair()) {
-      shuffleTiles(true);
-    }
-
-  },320);
+ },320);
 }
 
-/* =====================================
+/* =========================
    SHUFFLE
-===================================== */
+========================= */
 
-function shuffleTiles(automatic=false) {
+function shuffleTiles(automatic=false){
 
-  if(
-    paused ||
-    busy ||
-    finished
-  ) return;
+ if(paused||busy||finished)return;
 
-  const occupied = board.flatMap(
-    (v,i) => v===null ? [] : [i]
-  );
+ const occupied=board.flatMap(
+  (v,i)=>v===null?[]:[i]
+ );
 
-  const ids = shuffled(
-    occupied.map(i=>board[i])
-  );
+ const ids=shuffled(
+  occupied.map(i=>board[i])
+ );
 
-  const pairIds = [];
-  const counts = new Map();
+ const pairIds=[];
+ const counts=new Map();
 
-  ids.forEach(v => {
-    counts.set(
-      v,
-      (counts.get(v)||0)+1
-    );
-  });
+ ids.forEach(v=>{
+  counts.set(v,(counts.get(v)||0)+1);
+ });
 
-  for(const [id,count] of counts) {
+ for(const [id,count] of counts){
 
-    for(let k=0;k<count/2;k++) {
-      pairIds.push(id);
+  for(let k=0;k<count/2;k++){
+   pairIds.push(id);
+  }
+ }
+
+ const original=[...board];
+ let success=false;
+
+ for(let tries=0;tries<80&&!success;tries++){
+
+  board=original.map(v=>v===null?null:null);
+
+  const order=shuffled([...pairIds]);
+  success=true;
+
+  for(const id of order){
+
+   const empty=shuffled(
+    occupied.filter(i=>board[i]===null)
+   );
+
+   let placed=false;
+
+   for(const a of empty){
+
+    for(const b of empty){
+
+     if(a>=b)continue;
+
+     board[a]=id;
+     board[b]=id;
+
+     if(pathBetween(a,b)){
+      placed=true;
+      break;
+     }
+
+     board[a]=null;
+     board[b]=null;
     }
+
+    if(placed)break;
+   }
+
+   if(!placed){
+    success=false;
+    break;
+   }
   }
+ }
 
-  const emptyOriginal =
-    board.map(v=>v===null);
-
-  let success = false;
-
-  for(
-    let tries=0;
-    tries<80 && !success;
-    tries++
-  ) {
-
-    board = emptyOriginal.map(()=>null);
-
-    const order = shuffled([...pairIds]);
-
-    success = true;
-
-    for(const id of order) {
-
-      const empty = shuffled(
-        occupied.filter(
-          i=>board[i]===null
-        )
-      );
-
-      let placed = false;
-
-      for(const a of empty) {
-
-        for(const b of empty) {
-
-          if(a>=b) continue;
-
-          board[a] = id;
-          board[b] = id;
-
-          if(pathBetween(a,b)) {
-            placed = true;
-            break;
-          }
-
-          board[a] = null;
-          board[b] = null;
-        }
-
-        if(placed) break;
-      }
-
-      if(!placed) {
-        success = false;
-        break;
-      }
-    }
-  }
-
-  if(!success) {
-
-    board = emptyOriginal.map(()=>null);
-
-    const sh = shuffled(ids);
-
-    occupied.forEach((i,k) => {
-      board[i] = sh[k];
-    });
-  }
-
-  selected = null;
-  hints = [];
-
-  if(!automatic) {
-    score = Math.max(0,score-50);
-  }
-
-  say(
-    success
-      ? (
-          automatic
-            ? "연결할 수 없어 자동으로 섞었습니다."
-            : "패를 섞었습니다. -50점"
-        )
-      : "다시 배치했습니다."
-  );
-
+ if(!success){
+  board=original;
+  say("패를 섞지 못했습니다. 다시 시도하세요.");
   render();
+  return;
+ }
+
+ selected=null;
+ hints=[];
+
+ if(!automatic){
+  score=Math.max(0,score-50);
+ }
+
+ say(
+  automatic
+  ?"연결 가능한 패가 없어 자동으로 섞었습니다."
+  :"패를 섞었습니다. -50점"
+ );
+
+ render();
 }
 
-/* =====================================
+/* =========================
    HINT
-===================================== */
+========================= */
 
-function hint() {
+function hint(){
 
-  if(
-    paused ||
-    busy ||
-    finished
-  ) return;
+ if(paused||busy||finished)return;
 
-  let p = availablePair();
+ let p=availablePair();
 
-  if(!p) {
+ if(!p){
 
-    shuffleTiles(true);
-    p = availablePair();
-  }
+  shuffleTiles(true);
+  p=availablePair();
+ }
 
-  if(!p) {
+ if(!p){
 
-    say("연결 가능한 패를 찾지 못했습니다.");
-    return;
-  }
+  say("연결 가능한 패를 찾지 못했습니다.");
+  return;
+ }
 
-  selected = null;
-  hints = p;
+ selected=null;
+ hints=p;
 
-  score = Math.max(0,score-30);
+ score=Math.max(0,score-30);
 
-  play("hint");
+ play("hint");
 
-  say("표시된 두 패를 연결하세요. -30점");
+ say("표시된 두 패를 연결하세요. -30점");
 
-  render();
+ render();
 }
 
-/* =====================================
-   RECORD STORAGE
-===================================== */
+/* =========================
+   RECORDS
+========================= */
 
-const recordKey = () =>
-  "pattern_connect_v5_" +
-  $("difficulty").value +
-  "_" +
-  stage;
+const recordKey=()=>
+ "pattern_connect_v5_"+
+ $("difficulty").value+
+ "_"+
+ stage;
 
-function readRecord() {
+function readRecord(){
 
-  try {
+ try{
 
-    return JSON.parse(
-      localStorage.getItem(recordKey()) ||
-      "null"
-    );
-
-  } catch {
-    return null;
-  }
-}
-
-function updateBest() {
-
-  const r = readRecord();
-
-  $("bestScore").textContent = r
-    ? r.score.toLocaleString("ko-KR")
-    : "—";
-}
-
-function saveRecord() {
-
-  try {
-
-    const r = readRecord() || {};
-    const time = initialTime-seconds;
-
-    localStorage.setItem(
-      recordKey(),
-      JSON.stringify({
-
-        score:Math.max(
-          r.score||0,
-          score
-        ),
-
-        time:r.time===undefined
-          ?time
-          :Math.min(r.time,time),
-
-        clears:(r.clears||0)+1
-
-      })
-    );
-
-  } catch(e) {
-    console.warn("기록 저장 불가",e);
-  }
-
-  updateBest();
-}
-
-/* =====================================
-   GAME FINISH
-===================================== */
-
-function finish(won) {
-
-  finished = true;
-
-  clearInterval(tick);
-  tick = null;
-
-  render();
-
-  if(won) {
-
-    saveRecord();
-    play("win");
-
-    modal(
-      "STAGE COMPLETE",
-      "Stage " + stage + " Clear!",
-      "점수 " +
-        score.toLocaleString("ko-KR") +
-        "점\n완료 시간 " +
-        formatTime(initialTime-seconds),
-      "다음 스테이지",
-      "다시 플레이",
-      () => {
-        stage++;
-        newGame();
-      },
-      () => newGame()
-    );
-
-  } else {
-
-    play("lose");
-
-    modal(
-      "TIME OVER",
-      "시간 종료",
-      "제한 시간 안에 모든 패를 제거해 보세요.",
-      "다시 시작",
-      "홈으로",
-      () => newGame(),
-      openHome
-    );
-  }
-}
-
-/* =====================================
-   PAUSE
-===================================== */
-
-function pauseGame() {
-
-  if(finished||busy) return;
-
-  paused = !paused;
-
-  $("pauseBtn").textContent =
-    paused ? "계속하기" : "일시정지";
-
-  render();
-
-  if(paused) {
-
-    modal(
-      "PAUSE",
-      "일시정지",
-      "게임 타이머가 멈췄습니다.",
-      "계속하기",
-      "홈으로",
-      resume,
-      openHome
-    );
-  }
-}
-
-function resume() {
-
-  paused = false;
-
-  $("pauseBtn").textContent =
-    "일시정지";
-
-  render();
-}
-
-/* =====================================
-   NEW GAME
-===================================== */
-
-function newGame() {
-
-  clearInterval(tick);
-  clearTimeout(matchTimeout);
-
-  tick = null;
-  matchTimeout = null;
-
-  clearRoute();
-
-  const config =
-    LEVELS[$("difficulty").value];
-
-  rows = config.rows;
-  cols = config.cols;
-
-  initialTime = Math.max(
-    90,
-    config.time-(stage-1)*12
+  return JSON.parse(
+   localStorage.getItem(recordKey())||
+   "null"
   );
 
-  seconds = initialTime;
-
-  score = 0;
-  selected = null;
-  hints = [];
-
-  busy = false;
-  paused = false;
-  finished = false;
-
-  $("pauseBtn").textContent =
-    "일시정지";
-
-  buildSolvableBoard(
-    groupForStage(stage)
-  );
-
-  say("같은 패턴 두 개를 연결하세요.");
-
-  render();
-  updateBest();
-
-  tick = setInterval(() => {
-
-    if(
-      paused ||
-      finished ||
-      busy ||
-      $("game").hidden
-    ) return;
-
-    seconds = Math.max(0,seconds-1);
-
-    $("time").textContent =
-      formatTime(seconds);
-
-    if(!seconds) {
-      finish(false);
-    }
-
-  },1000);
+ }catch{
+  return null;
+ }
 }
 
-/* =====================================
-   BUTTON EVENTS
-===================================== */
+function updateBest(){
 
-$("hintBtn").onclick = hint;
+ const r=readRecord();
 
-$("shuffleBtn").onclick = () =>
-  shuffleTiles(false);
+ $("bestScore").textContent=r
+ ?r.score.toLocaleString("ko-KR")
+ :"—";
+}
 
-$("pauseBtn").onclick = pauseGame;
+function saveRecord(){
 
-$("restartBtn").onclick = newGame;
+ try{
 
-$("soundBtn").onclick = () => {
+  const r=readRecord()||{};
+  const time=initialTime-seconds;
 
-  soundOn = !soundOn;
+  localStorage.setItem(
+   recordKey(),
+   JSON.stringify({
+    score:Math.max(r.score||0,score),
+    time:r.time===undefined
+    ?time
+    :Math.min(r.time,time),
+    clears:(r.clears||0)+1
+   })
+  );
 
-  $("soundBtn").textContent =
-    soundOn
-      ? "소리 켜짐"
-      : "음소거";
+ }catch(e){
+  console.warn("기록 저장 불가",e);
+ }
 
-  if(soundOn) {
-    play("pick");
-  }
-};
+ updateBest();
+}
 
-$("difficulty").onchange = () => {
+/* =========================
+   FINISH
+========================= */
 
-  stage = 1;
-  newGame();
-};
+function finish(won){
 
-/* =====================================
-   RECORD BUTTON
-===================================== */
+ finished=true;
 
-$("recordBtn").onclick = () => {
+ clearInterval(tick);
+ tick=null;
 
-  if(!finished) {
+ render();
 
-    paused = true;
+ if(won){
 
-    $("pauseBtn").textContent =
-      "계속하기";
-
-    render();
-  }
-
-  const r = readRecord();
+  saveRecord();
+  play("win");
 
   modal(
-    "YOUR RECORD",
-    "나의 기록",
-
-    r
-      ? "최고 점수 " +
-        r.score.toLocaleString("ko-KR") +
-        "점\n최단 완료 시간 " +
-        formatTime(r.time) +
-        "\n클리어 횟수 " +
-        r.clears + "회"
-
-      : "아직 완료 기록이 없습니다.",
-
-    "게임으로",
-    "홈으로",
-
-    () => {
-      if(!finished) resume();
-    },
-
-    openHome
+   "STAGE COMPLETE",
+   "Stage "+stage+" Clear!",
+   "점수 "+
+   score.toLocaleString("ko-KR")+
+   "점\n완료 시간 "+
+   formatTime(initialTime-seconds),
+   "다음 스테이지",
+   "다시 플레이",
+   ()=>{
+    stage++;
+    newGame();
+   },
+   ()=>newGame()
   );
+
+ }else{
+
+  play("lose");
+
+  modal(
+   "TIME OVER",
+   "시간 종료",
+   "제한 시간 안에 모든 패를 제거하세요.",
+   "다시 시작",
+   "홈으로",
+   ()=>newGame(),
+   openHome
+  );
+ }
+}
+
+/* =========================
+   PAUSE
+========================= */
+
+function pauseGame(){
+
+ if(finished||busy)return;
+
+ paused=!paused;
+
+ $("pauseBtn").textContent=
+  paused?"계속하기":"일시정지";
+
+ render();
+
+ if(paused){
+
+  modal(
+   "PAUSE",
+   "일시정지",
+   "게임 타이머가 멈췄습니다.",
+   "계속하기",
+   "홈으로",
+   resume,
+   openHome
+  );
+ }
+}
+
+function resume(){
+
+ paused=false;
+
+ $("pauseBtn").textContent="일시정지";
+
+ render();
+}
+
+/* =========================
+   NEW GAME
+========================= */
+
+function newGame(){
+
+ clearInterval(tick);
+ clearTimeout(matchTimeout);
+
+ tick=null;
+ matchTimeout=null;
+
+ clearRoute();
+
+ const config=LEVELS[
+  $("difficulty").value
+ ];
+
+ rows=config.rows;
+ cols=config.cols;
+
+ initialTime=Math.max(
+  90,
+  config.time-(stage-1)*12
+ );
+
+ seconds=initialTime;
+ score=0;
+ selected=null;
+ hints=[];
+ busy=false;
+ paused=false;
+ finished=false;
+
+ $("pauseBtn").textContent="일시정지";
+
+ buildSolvableBoard(
+  groupForStage(stage)
+ );
+
+ say("같은 패턴 두 개를 연결하세요.");
+
+ render();
+ updateBest();
+
+ tick=setInterval(()=>{
+
+  if(
+   paused||
+   finished||
+   busy||
+   $("game").hidden
+  )return;
+
+  seconds=Math.max(0,seconds-1);
+
+  $("time").textContent=formatTime(seconds);
+
+  if(!seconds){
+   finish(false);
+  }
+
+ },1000);
+}
+
+/* =========================
+   BUTTON EVENTS
+========================= */
+
+$("hintBtn").onclick=hint;
+
+$("shuffleBtn").onclick=()=>
+ shuffleTiles(false);
+
+$("pauseBtn").onclick=pauseGame;
+
+$("restartBtn").onclick=newGame;
+
+$("soundBtn").onclick=()=>{
+
+ soundOn=!soundOn;
+
+ $("soundBtn").textContent=
+  soundOn?"소리 켜짐":"음소거";
+
+ if(soundOn){
+  play("pick");
+ }
 };
 
-/* =====================================
-   TILE IMAGE RATIO
-===================================== */
+$("difficulty").onchange=()=>{
 
-const sample = new Image();
-
-sample.onload = () => {
-
-  ratio =
-    sample.naturalWidth /
-    sample.naturalHeight;
-
-  fitBoard();
+ stage=1;
+ newGame();
 };
 
-sample.src = imgPath(1);
+$("recordBtn").onclick=()=>{
 
-/* =====================================
+ if(!finished){
+
+  paused=true;
+
+  $("pauseBtn").textContent="계속하기";
+
+  render();
+ }
+
+ const r=readRecord();
+
+ modal(
+  "YOUR RECORD",
+  "나의 기록",
+  r
+  ?`최고 점수 ${r.score.toLocaleString("ko-KR")}점
+최단 완료 시간 ${formatTime(r.time)}
+클리어 횟수 ${r.clears}회`
+  :"아직 완료 기록이 없습니다.",
+  "게임으로",
+  "홈으로",
+  ()=>{
+   if(!finished)resume();
+  },
+  openHome
+ );
+};
+
+/* =========================
+   IMAGE RATIO
+========================= */
+
+const sample=new Image();
+
+sample.onload=()=>{
+
+ ratio=
+  sample.naturalWidth/
+  sample.naturalHeight;
+
+ fitBoard();
+};
+
+sample.src=imgPath(1);
+
+/* =========================
    INITIALIZE
-===================================== */
+========================= */
 
 buildHome();
 openHome();
