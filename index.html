@@ -7,395 +7,405 @@
 <title>Pattern Connect | 사천성</title>
 
 <style>
-*{box-sizing:border-box}
-
-:root{
-  font-family:-apple-system,BlinkMacSystemFont,
-  "Apple SD Gothic Neo",sans-serif;
-  color:#222;
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  background:#fff;
+:root {
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", sans-serif;
+  color: #222;
 }
 
-button,select{
-  font:inherit;
-  cursor:pointer;
+body {
+  margin: 0;
+  background: #fff;
 }
 
-button:disabled{
-  opacity:.35;
-  cursor:default;
+button, select {
+  font: inherit;
+  cursor: pointer;
 }
 
-[hidden]{
-  display:none!important;
+button:disabled {
+  opacity: .35;
+  cursor: default;
 }
 
-.screen{
-  min-height:100dvh;
+[hidden] {
+  display: none !important;
 }
 
-/* ===================================
-   1 DEPTH — HOME
-=================================== */
-
-#home{
-  background:#eae8e9;
-  position:relative;
-  overflow:hidden;
-  height:100dvh;
-  min-height:450px;
+.screen {
+  min-height: 100dvh;
 }
 
-.home-nav{
-  position:absolute;
-  inset:16px 24px auto;
-  z-index:9;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:11px;
-  letter-spacing:3px;
+/* =====================================
+   1 DEPTH — HOME SCREEN
+===================================== */
+
+#home {
+  background: #eae8e9;
+  position: relative;
+  overflow: hidden;
+  height: 100dvh;
+  min-height: 450px;
 }
 
-.home-mark{
-  font-size:20px;
-  letter-spacing:0;
+/* 전체 그래픽 위치와 축소 비율 */
+.home-scene {
+  position: absolute;
+  left: 40%;
+  top: 43%;
+  width: min(100vw, calc(100dvh * 848 / 490));
+  aspect-ratio: 848 / 490;
+  transform: translate(-50%, -50%) scale(.80);
+  transform-origin: center;
+  overflow: visible;
+  pointer-events: none;
 }
 
-.home-scene{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:min(100vw,calc(100dvh * 848 / 490));
-  aspect-ratio:848/490;
-  transform:translate(-50%,-50%);
-  overflow:visible;
-  pointer-events:none;
+/* 독립 그래픽 */
+.motif {
+  position: absolute;
+  width: var(--w);
+  height: auto;
+  left: var(--x);
+  top: var(--y);
+  translate: -50% -50%;
+  transform-origin: center center;
+  transform: rotate(var(--angle, 0deg));
+  transition: transform .16s cubic-bezier(.15,.85,.25,1);
+  pointer-events: none;
+  user-select: none;
 }
 
-.motif{
-  position:absolute;
-  width:var(--w);
-  height:auto;
-  left:var(--x);
-  top:var(--y);
-  translate:-50% -50%;
-  transform-origin:center center;
-  transform:rotate(var(--angle,0deg));
-  transition:transform .16s cubic-bezier(.15,.85,.25,1);
-  pointer-events:none;
-  user-select:none;
+/* 우측 하단 타이틀과 버튼 */
+.home-menu {
+  position: absolute;
+  z-index: 100;
+  right: 4.5%;
+  bottom: 7%;
+  left: auto;
+  top: auto;
+  transform: none;
+  width: min(34vw,410px);
+  text-align: right;
+  padding: 12px 0;
+  background: transparent;
+  border-radius: 0;
+  backdrop-filter: none;
 }
 
-.home-menu{
-  position:absolute;
-  z-index:8;
-  left:50%;
-  top:53%;
-  transform:translate(-50%,-50%);
-  width:min(88vw,390px);
-  text-align:center;
-  padding:24px 18px;
-  background:rgba(234,232,233,.72);
-  border-radius:18px;
-  backdrop-filter:blur(7px);
+.kicker {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #777;
 }
 
-.kicker{
-  font-size:10px;
-  letter-spacing:3px;
-  color:#777;
+.home-menu h1 {
+  font-weight: 500;
+  font-size: clamp(27px,4vw,42px);
+  letter-spacing: -1.5px;
+  margin: 10px 0;
 }
 
-.home-menu h1{
-  font-weight:500;
-  font-size:clamp(27px,4vw,42px);
-  letter-spacing:-1.5px;
-  margin:10px 0;
-}
-
-.home-menu p{
-  font-size:12px;
-  color:#666;
-  margin:0 0 20px;
+.home-menu p {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 20px;
 }
 
 .home-actions,
-.modal-actions{
-  display:flex;
-  justify-content:center;
-  gap:10px;
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-.pill{
-  border:1px solid #282828;
-  border-radius:30px;
-  padding:12px 23px;
-  background:transparent;
-  color:#222;
-  font-size:13px;
+.home-menu .home-actions {
+  justify-content: flex-end;
 }
 
-.pill.dark{
-  background:#222;
-  color:white;
+.pill {
+  border: 1px solid #282828;
+  border-radius: 30px;
+  padding: 12px 23px;
+  background: transparent;
+  color: #222;
+  font-size: 13px;
 }
 
-/* ===================================
-   2 DEPTH — GAME
-=================================== */
-
-#game{
-  height:100dvh;
-  min-height:440px;
-  display:flex;
-  flex-direction:column;
-  padding:12px clamp(8px,3vw,28px) 15px;
-  max-width:1300px;
-  margin:auto;
+.pill.dark {
+  background: #222;
+  color: #fff;
 }
 
-.game-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex:none;
-  min-height:44px;
+.pill:hover {
+  opacity: .75;
 }
 
-.iconbtn{
-  border:0;
-  background:transparent;
-  padding:9px 10px;
-  color:#222;
-  font-size:20px;
+/* =====================================
+   2 DEPTH — GAME SCREEN
+===================================== */
+
+#game {
+  height: 100dvh;
+  min-height: 440px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px clamp(8px,3vw,28px) 15px;
+  max-width: 1300px;
+  margin: auto;
 }
 
-.game-heading{
-  text-align:center;
-  flex:none;
-  margin:1px 0 9px;
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  min-height: 44px;
 }
 
-.game-heading h2{
-  font-size:24px;
-  font-weight:500;
-  margin:4px 0;
+.iconbtn {
+  border: 0;
+  background: transparent;
+  padding: 9px 10px;
+  color: #222;
+  font-size: 20px;
 }
 
-.game-heading p{
-  font-size:11px;
-  color:#888;
-  margin:0;
+.game-heading {
+  text-align: center;
+  flex: none;
+  margin: 1px 0 9px;
 }
 
-.stats{
-  display:flex;
-  justify-content:center;
-  gap:clamp(12px,4vw,38px);
-  margin:7px 0;
-  flex:none;
-  text-align:center;
+.game-heading h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 4px 0;
 }
 
-.stats small{
-  display:block;
-  color:#999;
-  font-size:10px;
-  margin-bottom:3px;
+.game-heading p {
+  font-size: 11px;
+  color: #888;
+  margin: 0;
 }
 
-.stats strong{
-  font-size:15px;
-  font-weight:500;
-  font-variant-numeric:tabular-nums;
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: clamp(12px,4vw,38px);
+  margin: 7px 0;
+  flex: none;
+  text-align: center;
 }
 
-.game-area{
-  flex:1;
-  min-height:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:7px 0;
+.stats small {
+  display: block;
+  color: #999;
+  font-size: 10px;
+  margin-bottom: 3px;
 }
 
-.board{
-  position:relative;
-  display:grid;
+.stats strong {
+  font-size: 15px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 0;
+}
+
+.board {
+  position: relative;
+  display: grid;
   grid-template-columns:
-    repeat(var(--cols),var(--tile-width));
-  gap:var(--gap);
-  width:max-content;
-  max-width:100%;
-  margin:auto;
+    repeat(var(--cols), var(--tile-width));
+  gap: var(--gap);
+  width: max-content;
+  max-width: 100%;
+  margin: auto;
 }
 
-.tile{
-  width:var(--tile-width);
-  aspect-ratio:var(--ratio);
-  padding:0;
-  border:0;
-  background:none;
-  display:block;
-  position:relative;
-  transition:transform .15s,opacity .15s;
+.tile {
+  width: var(--tile-width);
+  aspect-ratio: var(--ratio);
+  padding: 0;
+  border: 0;
+  background: none;
+  display: block;
+  position: relative;
+  transition: transform .15s, opacity .15s;
 }
 
-.tile img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  user-select:none;
-  pointer-events:none;
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  pointer-events: none;
 }
 
-.tile.selected{
-  outline:2px solid #47a99c;
-  outline-offset:2px;
-  transform:scale(.94);
+.tile.selected {
+  outline: 2px solid #47a99c;
+  outline-offset: 2px;
+  transform: scale(.94);
 }
 
-.tile.hint{
-  outline:2px solid #e8bb57;
-  outline-offset:2px;
+.tile.hint {
+  outline: 2px solid #e8bb57;
+  outline-offset: 2px;
 }
 
-.tile.empty{
-  visibility:hidden;
+.tile.empty {
+  visibility: hidden;
 }
 
-.route{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  overflow:visible;
-  z-index:3;
+.route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 3;
 }
 
-.game-footer{
-  text-align:center;
-  flex:none;
+.game-footer {
+  text-align: center;
+  flex: none;
 }
 
-#message{
-  font-size:12px;
-  color:#777;
-  margin:3px 0 9px;
-  min-height:17px;
+#message {
+  font-size: 12px;
+  color: #777;
+  margin: 3px 0 9px;
+  min-height: 17px;
 }
 
-.tools{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:7px;
+.tools {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
 }
 
-.tool{
-  background:white;
-  border:1px solid #ddd;
-  border-radius:25px;
-  padding:9px 13px;
-  font-size:12px;
-  color:#222;
+.tool {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 9px 13px;
+  font-size: 12px;
+  color: #222;
 }
 
-.tool.emphasis{
-  background:#222;
-  border-color:#222;
-  color:white;
+.tool.emphasis {
+  background: #222;
+  border-color: #222;
+  color: white;
 }
 
-/* ===================================
+/* =====================================
    3 DEPTH — MODAL
-=================================== */
+===================================== */
 
-.overlay{
-  position:fixed;
-  inset:0;
-  z-index:99;
-  background:rgba(234,232,233,.94);
-  backdrop-filter:blur(9px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(234,232,233,.94);
+  backdrop-filter: blur(9px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-.dialog{
-  width:min(100%,430px);
-  padding:32px 24px;
-  background:white;
-  border-radius:18px;
-  text-align:center;
-  box-shadow:0 12px 50px #00000012;
+.dialog {
+  width: min(100%,430px);
+  padding: 32px 24px;
+  background: white;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 12px 50px #00000012;
 }
 
-.dialog h2{
-  font-weight:500;
-  font-size:26px;
-  margin:12px 0 20px;
+.dialog h2 {
+  font-weight: 500;
+  font-size: 26px;
+  margin: 12px 0 20px;
 }
 
-.dialog p{
-  font-size:13px;
-  line-height:1.9;
-  color:#666;
-  white-space:pre-line;
+.dialog p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #666;
+  white-space: pre-line;
 }
 
-.modal-actions{
-  margin-top:25px;
+.modal-actions {
+  margin-top: 25px;
 }
 
-/* 모바일 */
-@media(max-width:600px){
-  .home-nav{
-    inset:12px 15px auto;
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width:700px) {
+  .home-scene {
+    left: 45%;
+    top: 37%;
+    width: 135vw;
+    transform: translate(-50%,-50%) scale(.78);
   }
 
-  .home-menu{
-    top:55%;
-    padding:18px 12px;
+  .home-menu {
+    right: 5%;
+    bottom: 7%;
+    width: min(82vw,350px);
+    text-align: right;
+    padding: 8px 0;
   }
 
-  .home-menu h1{
-    font-size:26px;
+  .home-menu h1 {
+    font-size: clamp(26px,7vw,36px);
   }
 
-  .home-scene{
-    width:100vw;
+  .home-menu p {
+    font-size: 11px;
   }
 
-  .pill{
-    padding:11px 17px;
+  .pill {
+    padding: 10px 16px;
   }
 
-  .game-heading h2{
-    font-size:20px;
+  .game-heading h2 {
+    font-size: 20px;
   }
 
-  .stats{
-    gap:14px;
+  .stats {
+    gap: 14px;
   }
 
-  .tool{
-    font-size:11px;
-    padding:8px 10px;
+  .tool {
+    font-size: 11px;
+    padding: 8px 10px;
   }
 }
 
-@media(prefers-reduced-motion:reduce){
-  .motif,.tile{
-    transition:none;
+@media (prefers-reduced-motion:reduce) {
+  .motif,
+  .tile {
+    transition: none;
   }
 }
 </style>
@@ -403,16 +413,11 @@ button:disabled{
 
 <body>
 
-<!-- =============================
-     1 DEPTH — 홈 화면
-============================= -->
+<!-- =====================================
+     HOME
+===================================== -->
 
 <section id="home" class="screen">
-
-  <header class="home-nav">
-    <span>PATTERN CONNECT</span>
-    <span class="home-mark">✳</span>
-  </header>
 
   <div
     class="home-scene"
@@ -421,8 +426,6 @@ button:disabled{
   </div>
 
   <div class="home-menu">
-    <div class="kicker">SHISEN-SHO PUZZLE</div>
-
     <h1>Pattern Connect</h1>
 
     <p>
@@ -432,20 +435,20 @@ button:disabled{
 
     <div class="home-actions">
       <button class="pill" id="howBtn">
-        게임 방법
+        How to Play
       </button>
 
       <button class="pill dark" id="startBtn">
-        게임 시작
+        Start Game
       </button>
     </div>
   </div>
 
 </section>
 
-<!-- =============================
-     2 DEPTH — 게임 화면
-============================= -->
+<!-- =====================================
+     GAME
+===================================== -->
 
 <section id="game" class="screen" hidden>
 
@@ -468,7 +471,6 @@ button:disabled{
       aria-label="최고 기록">
       ♡
     </button>
-
   </header>
 
   <div class="game-heading">
@@ -501,6 +503,7 @@ button:disabled{
   </div>
 
   <div class="game-area" id="gameArea">
+
     <div class="board" id="board">
       <svg
         id="route"
@@ -508,6 +511,7 @@ button:disabled{
         aria-hidden="true">
       </svg>
     </div>
+
   </div>
 
   <div class="game-footer">
@@ -522,9 +526,15 @@ button:disabled{
         id="difficulty"
         class="tool"
         aria-label="난이도">
+
         <option value="easy">쉬움</option>
-        <option value="normal" selected>보통</option>
+
+        <option value="normal" selected>
+          보통
+        </option>
+
         <option value="hard">어려움</option>
+
       </select>
 
       <button id="hintBtn" class="tool">
@@ -543,7 +553,9 @@ button:disabled{
         소리 켜짐
       </button>
 
-      <button id="restartBtn" class="tool emphasis">
+      <button
+        id="restartBtn"
+        class="tool emphasis">
         다시 시작
       </button>
 
@@ -552,18 +564,22 @@ button:disabled{
 
 </section>
 
-<!-- =============================
-     팝업 화면
-============================= -->
+<!-- =====================================
+     MODAL
+===================================== -->
 
 <div class="overlay" id="overlay" hidden>
+
   <div
     class="dialog"
     role="dialog"
     aria-modal="true"
     aria-labelledby="dialogTitle">
 
-    <div class="kicker" id="dialogEyebrow"></div>
+    <div
+      class="kicker"
+      id="dialogEyebrow">
+    </div>
 
     <h2 id="dialogTitle"></h2>
 
@@ -571,11 +587,15 @@ button:disabled{
 
     <div class="modal-actions">
 
-      <button class="pill" id="dialogSecondary">
+      <button
+        class="pill"
+        id="dialogSecondary">
         닫기
       </button>
 
-      <button class="pill dark" id="dialogPrimary">
+      <button
+        class="pill dark"
+        id="dialogPrimary">
         확인
       </button>
 
@@ -586,1420 +606,1528 @@ button:disabled{
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
-
 /* =====================================
-   HOME — 숫자 배치도 좌표
+   COMMON
 ===================================== */
 
-/*
-  기준 좌표계: 848 × 490
-  [이미지 번호, X, Y]
+const $ = id => document.getElementById(id);
 
-  숫자 배치도 윗부분의 번호 중심점을
-  기준으로 옮긴 좌표.
+/* =====================================
+   HOME GRAPHIC LAYOUT
 
-  같은 번호가 여러 번 등장하면
-  같은 PNG가 해당 위치에 반복 배치됨.
-*/
+   기준 좌표: 848 × 490
+   [파일 번호, X, Y]
 
-const HOME_LAYOUT=[
- [4,128,28],
- [5,170,28],
- [6,196,28],
- [8,249,28],
- [8,260,28],
- [8,286,28],
- [9,323,28],
- [10,363,28],
- [11,394,28],
+   Home01.png ~ Home15.png
+===================================== */
 
- [2,79,90],
- [3,103,90],
- [7,189,90],
- [3,222,90],
- [12,239,90],
- [12,273,90],
- [12,287,90],
- [1,441,77],
- [2,494,100],
- [5,632,99],
- [6,651,89],
- [11,810,77],
+const HOME_LAYOUT = [
 
- [1,35,144],
- [13,234,144],
- [1,276,144],
- [3,494,123],
- [7,761,128],
+  [4,128,28],
+  [5,170,28],
+  [6,196,28],
+  [8,249,28],
+  [8,260,28],
+  [8,286,28],
+  [9,323,28],
+  [10,363,28],
+  [11,394,28],
 
- [8,277,186],
- [8,277,199],
- [4,556,169],
- [10,599,169],
- [10,725,167],
- [15,761,169],
+  [2,79,90],
+  [3,103,90],
+  [7,189,90],
+  [3,222,90],
+  [12,239,90],
+  [12,273,90],
+  [12,287,90],
 
- [8,277,248],
- [14,438,250],
- [6,598,238],
- [15,761,238],
+  [1,441,77],
+  [2,494,100],
+  [5,632,99],
+  [6,651,89],
+  [11,810,77],
 
- [13,438,275],
- [3,494,263],
- [12,494,278],
- [8,555,294],
- [8,555,305],
+  [1,35,144],
+  [13,234,144],
+  [1,276,144],
+  [3,494,123],
+  [7,761,128],
 
- [1,441,319],
- [12,494,318],
- [12,494,330],
- [8,555,329],
- [10,408,345],
+  [8,277,186],
+  [8,277,199],
+  [4,556,169],
+  [10,599,169],
+  [10,725,167],
+  [15,761,169],
 
- [8,277,365],
- [4,372,368],
- [9,557,367],
- [7,619,365],
+  [8,277,248],
+  [14,438,250],
+  [6,598,238],
+  [15,761,238],
 
- [10,556,406],
- [11,557,436],
- [2,587,436],
- [2,671,436],
- [13,705,436]
+  [13,438,275],
+  [3,494,263],
+  [12,494,278],
+  [8,555,294],
+  [8,555,305],
+
+  [1,441,319],
+  [12,494,318],
+  [12,494,330],
+  [8,555,329],
+  [10,408,345],
+
+  [8,277,365],
+  [4,372,368],
+  [9,557,367],
+  [7,619,365],
+
+  [10,556,406],
+  [11,557,436],
+  [2,587,436],
+  [2,671,436],
+  [13,705,436]
+
 ];
 
-/*
-  PNG별 홈 화면 표시 너비.
-  배치도에 보이는 그래픽 크기를
-  기준으로 정한 초기값.
-*/
+/* =====================================
+   HOME GRAPHIC SIZE
 
-const HOME_WIDTH={
- 1:74,
- 2:48,
- 3:32,
- 4:44,
- 5:53,
- 6:59,
- 7:71,
- 8:15,
- 9:52,
- 10:58,
- 11:29,
- 12:18,
- 13:57,
- 14:44,
- 15:68
+   개별 PNG 표시 너비
+===================================== */
+
+const HOME_WIDTH = {
+  1:74,
+  2:48,
+  3:32,
+  4:44,
+  5:53,
+  6:59,
+  7:71,
+  8:15,
+  9:52,
+  10:58,
+  11:29,
+  12:18,
+  13:57,
+  14:44,
+  15:68
 };
 
-const homeNodes=[];
-const motionTimers=new Set();
+const homeNodes = [];
+const motionTimers = new Set();
 
-let motionOn=false;
-
-/* =====================================
-   홈 이미지 생성
-===================================== */
-
-function buildHome(){
-
- const fragment=document.createDocumentFragment();
-
- HOME_LAYOUT.forEach(([n,x,y],i)=>{
-
-  const img=document.createElement("img");
-
-  img.className="motif";
-  img.alt="";
-  img.draggable=false;
-
-  img.src=
-   "images/Home"+
-   String(n).padStart(2,"0")+
-   ".png";
-
-  img.style.setProperty(
-   "--x",x/848*100+"%"
-  );
-
-  img.style.setProperty(
-   "--y",y/490*100+"%"
-  );
-
-  img.style.setProperty(
-   "--w",HOME_WIDTH[n]/848*100+"%"
-  );
-
-  img.style.zIndex=String(i);
-  img.dataset.rotation="0";
-
-  fragment.append(img);
-  homeNodes.push(img);
-
- });
-
- $("homeScene").append(fragment);
-
-}
+let motionOn = false;
 
 /* =====================================
-   홈 모션
+   BUILD HOME
 ===================================== */
 
-function stopHomeMotion(){
+function buildHome() {
 
- motionOn=false;
+  const fragment = document.createDocumentFragment();
 
- for(const timer of motionTimers){
-  clearTimeout(timer);
- }
+  HOME_LAYOUT.forEach(([n,x,y],i) => {
 
- motionTimers.clear();
-}
+    const img = document.createElement("img");
 
-function scheduleMotion(img){
+    img.className = "motif";
+    img.alt = "";
+    img.draggable = false;
 
- if(!motionOn)return;
+    img.src =
+      "images/Home" +
+      String(n).padStart(2,"0") +
+      ".png";
 
- const wait=850+Math.random()*2700;
+    img.style.setProperty(
+      "--x",
+      x / 848 * 100 + "%"
+    );
 
- const timer=setTimeout(()=>{
+    img.style.setProperty(
+      "--y",
+      y / 490 * 100 + "%"
+    );
 
-  motionTimers.delete(timer);
+    img.style.setProperty(
+      "--w",
+      HOME_WIDTH[n] / 848 * 100 + "%"
+    );
 
-  if(!motionOn)return;
+    img.style.zIndex = String(i);
+    img.dataset.rotation = "0";
 
-  const angles=[90,180,270,360];
+    fragment.append(img);
+    homeNodes.push(img);
+  });
 
-  const add=angles[
-   Math.floor(Math.random()*4)
-  ];
-
-  const next=
-   Number(img.dataset.rotation)+add;
-
-  img.dataset.rotation=next;
-
-  img.style.setProperty(
-   "--angle",next+"deg"
-  );
-
-  scheduleMotion(img);
-
- },wait);
-
- motionTimers.add(timer);
-}
-
-function startHomeMotion(){
-
- stopHomeMotion();
-
- if(matchMedia(
-  "(prefers-reduced-motion: reduce)"
- ).matches)return;
-
- motionOn=true;
-
- homeNodes.forEach(scheduleMotion);
+  $("homeScene").append(fragment);
 }
 
 /* =====================================
-   화면 전환
+   HOME MOTION
 ===================================== */
 
-function openHome(){
+function stopHomeMotion() {
 
- clearInterval(tick);
- clearTimeout(matchTimeout);
+  motionOn = false;
 
- tick=null;
- matchTimeout=null;
+  for(const t of motionTimers) {
+    clearTimeout(t);
+  }
 
- $("overlay").hidden=true;
- $("home").hidden=false;
- $("game").hidden=true;
-
- paused=false;
- busy=false;
-
- startHomeMotion();
+  motionTimers.clear();
 }
 
-function openGame(){
+function scheduleMotion(img) {
 
- stopHomeMotion();
+  if(!motionOn) return;
 
- $("home").hidden=true;
- $("game").hidden=false;
+  const delay = 850 + Math.random() * 2700;
 
- stage=1;
- newGame();
+  const t = setTimeout(() => {
 
- requestAnimationFrame(fitBoard);
+    motionTimers.delete(t);
+
+    if(!motionOn) return;
+
+    const angles = [90,180,270,360];
+
+    const add = angles[
+      Math.floor(Math.random() * angles.length)
+    ];
+
+    const next =
+      Number(img.dataset.rotation) + add;
+
+    img.dataset.rotation = next;
+
+    img.style.setProperty(
+      "--angle",
+      next + "deg"
+    );
+
+    scheduleMotion(img);
+
+  }, delay);
+
+  motionTimers.add(t);
+}
+
+function startHomeMotion() {
+
+  stopHomeMotion();
+
+  if(
+    matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+  ) return;
+
+  motionOn = true;
+
+  homeNodes.forEach(scheduleMotion);
 }
 
 /* =====================================
-   팝업 기능
+   SCREEN TRANSITION
 ===================================== */
 
-let modalPrimary=null;
-let modalSecondary=null;
+function openHome() {
+
+  clearInterval(tick);
+  clearTimeout(matchTimeout);
+
+  tick = null;
+  matchTimeout = null;
+
+  $("overlay").hidden = true;
+  $("home").hidden = false;
+  $("game").hidden = true;
+
+  paused = false;
+  busy = false;
+
+  startHomeMotion();
+}
+
+function openGame() {
+
+  stopHomeMotion();
+
+  $("home").hidden = true;
+  $("game").hidden = false;
+
+  stage = 1;
+  newGame();
+
+  requestAnimationFrame(fitBoard);
+}
+
+/* =====================================
+   MODAL SYSTEM
+===================================== */
+
+let modalPrimary = null;
+let modalSecondary = null;
 
 function modal(
- eyebrow,
- title,
- text,
- primary="확인",
- secondary="닫기",
- onPrimary=null,
- onSecondary=null
-){
+  eyebrow,
+  title,
+  text,
+  primary = "확인",
+  secondary = "닫기",
+  onPrimary = null,
+  onSecondary = null
+) {
 
- $("dialogEyebrow").textContent=eyebrow;
- $("dialogTitle").textContent=title;
- $("dialogText").textContent=text;
- $("dialogPrimary").textContent=primary;
- $("dialogSecondary").textContent=secondary;
+  $("dialogEyebrow").textContent = eyebrow;
+  $("dialogTitle").textContent = title;
+  $("dialogText").textContent = text;
 
- modalPrimary=onPrimary;
- modalSecondary=onSecondary;
+  $("dialogPrimary").textContent = primary;
+  $("dialogSecondary").textContent = secondary;
 
- $("overlay").hidden=false;
+  modalPrimary = onPrimary;
+  modalSecondary = onSecondary;
+
+  $("overlay").hidden = false;
 }
 
-function closeModal(){
- $("overlay").hidden=true;
+function closeModal() {
+  $("overlay").hidden = true;
 }
 
-$("dialogPrimary").onclick=()=>{
+$("dialogPrimary").onclick = () => {
 
- const action=modalPrimary;
+  const fn = modalPrimary;
 
- closeModal();
+  closeModal();
 
- if(action)action();
+  if(fn) fn();
 };
 
-$("dialogSecondary").onclick=()=>{
+$("dialogSecondary").onclick = () => {
 
- const action=modalSecondary;
+  const fn = modalSecondary;
 
- closeModal();
+  closeModal();
 
- if(action)action();
+  if(fn) fn();
 };
-
-/* 게임 방법 */
-$("howBtn").onclick=()=>modal(
- "HOW TO PLAY",
- "게임 방법",
- "① 같은 디자인의 패 두 개를 선택하세요.\n"+
- "② 다른 패를 통과하지 않고 최대 두 번 꺾이는 경로로 연결해야 합니다.\n"+
- "③ 제한 시간 안에 모든 패를 제거하면 다음 스테이지로 이동합니다.\n"+
- "④ 홀수 스테이지는 01~09, 짝수 스테이지는 10~18 이미지를 사용합니다.",
- "게임 시작",
- "닫기",
- openGame
-);
-
-$("startBtn").onclick=openGame;
-$("homeBtn").onclick=openHome;
 
 /* =====================================
-   게임 설정
+   HOW TO PLAY
 ===================================== */
 
-const LEVELS={
- easy:{rows:4,cols:6,time:360},
- normal:{rows:5,cols:8,time:300},
- hard:{rows:6,cols:10,time:240}
+$("howBtn").onclick = () => {
+
+  modal(
+    "HOW TO PLAY",
+    "게임 방법",
+    "① 같은 디자인의 패 두 개를 선택하세요.\n" +
+    "② 다른 패를 통과하지 않고 최대 두 번 꺾이는 경로로 연결해야 합니다.\n" +
+    "③ 제한 시간 안에 모든 패를 제거하면 다음 스테이지로 이동합니다.\n" +
+    "④ 홀수 스테이지는 01~09, 짝수 스테이지는 10~18 이미지를 사용합니다.",
+    "게임 시작",
+    "닫기",
+    openGame
+  );
 };
 
-let stage=1;
-let rows=0;
-let cols=0;
-let board=[];
+$("startBtn").onclick = openGame;
+$("homeBtn").onclick = openHome;
 
-let score=0;
-let seconds=0;
-let initialTime=0;
+/* =====================================
+   GAME SETTINGS
+===================================== */
 
-let selected=null;
-let hints=[];
+const LEVELS = {
 
-let paused=false;
-let finished=false;
-let busy=false;
+  easy: {
+    rows:4,
+    cols:6,
+    time:360
+  },
 
-let tick=null;
-let matchTimeout=null;
+  normal: {
+    rows:5,
+    cols:8,
+    time:300
+  },
 
-let ratio=184/223;
-let soundOn=true;
-let audio=null;
+  hard: {
+    rows:6,
+    cols:10,
+    time:240
+  }
 
-const imgPath=n=>
- "images/tile"+
- String(n).padStart(2,"0")+
- ".jpg";
+};
 
-const groupForStage=n=>
- Array.from(
-  {length:9},
-  (_,i)=>i+(n%2?1:10)
- );
+let stage = 1;
 
-const formatTime=s=>
- String(Math.floor(s/60)).padStart(2,"0")+
- ":"+
- String(s%60).padStart(2,"0");
+let rows = 0;
+let cols = 0;
 
-const ix=(r,c)=>r*cols+c;
+let board = [];
 
-const rc=i=>[
- Math.floor(i/cols),
- i%cols
+let score = 0;
+let seconds = 0;
+let initialTime = 0;
+
+let selected = null;
+let hints = [];
+
+let paused = false;
+let finished = false;
+let busy = false;
+
+let tick = null;
+let matchTimeout = null;
+
+let ratio = 184/223;
+
+let soundOn = true;
+let audio = null;
+
+/* =====================================
+   IMAGE PATH
+===================================== */
+
+function imgPath(n) {
+
+  return (
+    "images/tile" +
+    String(n).padStart(2,"0") +
+    ".jpg"
+  );
+}
+
+/* =====================================
+   STAGE IMAGE GROUPS
+
+   홀수: 01~09
+   짝수: 10~18
+===================================== */
+
+function groupForStage(n) {
+
+  return Array.from(
+    {length:9},
+    (_,i) => i + (n % 2 ? 1 : 10)
+  );
+}
+
+/* =====================================
+   UTILITIES
+===================================== */
+
+function formatTime(s) {
+
+  return (
+    String(Math.floor(s/60)).padStart(2,"0") +
+    ":" +
+    String(s%60).padStart(2,"0")
+  );
+}
+
+const ix = (r,c) => r*cols+c;
+
+const rc = i => [
+  Math.floor(i/cols),
+  i%cols
 ];
 
-function shuffled(array){
+function shuffled(a) {
 
- for(let i=array.length-1;i>0;i--){
+  for(let i=a.length-1;i>0;i--) {
 
-  const j=Math.floor(Math.random()*(i+1));
+    const j = Math.floor(
+      Math.random()*(i+1)
+    );
 
-  [array[i],array[j]]=
-   [array[j],array[i]];
- }
+    [a[i],a[j]] = [a[j],a[i]];
+  }
 
- return array;
+  return a;
 }
 
-function say(text){
- $("message").textContent=text;
+function say(s) {
+  $("message").textContent = s;
 }
 
 /* =====================================
-   효과음
+   SOUND
 ===================================== */
 
-function play(type){
+function play(type) {
 
- if(!soundOn)return;
+  if(!soundOn) return;
 
- try{
+  try {
 
-  const AC=
-   window.AudioContext||
-   window.webkitAudioContext;
+    const AC =
+      window.AudioContext ||
+      window.webkitAudioContext;
 
-  if(!AC)return;
+    if(!AC) return;
 
-  if(!audio)audio=new AC();
-
-  if(audio.state==="suspended"){
-   audio.resume();
-  }
-
-  const patterns={
-   pick:[440],
-   good:[660,880],
-   bad:[210],
-   hint:[560],
-   win:[523,659,784,1046],
-   lose:[350,260]
-  };
-
-  patterns[type].forEach((hz,i)=>{
-
-   const t=audio.currentTime+i*.10;
-
-   const osc=audio.createOscillator();
-   const gain=audio.createGain();
-
-   osc.frequency.value=hz;
-   osc.type="sine";
-
-   gain.gain.setValueAtTime(.0001,t);
-
-   gain.gain.exponentialRampToValueAtTime(
-    .08,t+.01
-   );
-
-   gain.gain.exponentialRampToValueAtTime(
-    .0001,t+.09
-   );
-
-   osc.connect(gain);
-   gain.connect(audio.destination);
-
-   osc.start(t);
-   osc.stop(t+.1);
-
-  });
-
- }catch(e){
-  console.warn(e);
- }
-}
-
-/* =====================================
-   사천성 경로 판정
-===================================== */
-
-function pathBetween(a,b){
-
- if(
-  a===b||
-  board[a]==null||
-  board[a]!==board[b]
- )return null;
-
- const H=rows+2;
- const W=cols+2;
-
- const grid=Array.from(
-  {length:H},
-  ()=>Array(W).fill(null)
- );
-
- board.forEach((v,i)=>{
-
-  const [r,c]=rc(i);
-
-  grid[r+1][c+1]=v;
- });
-
- const [ar,ac]=rc(a);
- const [br,bc]=rc(b);
-
- const sr=ar+1;
- const sc=ac+1;
- const tr=br+1;
- const tc=bc+1;
-
- const dr=[-1,0,1,0];
- const dc=[0,1,0,-1];
-
- const best=Array.from(
-  {length:H},
-  ()=>Array.from(
-   {length:W},
-   ()=>[3,3,3,3]
-  )
- );
-
- const queue=[];
-
- for(let d=0;d<4;d++){
-
-  best[sr][sc][d]=0;
-
-  queue.push({
-   r:sr,c:sc,d,t:0,
-   p:[[sr,sc]]
-  });
- }
-
- for(let h=0;h<queue.length;h++){
-
-  const s=queue[h];
-
-  if(s.t!==best[s.r][s.c][s.d])
-   continue;
-
-  if(s.r===tr&&s.c===tc)
-   return s.p;
-
-  for(let nd=0;nd<4;nd++){
-
-   const nt=s.t+(nd===s.d?0:1);
-
-   const nr=s.r+dr[nd];
-   const nc=s.c+dc[nd];
-
-   if(
-    nt>2||
-    nr<0||nc<0||
-    nr>=H||nc>=W
-   )continue;
-
-   if(
-    grid[nr][nc]!==null&&
-    !(nr===tr&&nc===tc)
-   )continue;
-
-   if(nt>=best[nr][nc][nd])
-    continue;
-
-   best[nr][nc][nd]=nt;
-
-   queue.push({
-    r:nr,
-    c:nc,
-    d:nd,
-    t:nt,
-    p:[...s.p,[nr,nc]]
-   });
-  }
- }
-
- return null;
-}
-
-/* 연결 가능한 패 찾기 */
-function availablePair(){
-
- for(let a=0;a<board.length;a++){
-
-  if(board[a]===null)continue;
-
-  for(let b=a+1;b<board.length;b++){
-
-   if(
-    board[a]===board[b]&&
-    pathBetween(a,b)
-   )return[a,b];
-
-  }
- }
-
- return null;
-}
-
-/* =====================================
-   해결 가능한 게임판 생성
-===================================== */
-
-function buildSolvableBoard(group){
-
- const num=rows*cols;
- const pairs=num/2;
-
- const ids=shuffled(
-  Array.from(
-   {length:pairs},
-   (_,i)=>group[i%group.length]
-  )
- );
-
- for(let attempt=0;attempt<100;attempt++){
-
-  board=Array(num).fill(null);
-
-  let ok=true;
-
-  for(const id of ids){
-
-   const empties=shuffled(
-    board.flatMap(
-     (v,i)=>v===null?[i]:[]
-    )
-   );
-
-   let added=false;
-
-   for(const a of empties){
-
-    for(const b of empties){
-
-     if(a>=b)continue;
-
-     board[a]=id;
-     board[b]=id;
-
-     if(pathBetween(a,b)){
-      added=true;
-      break;
-     }
-
-     board[a]=null;
-     board[b]=null;
-
+    if(!audio) {
+      audio = new AC();
     }
 
-    if(added)break;
-   }
+    if(audio.state === "suspended") {
+      audio.resume();
+    }
 
-   if(!added){
-    ok=false;
-    break;
-   }
+    const patterns = {
+      pick:[440],
+      good:[660,880],
+      bad:[210],
+      hint:[560],
+      win:[523,659,784,1046],
+      lose:[350,260]
+    };
+
+    patterns[type].forEach((hz,i) => {
+
+      const t = audio.currentTime+i*.10;
+
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+
+      osc.frequency.value = hz;
+      osc.type = "sine";
+
+      gain.gain.setValueAtTime(.0001,t);
+
+      gain.gain.exponentialRampToValueAtTime(
+        .08,t+.01
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        .0001,t+.09
+      );
+
+      osc.connect(gain);
+      gain.connect(audio.destination);
+
+      osc.start(t);
+      osc.stop(t+.1);
+    });
+
+  } catch(e) {
+    console.warn(e);
   }
-
-  if(ok)return;
- }
-
- // 예비 배치
- board=Array(num).fill(null);
-
- let k=0;
-
- for(let r=0;r<rows;r++){
-
-  for(let c=0;c<cols;c+=2){
-
-   board[ix(r,c)]=ids[k];
-   board[ix(r,c+1)]=ids[k];
-
-   k++;
-  }
- }
 }
 
 /* =====================================
-   화면 크기 자동 조정
+   CONNECTION PATH FINDING
+
+   최대 2회 꺾임
 ===================================== */
 
-function fitBoard(){
+function pathBetween(a,b) {
 
- if(
-  !rows||
-  !cols||
-  $("game").hidden
- )return;
+  if(
+    a===b ||
+    board[a]==null ||
+    board[a]!==board[b]
+  ) return null;
 
- const area=$("gameArea");
+  const H = rows+2;
+  const W = cols+2;
 
- const W=area.clientWidth;
- const H=area.clientHeight;
+  const grid = Array.from(
+    {length:H},
+    () => Array(W).fill(null)
+  );
 
- const gap=Math.max(
-  2,
-  Math.min(
-   18,
-   W/(cols*5),
-   H/(rows*5)
-  )
- );
+  board.forEach((v,i) => {
 
- const size=Math.max(
-  1,
-  Math.min(
-   106,
-   (W-gap*(cols-1))/cols,
-   (H-gap*(rows-1))*ratio/rows
-  )
- );
+    const [r,c] = rc(i);
 
- $("board").style.setProperty(
-  "--cols",cols
- );
+    grid[r+1][c+1] = v;
+  });
 
- $("board").style.setProperty(
-  "--gap",gap+"px"
- );
+  const [ar,ac] = rc(a);
+  const [br,bc] = rc(b);
 
- $("board").style.setProperty(
-  "--tile-width",size+"px"
- );
+  const sr = ar+1;
+  const sc = ac+1;
 
- $("board").style.setProperty(
-  "--ratio",ratio
- );
+  const tr = br+1;
+  const tc = bc+1;
+
+  const dr = [-1,0,1,0];
+  const dc = [0,1,0,-1];
+
+  const best = Array.from(
+    {length:H},
+    () => Array.from(
+      {length:W},
+      () => [3,3,3,3]
+    )
+  );
+
+  const q = [];
+
+  for(let d=0;d<4;d++) {
+
+    best[sr][sc][d] = 0;
+
+    q.push({
+      r:sr,
+      c:sc,
+      d,
+      t:0,
+      p:[[sr,sc]]
+    });
+  }
+
+  for(let h=0;h<q.length;h++) {
+
+    const s = q[h];
+
+    if(
+      s.t !== best[s.r][s.c][s.d]
+    ) continue;
+
+    if(s.r===tr && s.c===tc) {
+      return s.p;
+    }
+
+    for(let nd=0;nd<4;nd++) {
+
+      const nt =
+        s.t + (nd===s.d ? 0 : 1);
+
+      const nr = s.r+dr[nd];
+      const nc = s.c+dc[nd];
+
+      if(
+        nt>2 ||
+        nr<0 ||
+        nc<0 ||
+        nr>=H ||
+        nc>=W
+      ) continue;
+
+      if(
+        grid[nr][nc]!==null &&
+        !(nr===tr && nc===tc)
+      ) continue;
+
+      if(
+        nt>=best[nr][nc][nd]
+      ) continue;
+
+      best[nr][nc][nd] = nt;
+
+      q.push({
+        r:nr,
+        c:nc,
+        d:nd,
+        t:nt,
+        p:[...s.p,[nr,nc]]
+      });
+    }
+  }
+
+  return null;
+}
+
+/* =====================================
+   AVAILABLE PAIR
+===================================== */
+
+function availablePair() {
+
+  for(let a=0;a<board.length;a++) {
+
+    if(board[a]===null) continue;
+
+    for(let b=a+1;b<board.length;b++) {
+
+      if(
+        board[a]===board[b] &&
+        pathBetween(a,b)
+      ) {
+        return [a,b];
+      }
+    }
+  }
+
+  return null;
+}
+
+/* =====================================
+   SOLVABLE BOARD GENERATION
+===================================== */
+
+function buildSolvableBoard(group) {
+
+  const num = rows*cols;
+  const pairs = num/2;
+
+  const ids = shuffled(
+    Array.from(
+      {length:pairs},
+      (_,i) => group[i%group.length]
+    )
+  );
+
+  for(let attempt=0;attempt<100;attempt++) {
+
+    board = Array(num).fill(null);
+
+    let ok = true;
+
+    for(const id of ids) {
+
+      const empties = shuffled(
+        board.flatMap(
+          (v,i) => v===null ? [i] : []
+        )
+      );
+
+      let added = false;
+
+      for(const a of empties) {
+
+        for(const b of empties) {
+
+          if(a>=b) continue;
+
+          board[a] = id;
+          board[b] = id;
+
+          if(pathBetween(a,b)) {
+            added = true;
+            break;
+          }
+
+          board[a] = null;
+          board[b] = null;
+        }
+
+        if(added) break;
+      }
+
+      if(!added) {
+        ok = false;
+        break;
+      }
+    }
+
+    if(ok) return;
+  }
+
+  // 예비 배치: 인접한 가로 쌍 생성
+  board = Array(num).fill(null);
+
+  let k = 0;
+
+  for(let r=0;r<rows;r++) {
+
+    for(let c=0;c<cols;c+=2) {
+
+      board[ix(r,c)] = ids[k];
+      board[ix(r,c+1)] = ids[k];
+
+      k++;
+    }
+  }
+}
+
+/* =====================================
+   RESPONSIVE GAME BOARD
+===================================== */
+
+function fitBoard() {
+
+  if(
+    !rows ||
+    !cols ||
+    $("game").hidden
+  ) return;
+
+  const area = $("gameArea");
+
+  const W = area.clientWidth;
+  const H = area.clientHeight;
+
+  const gap = Math.max(
+    2,
+    Math.min(
+      18,
+      W/(cols*5),
+      H/(rows*5)
+    )
+  );
+
+  const size = Math.max(
+    1,
+    Math.min(
+      106,
+      (W-gap*(cols-1))/cols,
+      (H-gap*(rows-1))*ratio/rows
+    )
+  );
+
+  $("board").style.setProperty(
+    "--cols",cols
+  );
+
+  $("board").style.setProperty(
+    "--gap",gap+"px"
+  );
+
+  $("board").style.setProperty(
+    "--tile-width",size+"px"
+  );
+
+  $("board").style.setProperty(
+    "--ratio",ratio
+  );
 }
 
 window.addEventListener("resize",fitBoard);
 
 /* =====================================
-   연결선 애니메이션
+   CONNECTION LINE ANIMATION
 ===================================== */
 
-function clearRoute(){
- $("route").replaceChildren();
+function clearRoute() {
+  $("route").replaceChildren();
 }
 
-function drawRoute(path){
-
- clearRoute();
-
- const root=$("board");
-
- const first=root.querySelector(".tile");
-
- if(!first)return;
-
- const css=getComputedStyle(root);
-
- const gx=parseFloat(css.columnGap)||0;
- const gy=parseFloat(css.rowGap)||0;
-
- const w=first.getBoundingClientRect().width;
- const h=first.getBoundingClientRect().height;
-
- const pts=path.map(([r,c])=>[
-  w/2+(c-1)*(w+gx),
-  h/2+(r-1)*(h+gy)
- ]);
-
- const points=pts.filter((p,i)=>{
-
-  if(i===0||i===pts.length-1)
-   return true;
-
-  const a=pts[i-1];
-  const b=pts[i+1];
-
-  return(
-   (p[0]-a[0])*(b[1]-p[1])!==
-   (p[1]-a[1])*(b[0]-p[0])
-  );
- });
-
- const line=document.createElementNS(
-  "http://www.w3.org/2000/svg",
-  "polyline"
- );
-
- line.setAttribute(
-  "points",
-  points.map(p=>p.join(",")).join(" ")
- );
-
- line.setAttribute("fill","none");
- line.setAttribute("stroke","#47b5a8");
- line.setAttribute("stroke-width","3");
- line.setAttribute("stroke-linecap","round");
- line.setAttribute("stroke-linejoin","round");
-
- $("route").append(line);
-
- const len=Math.max(
-  1,line.getTotalLength()
- );
-
- line.animate(
-  [
-   {
-    strokeDasharray:len,
-    strokeDashoffset:len
-   },
-   {
-    strokeDasharray:len,
-    strokeDashoffset:0
-   }
-  ],
-  {
-   duration:250,
-   fill:"forwards"
-  }
- );
-}
-
-/* =====================================
-   게임 화면 그리기
-===================================== */
-
-function render(){
-
- $("board").querySelectorAll(".tile")
-  .forEach(t=>t.remove());
-
- const fragment=document.createDocumentFragment();
-
- board.forEach((id,i)=>{
-
-  const btn=document.createElement("button");
-
-  btn.className="tile";
-  btn.type="button";
-
-  if(id===null){
-   btn.classList.add("empty");
-  }
-
-  if(i===selected){
-   btn.classList.add("selected");
-  }
-
-  if(hints.includes(i)){
-   btn.classList.add("hint");
-  }
-
-  if(id!==null){
-
-   const img=document.createElement("img");
-
-   img.src=imgPath(id);
-   img.alt="패턴 "+id;
-   img.draggable=false;
-
-   btn.append(img);
-  }
-
-  btn.disabled=
-   id===null||busy||paused||finished;
-
-  btn.onclick=()=>pickTile(i);
-
-  fragment.append(btn);
- });
-
- $("board").insertBefore(
-  fragment,
-  $("route")
- );
-
- $("stageLabel").textContent=
-  "STAGE "+
-  String(stage).padStart(2,"0");
-
- $("groupLabel").textContent=
-  stage%2
-  ?"Pattern Collection 01–09"
-  :"Pattern Collection 10–18";
-
- $("score").textContent=
-  score.toLocaleString("ko-KR");
-
- $("remaining").textContent=
-  board.filter(v=>v!==null).length;
-
- $("time").textContent=formatTime(seconds);
-
- fitBoard();
-}
-
-/* =====================================
-   패 선택
-===================================== */
-
-function pickTile(i){
-
- if(
-  paused||
-  busy||
-  finished||
-  board[i]===null
- )return;
-
- hints=[];
-
- if(selected===null){
-
-  selected=i;
-
-  play("pick");
-  render();
-
-  return;
- }
-
- if(selected===i){
-
-  selected=null;
-  render();
-
-  return;
- }
-
- const a=selected;
- const path=pathBetween(a,i);
-
- selected=null;
-
- if(!path){
-
-  play("bad");
-
-  say("연결할 수 없는 패입니다.");
-
-  render();
-
-  return;
- }
-
- busy=true;
- score+=100;
-
- play("good");
-
- render();
- drawRoute(path);
-
- matchTimeout=setTimeout(()=>{
-
-  matchTimeout=null;
-
-  board[a]=null;
-  board[i]=null;
-
-  busy=false;
+function drawRoute(path) {
 
   clearRoute();
 
-  if(board.every(v=>v===null)){
+  const root = $("board");
+  const first = root.querySelector(".tile");
 
-   finish(true);
+  if(!first) return;
 
-   return;
-  }
+  const css = getComputedStyle(root);
 
-  say("연결 성공! +100점");
+  const gx = parseFloat(
+    css.columnGap
+  ) || 0;
 
-  render();
+  const gy = parseFloat(
+    css.rowGap
+  ) || 0;
 
-  if(!availablePair()){
-   shuffleTiles(true);
-  }
+  const w = first.getBoundingClientRect().width;
+  const h = first.getBoundingClientRect().height;
 
- },320);
+  const pts = path.map(([r,c]) => [
+    w/2+(c-1)*(w+gx),
+    h/2+(r-1)*(h+gy)
+  ]);
+
+  const points = pts.filter((p,i) => {
+
+    if(
+      i===0 ||
+      i===pts.length-1
+    ) return true;
+
+    const a = pts[i-1];
+    const b = pts[i+1];
+
+    return (
+      (p[0]-a[0])*(b[1]-p[1]) !==
+      (p[1]-a[1])*(b[0]-p[0])
+    );
+  });
+
+  const line = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "polyline"
+  );
+
+  line.setAttribute(
+    "points",
+    points.map(p=>p.join(",")).join(" ")
+  );
+
+  line.setAttribute("fill","none");
+  line.setAttribute("stroke","#47b5a8");
+  line.setAttribute("stroke-width","3");
+  line.setAttribute("stroke-linecap","round");
+  line.setAttribute("stroke-linejoin","round");
+
+  $("route").append(line);
+
+  const len = Math.max(
+    1,
+    line.getTotalLength()
+  );
+
+  line.animate(
+    [
+      {
+        strokeDasharray:len,
+        strokeDashoffset:len
+      },
+      {
+        strokeDasharray:len,
+        strokeDashoffset:0
+      }
+    ],
+    {
+      duration:250,
+      fill:"forwards"
+    }
+  );
 }
 
 /* =====================================
-   패 섞기
+   RENDER GAME
 ===================================== */
 
-function shuffleTiles(automatic=false){
+function render() {
 
- if(paused||busy||finished)return;
+  $("board")
+    .querySelectorAll(".tile")
+    .forEach(t=>t.remove());
 
- const occupied=board.flatMap(
-  (v,i)=>v===null?[]:[i]
- );
+  const fragment =
+    document.createDocumentFragment();
 
- const ids=shuffled(
-  occupied.map(i=>board[i])
- );
+  board.forEach((id,i) => {
 
- const pairIds=[];
- const counts=new Map();
+    const btn = document.createElement("button");
 
- ids.forEach(v=>{
-  counts.set(
-   v,
-   (counts.get(v)||0)+1
-  );
- });
+    btn.className = "tile";
+    btn.type = "button";
 
- for(const [id,count]of counts){
-
-  for(let k=0;k<count/2;k++){
-   pairIds.push(id);
-  }
- }
-
- const emptyOriginal=
-  board.map(v=>v===null);
-
- let success=false;
-
- for(
-  let tries=0;
-  tries<80&&!success;
-  tries++
- ){
-
-  board=emptyOriginal.map(()=>null);
-
-  const order=shuffled([...pairIds]);
-
-  success=true;
-
-  for(const id of order){
-
-   const empty=shuffled(
-    occupied.filter(
-     i=>board[i]===null
-    )
-   );
-
-   let placed=false;
-
-   for(const a of empty){
-
-    for(const b of empty){
-
-     if(a>=b)continue;
-
-     board[a]=id;
-     board[b]=id;
-
-     if(pathBetween(a,b)){
-
-      placed=true;
-      break;
-     }
-
-     board[a]=null;
-     board[b]=null;
-
+    if(id===null) {
+      btn.classList.add("empty");
     }
 
-    if(placed)break;
-   }
+    if(i===selected) {
+      btn.classList.add("selected");
+    }
 
-   if(!placed){
+    if(hints.includes(i)) {
+      btn.classList.add("hint");
+    }
 
-    success=false;
-    break;
-   }
-  }
- }
+    if(id!==null) {
 
- if(!success){
+      const img = document.createElement("img");
 
-  board=emptyOriginal.map(()=>null);
+      img.src = imgPath(id);
+      img.alt = "패턴 " + id;
+      img.draggable = false;
 
-  const sh=shuffled(ids);
+      btn.append(img);
+    }
 
-  occupied.forEach((i,k)=>{
-   board[i]=sh[k];
+    btn.disabled =
+      id===null ||
+      busy ||
+      paused ||
+      finished;
+
+    btn.onclick = () => pickTile(i);
+
+    fragment.append(btn);
   });
- }
 
- selected=null;
- hints=[];
+  $("board").insertBefore(
+    fragment,
+    $("route")
+  );
 
- if(!automatic){
-  score=Math.max(0,score-50);
- }
+  $("stageLabel").textContent =
+    "STAGE " +
+    String(stage).padStart(2,"0");
 
- say(
-  success
-  ?(
-   automatic
-   ?"연결할 수 없어 자동으로 섞었습니다."
-   :"패를 섞었습니다. -50점"
-  )
-  :"다시 배치했습니다."
- );
+  $("groupLabel").textContent =
+    stage%2
+      ? "Pattern Collection 01–09"
+      : "Pattern Collection 10–18";
 
- render();
+  $("score").textContent =
+    score.toLocaleString("ko-KR");
+
+  $("remaining").textContent =
+    board.filter(v=>v!==null).length;
+
+  $("time").textContent =
+    formatTime(seconds);
+
+  fitBoard();
 }
 
 /* =====================================
-   힌트
+   TILE SELECTION
 ===================================== */
 
-function hint(){
-
- if(paused||busy||finished)return;
-
- let pair=availablePair();
-
- if(!pair){
-
-  shuffleTiles(true);
-  pair=availablePair();
- }
-
- if(!pair){
-
-  say("연결 가능한 패를 찾지 못했습니다.");
-
-  return;
- }
-
- selected=null;
- hints=pair;
-
- score=Math.max(0,score-30);
-
- play("hint");
-
- say("표시된 두 패를 연결하세요. -30점");
-
- render();
-}
-
-/* =====================================
-   기록 저장
-===================================== */
-
-const recordKey=()=>
- "pattern_connect_v5_"+
- $("difficulty").value+
- "_"+
- stage;
-
-function readRecord(){
-
- try{
-
-  return JSON.parse(
-   localStorage.getItem(recordKey())||
-   "null"
-  );
-
- }catch{
-  return null;
- }
-}
-
-function updateBest(){
-
- const r=readRecord();
-
- $("bestScore").textContent=r
-  ?r.score.toLocaleString("ko-KR")
-  :"—";
-}
-
-function saveRecord(){
-
- try{
-
-  const r=readRecord()||{};
-  const time=initialTime-seconds;
-
-  localStorage.setItem(
-   recordKey(),
-   JSON.stringify({
-    score:Math.max(r.score||0,score),
-    time:r.time===undefined
-     ?time
-     :Math.min(r.time,time),
-    clears:(r.clears||0)+1
-   })
-  );
-
- }catch(e){
-  console.warn("기록 저장 불가",e);
- }
-
- updateBest();
-}
-
-/* =====================================
-   게임 종료
-===================================== */
-
-function finish(won){
-
- finished=true;
-
- clearInterval(tick);
- tick=null;
-
- render();
-
- if(won){
-
-  saveRecord();
-  play("win");
-
-  modal(
-   "STAGE COMPLETE",
-   "Stage "+stage+" Clear!",
-   "점수 "+
-   score.toLocaleString("ko-KR")+
-   "점\n완료 시간 "+
-   formatTime(initialTime-seconds),
-   "다음 스테이지",
-   "다시 플레이",
-   ()=>{
-    stage++;
-    newGame();
-   },
-   ()=>newGame()
-  );
-
- }else{
-
-  play("lose");
-
-  modal(
-   "TIME OVER",
-   "시간 종료",
-   "제한 시간 안에 모든 패를 제거해 보세요.",
-   "다시 시작",
-   "홈으로",
-   ()=>newGame(),
-   openHome
-  );
- }
-}
-
-/* =====================================
-   일시정지
-===================================== */
-
-function pauseGame(){
-
- if(finished||busy)return;
-
- paused=!paused;
-
- $("pauseBtn").textContent=
-  paused?"계속하기":"일시정지";
-
- render();
-
- if(paused){
-
-  modal(
-   "PAUSE",
-   "일시정지",
-   "게임 타이머가 멈췄습니다.",
-   "계속하기",
-   "홈으로",
-   resume,
-   openHome
-  );
- }
-}
-
-function resume(){
-
- paused=false;
-
- $("pauseBtn").textContent="일시정지";
-
- render();
-}
-
-/* =====================================
-   새 게임 생성
-===================================== */
-
-function newGame(){
-
- clearInterval(tick);
- clearTimeout(matchTimeout);
-
- tick=null;
- matchTimeout=null;
-
- clearRoute();
-
- const config=
-  LEVELS[$("difficulty").value];
-
- rows=config.rows;
- cols=config.cols;
-
- initialTime=Math.max(
-  90,
-  config.time-(stage-1)*12
- );
-
- seconds=initialTime;
- score=0;
- selected=null;
- hints=[];
- busy=false;
- paused=false;
- finished=false;
-
- $("pauseBtn").textContent="일시정지";
-
- buildSolvableBoard(
-  groupForStage(stage)
- );
-
- say("같은 패턴 두 개를 연결하세요.");
-
- render();
- updateBest();
-
- tick=setInterval(()=>{
+function pickTile(i) {
 
   if(
-   paused||
-   finished||
-   busy||
-   $("game").hidden
-  )return;
+    paused ||
+    busy ||
+    finished ||
+    board[i]===null
+  ) return;
 
-  seconds=Math.max(0,seconds-1);
+  hints = [];
 
-  $("time").textContent=
-   formatTime(seconds);
+  if(selected===null) {
 
-  if(!seconds){
-   finish(false);
+    selected = i;
+
+    play("pick");
+    render();
+
+    return;
   }
 
- },1000);
+  if(selected===i) {
+
+    selected = null;
+    render();
+
+    return;
+  }
+
+  const a = selected;
+  const path = pathBetween(a,i);
+
+  selected = null;
+
+  if(!path) {
+
+    play("bad");
+
+    say("연결할 수 없는 패입니다.");
+
+    render();
+    return;
+  }
+
+  busy = true;
+  score += 100;
+
+  play("good");
+
+  render();
+  drawRoute(path);
+
+  matchTimeout = setTimeout(() => {
+
+    matchTimeout = null;
+
+    board[a] = null;
+    board[i] = null;
+
+    busy = false;
+
+    clearRoute();
+
+    if(board.every(v=>v===null)) {
+
+      finish(true);
+      return;
+    }
+
+    say("연결 성공! +100점");
+    render();
+
+    if(!availablePair()) {
+      shuffleTiles(true);
+    }
+
+  },320);
 }
 
 /* =====================================
-   버튼 연결
+   SHUFFLE
 ===================================== */
 
-$("hintBtn").onclick=hint;
+function shuffleTiles(automatic=false) {
 
-$("shuffleBtn").onclick=()=>
- shuffleTiles(false);
+  if(
+    paused ||
+    busy ||
+    finished
+  ) return;
 
-$("pauseBtn").onclick=pauseGame;
+  const occupied = board.flatMap(
+    (v,i) => v===null ? [] : [i]
+  );
 
-$("restartBtn").onclick=newGame;
+  const ids = shuffled(
+    occupied.map(i=>board[i])
+  );
 
-$("soundBtn").onclick=()=>{
+  const pairIds = [];
+  const counts = new Map();
 
- soundOn=!soundOn;
+  ids.forEach(v => {
+    counts.set(
+      v,
+      (counts.get(v)||0)+1
+    );
+  });
 
- $("soundBtn").textContent=
-  soundOn?"소리 켜짐":"음소거";
+  for(const [id,count] of counts) {
 
- if(soundOn){
-  play("pick");
- }
-};
+    for(let k=0;k<count/2;k++) {
+      pairIds.push(id);
+    }
+  }
 
-$("difficulty").onchange=()=>{
+  const emptyOriginal =
+    board.map(v=>v===null);
 
- stage=1;
- newGame();
-};
+  let success = false;
 
-$("recordBtn").onclick=()=>{
+  for(
+    let tries=0;
+    tries<80 && !success;
+    tries++
+  ) {
 
- if(!finished){
+    board = emptyOriginal.map(()=>null);
 
-  paused=true;
+    const order = shuffled([...pairIds]);
 
-  $("pauseBtn").textContent="계속하기";
+    success = true;
+
+    for(const id of order) {
+
+      const empty = shuffled(
+        occupied.filter(
+          i=>board[i]===null
+        )
+      );
+
+      let placed = false;
+
+      for(const a of empty) {
+
+        for(const b of empty) {
+
+          if(a>=b) continue;
+
+          board[a] = id;
+          board[b] = id;
+
+          if(pathBetween(a,b)) {
+            placed = true;
+            break;
+          }
+
+          board[a] = null;
+          board[b] = null;
+        }
+
+        if(placed) break;
+      }
+
+      if(!placed) {
+        success = false;
+        break;
+      }
+    }
+  }
+
+  if(!success) {
+
+    board = emptyOriginal.map(()=>null);
+
+    const sh = shuffled(ids);
+
+    occupied.forEach((i,k) => {
+      board[i] = sh[k];
+    });
+  }
+
+  selected = null;
+  hints = [];
+
+  if(!automatic) {
+    score = Math.max(0,score-50);
+  }
+
+  say(
+    success
+      ? (
+          automatic
+            ? "연결할 수 없어 자동으로 섞었습니다."
+            : "패를 섞었습니다. -50점"
+        )
+      : "다시 배치했습니다."
+  );
 
   render();
- }
-
- const r=readRecord();
-
- modal(
-  "YOUR RECORD",
-  "나의 기록",
-  r
-   ?(
-    "최고 점수 "+
-    r.score.toLocaleString("ko-KR")+
-    "점\n최단 완료 시간 "+
-    formatTime(r.time)+
-    "\n클리어 횟수 "+
-    r.clears+"회"
-   )
-   :"아직 완료 기록이 없습니다.",
-  "게임으로",
-  "홈으로",
-  ()=>{
-   if(!finished)resume();
-  },
-  openHome
- );
-};
+}
 
 /* =====================================
-   이미지 원본 비율 인식
+   HINT
 ===================================== */
 
-const sample=new Image();
+function hint() {
 
-sample.onload=()=>{
+  if(
+    paused ||
+    busy ||
+    finished
+  ) return;
 
- ratio=
-  sample.naturalWidth/
-  sample.naturalHeight;
+  let p = availablePair();
 
- fitBoard();
-};
+  if(!p) {
 
-sample.src=imgPath(1);
+    shuffleTiles(true);
+    p = availablePair();
+  }
+
+  if(!p) {
+
+    say("연결 가능한 패를 찾지 못했습니다.");
+    return;
+  }
+
+  selected = null;
+  hints = p;
+
+  score = Math.max(0,score-30);
+
+  play("hint");
+
+  say("표시된 두 패를 연결하세요. -30점");
+
+  render();
+}
 
 /* =====================================
-   최초 실행
+   RECORD STORAGE
+===================================== */
+
+const recordKey = () =>
+  "pattern_connect_v5_" +
+  $("difficulty").value +
+  "_" +
+  stage;
+
+function readRecord() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(recordKey()) ||
+      "null"
+    );
+
+  } catch {
+    return null;
+  }
+}
+
+function updateBest() {
+
+  const r = readRecord();
+
+  $("bestScore").textContent = r
+    ? r.score.toLocaleString("ko-KR")
+    : "—";
+}
+
+function saveRecord() {
+
+  try {
+
+    const r = readRecord() || {};
+    const time = initialTime-seconds;
+
+    localStorage.setItem(
+      recordKey(),
+      JSON.stringify({
+
+        score:Math.max(
+          r.score||0,
+          score
+        ),
+
+        time:r.time===undefined
+          ?time
+          :Math.min(r.time,time),
+
+        clears:(r.clears||0)+1
+
+      })
+    );
+
+  } catch(e) {
+    console.warn("기록 저장 불가",e);
+  }
+
+  updateBest();
+}
+
+/* =====================================
+   GAME FINISH
+===================================== */
+
+function finish(won) {
+
+  finished = true;
+
+  clearInterval(tick);
+  tick = null;
+
+  render();
+
+  if(won) {
+
+    saveRecord();
+    play("win");
+
+    modal(
+      "STAGE COMPLETE",
+      "Stage " + stage + " Clear!",
+      "점수 " +
+        score.toLocaleString("ko-KR") +
+        "점\n완료 시간 " +
+        formatTime(initialTime-seconds),
+      "다음 스테이지",
+      "다시 플레이",
+      () => {
+        stage++;
+        newGame();
+      },
+      () => newGame()
+    );
+
+  } else {
+
+    play("lose");
+
+    modal(
+      "TIME OVER",
+      "시간 종료",
+      "제한 시간 안에 모든 패를 제거해 보세요.",
+      "다시 시작",
+      "홈으로",
+      () => newGame(),
+      openHome
+    );
+  }
+}
+
+/* =====================================
+   PAUSE
+===================================== */
+
+function pauseGame() {
+
+  if(finished||busy) return;
+
+  paused = !paused;
+
+  $("pauseBtn").textContent =
+    paused ? "계속하기" : "일시정지";
+
+  render();
+
+  if(paused) {
+
+    modal(
+      "PAUSE",
+      "일시정지",
+      "게임 타이머가 멈췄습니다.",
+      "계속하기",
+      "홈으로",
+      resume,
+      openHome
+    );
+  }
+}
+
+function resume() {
+
+  paused = false;
+
+  $("pauseBtn").textContent =
+    "일시정지";
+
+  render();
+}
+
+/* =====================================
+   NEW GAME
+===================================== */
+
+function newGame() {
+
+  clearInterval(tick);
+  clearTimeout(matchTimeout);
+
+  tick = null;
+  matchTimeout = null;
+
+  clearRoute();
+
+  const config =
+    LEVELS[$("difficulty").value];
+
+  rows = config.rows;
+  cols = config.cols;
+
+  initialTime = Math.max(
+    90,
+    config.time-(stage-1)*12
+  );
+
+  seconds = initialTime;
+
+  score = 0;
+  selected = null;
+  hints = [];
+
+  busy = false;
+  paused = false;
+  finished = false;
+
+  $("pauseBtn").textContent =
+    "일시정지";
+
+  buildSolvableBoard(
+    groupForStage(stage)
+  );
+
+  say("같은 패턴 두 개를 연결하세요.");
+
+  render();
+  updateBest();
+
+  tick = setInterval(() => {
+
+    if(
+      paused ||
+      finished ||
+      busy ||
+      $("game").hidden
+    ) return;
+
+    seconds = Math.max(0,seconds-1);
+
+    $("time").textContent =
+      formatTime(seconds);
+
+    if(!seconds) {
+      finish(false);
+    }
+
+  },1000);
+}
+
+/* =====================================
+   BUTTON EVENTS
+===================================== */
+
+$("hintBtn").onclick = hint;
+
+$("shuffleBtn").onclick = () =>
+  shuffleTiles(false);
+
+$("pauseBtn").onclick = pauseGame;
+
+$("restartBtn").onclick = newGame;
+
+$("soundBtn").onclick = () => {
+
+  soundOn = !soundOn;
+
+  $("soundBtn").textContent =
+    soundOn
+      ? "소리 켜짐"
+      : "음소거";
+
+  if(soundOn) {
+    play("pick");
+  }
+};
+
+$("difficulty").onchange = () => {
+
+  stage = 1;
+  newGame();
+};
+
+/* =====================================
+   RECORD BUTTON
+===================================== */
+
+$("recordBtn").onclick = () => {
+
+  if(!finished) {
+
+    paused = true;
+
+    $("pauseBtn").textContent =
+      "계속하기";
+
+    render();
+  }
+
+  const r = readRecord();
+
+  modal(
+    "YOUR RECORD",
+    "나의 기록",
+
+    r
+      ? "최고 점수 " +
+        r.score.toLocaleString("ko-KR") +
+        "점\n최단 완료 시간 " +
+        formatTime(r.time) +
+        "\n클리어 횟수 " +
+        r.clears + "회"
+
+      : "아직 완료 기록이 없습니다.",
+
+    "게임으로",
+    "홈으로",
+
+    () => {
+      if(!finished) resume();
+    },
+
+    openHome
+  );
+};
+
+/* =====================================
+   TILE IMAGE RATIO
+===================================== */
+
+const sample = new Image();
+
+sample.onload = () => {
+
+  ratio =
+    sample.naturalWidth /
+    sample.naturalHeight;
+
+  fitBoard();
+};
+
+sample.src = imgPath(1);
+
+/* =====================================
+   INITIALIZE
 ===================================== */
 
 buildHome();
