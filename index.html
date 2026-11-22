@@ -1,1439 +1,2291 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Pattern Connect | 사천성</title>
+<title>Pattern Connect</title>
 
 <style>
 *{box-sizing:border-box}
 
 :root{
-  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
-  color:#222;
-  --accent:#ef5f7f;
-  --accent-deep:#e14d70;
-  --accent-soft:rgba(239,95,127,.10);
+ --pink:#f15b7e;
+ --pink-line:#ff4e79;
+ --background:#eae8e9;
+ font-family:-apple-system,BlinkMacSystemFont,
+ "Apple SD Gothic Neo",Arial,sans-serif;
+ color:#242424;
 }
 
-body{
-  margin:0;
-  background:#fff;
+html,body{
+ margin:0;
+ width:100%;
+ min-height:100%;
 }
+
+body{background:#fff}
 
 button,select{
-  font:inherit;
-  cursor:pointer;
+ font:inherit;
+ cursor:pointer;
 }
 
 button:disabled{
-  opacity:.35;
-  cursor:default;
+ opacity:.38;
+ cursor:default;
 }
 
-[hidden]{
-  display:none!important;
-}
+[hidden]{display:none!important}
 
-.screen{
-  min-height:100dvh;
-}
-
-/* =========================
+/* ===================================
    HOME SCREEN
-========================= */
+=================================== */
 
 #home{
-  background:#eae8e9;
-  position:relative;
-  overflow:hidden;
-  height:100dvh;
-  min-height:450px;
+ position:relative;
+ width:100%;
+ height:100dvh;
+ min-height:530px;
+ background:var(--background);
+ overflow:hidden;
+ isolation:isolate;
 }
 
-/* 그래픽 그룹 전체를 더 작게 */
+/*
+ 그래픽 배치 영역
+
+ 기존 그룹 전체 축소 방식 제거.
+ 화면 전체 너비에 개별 그래픽 배치.
+ 타이틀 영역과는 분리.
+*/
+
 .home-scene{
-  position:absolute;
-  left:50%;
-  top:31%;
-  width:min(90vw,1020px,calc(100dvh * 1.55));
-  aspect-ratio:848/490;
-  transform:translate(-50%,-50%) scale(.72);
-  transform-origin:center;
-  overflow:visible;
-  pointer-events:none;
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:70%;
+ overflow:hidden;
+ pointer-events:none;
+ z-index:1;
 }
+
+/* 개별 그래픽 */
 
 .motif{
-  position:absolute;
-  width:var(--w);
-  height:auto;
-  left:var(--x);
-  top:var(--y);
-  translate:-50% -50%;
-  transform-origin:center;
-  transform:rotate(var(--angle,0deg));
-  transition:transform .16s cubic-bezier(.15,.85,.25,1);
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-drag:none;
+ position:absolute;
+ left:var(--x);
+ top:var(--y);
+ width:var(--w);
+ height:auto;
+ display:block;
+ translate:-50% -50%;
+ transform:rotate(var(--angle,0deg));
+ transform-origin:50% 50%;
+ transition:transform .16s cubic-bezier(.18,.85,.3,1);
+ pointer-events:none;
+ user-select:none;
+ -webkit-user-drag:none;
 }
 
+/* ===================================
+   HOME TITLE
+=================================== */
+
 .home-menu{
-  position:absolute;
-  z-index:100;
-  left:50%;
-  bottom:5.2%;
-  transform:translateX(-50%);
-  width:min(92vw,470px);
-  text-align:center;
-  padding:12px 0;
-  background:transparent;
+ position:absolute;
+ z-index:10;
+ left:50%;
+ bottom:5.5%;
+ transform:translateX(-50%);
+ width:min(92%,520px);
+ text-align:center;
+ background:transparent;
 }
 
 .home-menu h1{
-  font-weight:500;
-  font-size:clamp(28px,4vw,44px);
-  letter-spacing:-1.7px;
-  margin:0 0 10px;
+ margin:0 0 9px;
+ font-size:clamp(30px,3.1vw,46px);
+ line-height:1.2;
+ font-weight:600;
+ letter-spacing:-1.8px;
 }
 
 .home-menu p{
-  font-size:12px;
-  color:#666;
-  margin:0 0 20px;
+ margin:0 0 21px;
+ font-size:13px;
+ color:#777;
 }
 
-.kicker{
-  font-size:10px;
-  letter-spacing:3px;
-  color:#777;
+.home-actions{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ gap:13px;
 }
 
-.home-actions,
-.modal-actions{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
+.home-button{
+ min-width:148px;
+ height:49px;
+ padding:0 21px;
+ border-radius:999px;
+ border:1.7px solid var(--pink-line);
+ font-size:13px;
+ font-weight:600;
+ transition:
+ background .18s,
+ transform .18s,
+ color .18s;
 }
 
-.pill{
-  min-width:138px;
-  border:1.5px solid var(--accent);
-  border-radius:999px;
-  padding:12px 24px;
-  background:var(--accent-soft);
-  color:var(--accent-deep);
-  font-size:13px;
-  font-weight:600;
+.home-button:hover{
+ transform:translateY(-2px);
 }
 
-.pill.dark{
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
+.home-button.outline{
+ background:rgba(241,91,126,.035);
+ color:var(--pink-line);
 }
 
-.pill:hover{
-  opacity:.86;
+.home-button.filled{
+ background:var(--pink);
+ border-color:var(--pink);
+ color:white;
 }
 
-/* =========================
-   GAME SCREEN
-========================= */
+/* ===================================
+   GAME
+=================================== */
 
 #game{
-  height:100dvh;
-  min-height:440px;
-  display:flex;
-  flex-direction:column;
-  padding:12px clamp(8px,3vw,28px) 15px;
-  max-width:1300px;
-  margin:auto;
+ display:flex;
+ flex-direction:column;
+ height:100dvh;
+ min-height:480px;
+ max-width:1300px;
+ margin:auto;
+ padding:12px 22px 18px;
+ background:#fff;
 }
 
 .game-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex:none;
-  min-height:44px;
+ flex:none;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ height:47px;
 }
 
-.iconbtn{
-  border:0;
-  background:transparent;
-  padding:9px 10px;
-  color:#222;
-  font-size:20px;
+.icon-button{
+ width:44px;
+ height:44px;
+ border:0;
+ background:transparent;
+ color:#222;
+ font-size:24px;
+}
+
+.stage-label{
+ font-size:11px;
+ letter-spacing:2.5px;
+ color:#777;
 }
 
 .game-heading{
-  text-align:center;
-  flex:none;
-  margin:1px 0 9px;
+ flex:none;
+ text-align:center;
+ margin:2px 0 11px;
 }
 
 .game-heading h2{
-  font-size:24px;
-  font-weight:500;
-  margin:4px 0;
+ font-size:25px;
+ font-weight:500;
+ margin:0 0 6px;
 }
 
 .game-heading p{
-  font-size:11px;
-  color:#888;
-  margin:0;
+ font-size:11px;
+ color:#999;
+ margin:0;
 }
 
 .stats{
-  display:flex;
-  justify-content:center;
-  gap:clamp(12px,4vw,38px);
-  margin:7px 0;
-  flex:none;
-  text-align:center;
+ flex:none;
+ display:flex;
+ justify-content:center;
+ gap:clamp(15px,4vw,50px);
+ text-align:center;
+ margin:6px 0 12px;
 }
 
-.stats small{
-  display:block;
-  color:#999;
-  font-size:10px;
-  margin-bottom:3px;
+.stat small{
+ display:block;
+ font-size:10px;
+ color:#999;
+ margin-bottom:5px;
 }
 
-.stats strong{
-  font-size:15px;
-  font-weight:500;
-  font-variant-numeric:tabular-nums;
+.stat strong{
+ font-size:16px;
+ font-weight:500;
+ font-variant-numeric:tabular-nums;
 }
 
 .game-area{
-  flex:1;
-  min-height:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:7px 0;
+ flex:1;
+ min-height:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:8px 0;
 }
 
 .board{
-  position:relative;
-  display:grid;
-  grid-template-columns:repeat(var(--cols),var(--tile-width));
-  gap:var(--gap);
-  width:max-content;
-  max-width:100%;
-  margin:auto;
+ position:relative;
+ display:grid;
+ grid-template-columns:
+ repeat(var(--cols),var(--tile-width));
+ gap:var(--gap);
+ width:max-content;
+ max-width:100%;
+ margin:auto;
 }
 
 .tile{
-  width:var(--tile-width);
-  aspect-ratio:var(--ratio);
-  padding:0;
-  border:0;
-  background:none;
-  display:block;
-  position:relative;
-  transition:transform .15s,opacity .15s;
+ position:relative;
+ display:block;
+ padding:0;
+ border:0;
+ background:transparent;
+ width:var(--tile-width);
+ aspect-ratio:var(--ratio);
+ transition:transform .15s;
 }
 
 .tile img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  user-select:none;
-  pointer-events:none;
+ display:block;
+ width:100%;
+ height:100%;
+ object-fit:contain;
+ user-select:none;
+ pointer-events:none;
 }
 
 .tile.selected{
-  outline:2px solid #47a99c;
-  outline-offset:2px;
-  transform:scale(.94);
+ outline:2px solid var(--pink);
+ outline-offset:3px;
+ transform:scale(.94);
 }
 
 .tile.hint{
-  outline:2px solid #e8bb57;
-  outline-offset:2px;
+ outline:2px solid #edbf4d;
+ outline-offset:3px;
 }
 
 .tile.empty{
-  visibility:hidden;
+ visibility:hidden;
 }
 
 .route{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  overflow:visible;
-  z-index:3;
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ overflow:visible;
+ pointer-events:none;
+ z-index:5;
 }
 
 .game-footer{
-  text-align:center;
-  flex:none;
+ flex:none;
+ text-align:center;
 }
 
 #message{
-  font-size:12px;
-  color:#777;
-  margin:3px 0 9px;
-  min-height:17px;
+ min-height:20px;
+ color:#888;
+ font-size:12px;
+ margin:7px 0 13px;
 }
 
 .tools{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:7px;
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:7px;
 }
 
 .tool{
-  background:white;
-  border:1px solid #ddd;
-  border-radius:25px;
-  padding:9px 13px;
-  font-size:12px;
-  color:#222;
+ border:1px solid #ddd;
+ border-radius:24px;
+ padding:9px 14px;
+ background:#fff;
+ color:#222;
+ font-size:12px;
 }
 
-.tool.emphasis{
-  background:#222;
-  border-color:#222;
-  color:white;
+.tool.primary{
+ background:var(--pink);
+ border-color:var(--pink);
+ color:#fff;
 }
 
-/* =========================
+/* ===================================
    MODAL
-========================= */
+=================================== */
 
 .overlay{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  background:rgba(234,232,233,.94);
-  backdrop-filter:blur(9px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+ position:fixed;
+ inset:0;
+ z-index:100;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:rgba(234,232,233,.94);
+ backdrop-filter:blur(9px);
+ padding:20px;
 }
 
 .dialog{
-  width:min(100%,430px);
-  padding:32px 24px;
-  background:white;
-  border-radius:18px;
-  text-align:center;
-  box-shadow:0 12px 50px #00000012;
+ width:min(100%,440px);
+ background:white;
+ border-radius:18px;
+ padding:37px 28px;
+ text-align:center;
+ box-shadow:0 12px 60px #00000010;
+}
+
+.dialog-kicker{
+ font-size:10px;
+ letter-spacing:3px;
+ color:var(--pink);
 }
 
 .dialog h2{
-  font-weight:500;
-  font-size:26px;
-  margin:12px 0 20px;
+ font-size:27px;
+ font-weight:500;
+ margin:15px 0 20px;
 }
 
 .dialog p{
-  font-size:13px;
-  line-height:1.9;
-  color:#666;
-  white-space:pre-line;
+ font-size:13px;
+ line-height:1.9;
+ color:#666;
+ white-space:pre-line;
 }
 
 .modal-actions{
-  margin-top:25px;
+ display:flex;
+ justify-content:center;
+ gap:10px;
+ margin-top:25px;
 }
 
-/* =========================
+/* ===================================
    MOBILE
-========================= */
+=================================== */
 
 @media(max-width:700px){
-  .home-scene{
-    left:50%;
-    top:29%;
-    width:118vw;
-    transform:translate(-50%,-50%) scale(.67);
-  }
 
-  .home-menu{
-    left:50%;
-    bottom:5%;
-    width:min(92vw,360px);
-    text-align:center;
-    padding:8px 0;
-  }
+ #home{
+  min-height:520px;
+ }
 
-  .home-menu h1{
-    font-size:clamp(26px,7vw,36px);
-  }
+ .home-scene{
+  height:67%;
+ }
 
-  .home-menu p{
-    font-size:11px;
-  }
+ .home-menu{
+  bottom:6%;
+  width:94%;
+ }
 
-  .pill{
-    min-width:122px;
-    padding:10px 18px;
-  }
+ .home-menu h1{
+  font-size:31px;
+ }
 
-  .game-heading h2{
-    font-size:20px;
-  }
+ .home-menu p{
+  font-size:11px;
+ }
 
-  .stats{
-    gap:14px;
-  }
+ .home-button{
+  min-width:125px;
+  height:45px;
+  padding:0 15px;
+  font-size:12px;
+ }
 
-  .tool{
-    font-size:11px;
-    padding:8px 10px;
-  }
+ #game{
+  padding:8px 7px 13px;
+ }
+
+ .game-heading h2{
+  font-size:21px;
+ }
+
+ .stats{
+  gap:17px;
+ }
+
+ .stat strong{
+  font-size:14px;
+ }
+
+ .tool{
+  padding:8px 10px;
+  font-size:11px;
+ }
 }
 
 @media(prefers-reduced-motion:reduce){
-  .motif,.tile{
-    transition:none;
-  }
+ .motif,
+ .tile,
+ .home-button{
+  transition:none;
+ }
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     HOME
-========================= -->
+<!-- ===================================
+     1 DEPTH : HOME
+=================================== -->
 
-<section id="home" class="screen">
-  <div class="home-scene" id="homeScene" aria-hidden="true"></div>
+<section id="home">
 
-  <div class="home-menu">
-    <h1>Pattern Connect</h1>
-    <p>Find the same patterns. Connect the moments.</p>
+ <div
+  class="home-scene"
+  id="homeScene"
+  aria-hidden="true">
+ </div>
 
-    <div class="home-actions">
-      <button class="pill" id="howBtn">How to Play</button>
-      <button class="pill dark" id="startBtn">Start Game</button>
-    </div>
+ <div class="home-menu">
+
+  <h1>Pattern Connect</h1>
+
+  <p>
+   Find the same patterns. Connect the moments.
+  </p>
+
+  <div class="home-actions">
+
+   <button
+    class="home-button outline"
+    id="howBtn">
+    How to Play
+   </button>
+
+   <button
+    class="home-button filled"
+    id="startBtn">
+    Start Game
+   </button>
+
   </div>
+
+ </div>
+
 </section>
 
-<!-- =========================
-     GAME
-========================= -->
+<!-- ===================================
+     2 DEPTH : GAME
+=================================== -->
 
-<section id="game" class="screen" hidden>
-  <header class="game-header">
-    <button class="iconbtn" id="homeBtn" aria-label="홈으로">←</button>
-    <span class="kicker" id="stageLabel">STAGE 01</span>
-    <button class="iconbtn" id="recordBtn" aria-label="기록">♡</button>
-  </header>
+<section id="game" hidden>
 
-  <div class="game-heading">
-    <h2>사천성 퍼즐</h2>
-    <p id="groupLabel"></p>
+ <header class="game-header">
+
+  <button
+   class="icon-button"
+   id="homeBtn"
+   aria-label="홈으로">
+   ←
+  </button>
+
+  <span
+   class="stage-label"
+   id="stageLabel">
+   STAGE 01
+  </span>
+
+  <button
+   class="icon-button"
+   id="recordBtn"
+   aria-label="최고 기록">
+   ♡
+  </button>
+
+ </header>
+
+ <div class="game-heading">
+
+  <h2>Pattern Connect</h2>
+
+  <p id="groupLabel">
+   Pattern Collection 01–09
+  </p>
+
+ </div>
+
+ <div class="stats">
+
+  <div class="stat">
+   <small>SCORE</small>
+   <strong id="score">0</strong>
   </div>
 
-  <div class="stats">
-    <div>
-      <small>SCORE</small>
-      <strong id="score">0</strong>
-    </div>
-    <div>
-      <small>TIME</small>
-      <strong id="time">00:00</strong>
-    </div>
-    <div>
-      <small>TILES</small>
-      <strong id="remaining">0</strong>
-    </div>
-    <div>
-      <small>BEST</small>
-      <strong id="bestScore">—</strong>
-    </div>
+  <div class="stat">
+   <small>TIME</small>
+   <strong id="time">05:00</strong>
   </div>
 
-  <div class="game-area" id="gameArea">
-    <div class="board" id="board">
-      <svg id="route" class="route"></svg>
-    </div>
+  <div class="stat">
+   <small>TILES</small>
+   <strong id="remaining">40</strong>
   </div>
 
-  <div class="game-footer">
-    <p id="message">같은 패 두 개를 연결하세요.</p>
-
-    <div class="tools">
-      <select id="difficulty" class="tool">
-        <option value="easy">쉬움</option>
-        <option value="normal" selected>보통</option>
-        <option value="hard">어려움</option>
-      </select>
-
-      <button id="hintBtn" class="tool">힌트</button>
-      <button id="shuffleBtn" class="tool">섞기</button>
-      <button id="pauseBtn" class="tool">일시정지</button>
-      <button id="soundBtn" class="tool">소리 켜짐</button>
-      <button id="restartBtn" class="tool emphasis">다시 시작</button>
-    </div>
+  <div class="stat">
+   <small>BEST</small>
+   <strong id="bestScore">—</strong>
   </div>
+
+ </div>
+
+ <div
+  class="game-area"
+  id="gameArea">
+
+  <div
+   class="board"
+   id="board">
+
+   <svg
+    id="route"
+    class="route"
+    aria-hidden="true">
+   </svg>
+
+  </div>
+
+ </div>
+
+ <div class="game-footer">
+
+  <p id="message" role="status">
+   같은 디자인의 패 두 개를 연결하세요.
+  </p>
+
+  <div class="tools">
+
+   <select
+    class="tool"
+    id="difficulty">
+
+    <option value="easy">
+     Easy
+    </option>
+
+    <option value="normal" selected>
+     Normal
+    </option>
+
+    <option value="hard">
+     Hard
+    </option>
+
+   </select>
+
+   <button class="tool" id="hintBtn">
+    Hint
+   </button>
+
+   <button class="tool" id="shuffleBtn">
+    Shuffle
+   </button>
+
+   <button class="tool" id="pauseBtn">
+    Pause
+   </button>
+
+   <button class="tool" id="soundBtn">
+    Sound On
+   </button>
+
+   <button class="tool primary" id="restartBtn">
+    Restart
+   </button>
+
+  </div>
+
+ </div>
+
 </section>
 
-<!-- =========================
+<!-- ===================================
      MODAL
-========================= -->
+=================================== -->
 
-<div class="overlay" id="overlay" hidden>
-  <div class="dialog" role="dialog" aria-modal="true">
-    <div class="kicker" id="dialogEyebrow"></div>
-    <h2 id="dialogTitle"></h2>
-    <p id="dialogText"></p>
+<div
+ class="overlay"
+ id="overlay"
+ hidden>
 
-    <div class="modal-actions">
-      <button class="pill" id="dialogSecondary">닫기</button>
-      <button class="pill dark" id="dialogPrimary">확인</button>
-    </div>
+ <div class="dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dialogTitle">
+
+  <div
+   class="dialog-kicker"
+   id="dialogEyebrow">
   </div>
+
+  <h2 id="dialogTitle"></h2>
+
+  <p id="dialogText"></p>
+
+  <div class="modal-actions">
+
+   <button
+    class="home-button outline"
+    id="dialogSecondary">
+    Close
+   </button>
+
+   <button
+    class="home-button filled"
+    id="dialogPrimary">
+    OK
+   </button>
+
+  </div>
+
+ </div>
+
 </div>
 
 <script>
 "use strict";
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-/* =========================
-   HOME GRAPHICS
-   기준 좌표계 848 × 490
-   [이미지번호, X, Y]
-========================= */
+/* =====================================
+   HOME LAYOUT
 
-const L = [
-  /* 기존 중심 그룹 */
-  [4,128,28],[5,170,28],[6,196,28],[8,249,28],[8,260,28],[8,286,28],[9,323,28],[10,363,28],[11,394,28],
+   좌표 기준 : 848 × 490
 
-  [2,79,90],[3,103,90],[7,189,90],[3,222,90],[12,239,90],[12,273,90],[12,287,90],
-  [1,441,77],[2,494,100],[5,632,99],[6,651,89],[11,810,77],
+   기존 패턴의 상대적인 위치 유지.
+   전체 너비에 분산되도록 변환.
+===================================== */
 
-  [1,35,144],[13,234,144],[1,276,144],[3,494,123],[7,761,128],
+const BASE_WIDTH=848;
+const BASE_HEIGHT=490;
 
-  [8,277,186],[8,277,199],[4,556,169],[10,599,169],[10,725,167],[15,761,169],
+/*
+  [이미지 번호, X, Y]
 
-  [8,277,248],[14,438,250],[6,598,238],[15,761,238],
-  [13,438,275],[3,494,263],[12,494,278],[8,555,294],[8,555,305],
+  가운데 원래 배치 + 좌우 확장.
+*/
 
-  [1,441,319],[12,494,318],[12,494,330],[8,555,329],[10,408,345],
-  [8,277,365],[4,372,368],[9,557,367],[7,619,365],
-  [10,556,406],[11,557,436],[2,587,436],[2,671,436],[13,705,436],
+const HOME_LAYOUT=[
 
-  /* 좌우 여백 보강용 추가 패턴 */
-  [3,55,60],[8,90,88],[12,70,120],[10,44,210],[8,63,310],[6,95,405],[12,120,455],
-  [14,175,292],[8,210,355],[11,235,430],
-  [5,790,55],[8,742,88],[12,778,142],[3,795,230],[8,760,292],[6,806,395],[14,785,458],
-  [12,665,68],[8,690,115],[3,640,428],
-  [11,165,58],[8,335,55],[3,708,112]
+ /* 왼쪽 상단 */
+
+ [8,35,25],
+ [12,68,57],
+ [3,91,25],
+ [9,112,80],
+ [8,145,37],
+ [11,168,57],
+
+ /* 기존 상단 그래픽 */
+
+ [4,205,28],
+ [5,244,28],
+ [6,267,28],
+ [8,305,28],
+ [8,317,28],
+ [8,340,28],
+ [9,378,28],
+ [10,415,28],
+ [11,450,28],
+
+ /* 오른쪽 상단 확장 */
+
+ [8,506,32],
+ [12,543,60],
+ [3,583,34],
+ [5,626,74],
+ [8,670,27],
+ [11,712,57],
+ [9,760,33],
+ [8,811,73],
+
+ /* 왼쪽 두 번째 영역 */
+
+ [1,34,144],
+ [13,112,143],
+ [8,67,201],
+ [6,165,187],
+ [3,204,117],
+
+ /* 기존 중상단 */
+
+ [2,233,91],
+ [3,256,91],
+ [7,324,91],
+ [3,363,91],
+ [12,385,91],
+ [12,407,91],
+
+ [1,479,80],
+ [2,534,105],
+ [5,630,99],
+ [6,650,90],
+ [11,811,78],
+
+ /* 중상단 추가 */
+
+ [8,85,110],
+ [12,145,105],
+ [3,180,142],
+ [8,560,48],
+ [12,704,124],
+
+ /* 기존 두 번째 그룹 */
+
+ [1,70,166],
+ [13,286,146],
+ [1,336,148],
+ [3,538,127],
+ [7,757,144],
+
+ [8,337,186],
+ [8,337,201],
+ [4,592,170],
+ [10,628,171],
+ [10,720,170],
+ [15,775,168],
+
+ /* 왼쪽 중간 보강 */
+
+ [14,44,270],
+ [8,98,256],
+ [3,151,282],
+ [12,192,239],
+ [6,221,311],
+ [8,254,265],
+
+ /* 기존 중앙 */
+
+ [8,337,248],
+ [14,478,248],
+ [6,628,236],
+ [15,775,236],
+
+ [13,478,276],
+ [3,535,263],
+ [12,535,279],
+ [8,595,294],
+ [8,595,306],
+
+ /* 오른쪽 중간 보강 */
+
+ [8,802,270],
+ [3,726,305],
+ [12,765,330],
+ [9,820,358],
+ [8,692,273],
+
+ /* 왼쪽 하단 */
+
+ [8,30,387],
+ [12,78,364],
+ [5,113,416],
+ [3,172,396],
+ [8,207,445],
+ [11,250,383],
+
+ /* 기존 하단 중앙 */
+
+ [1,479,319],
+ [12,535,318],
+ [12,535,331],
+ [8,595,329],
+ [10,445,346],
+
+ [8,337,365],
+ [4,409,370],
+ [9,595,368],
+ [7,656,366],
+
+ /* 하단 좌우 추가 */
+
+ [3,75,465],
+ [8,154,471],
+ [12,283,430],
+ [6,350,452],
+
+ [8,710,415],
+ [14,764,412],
+ [3,810,458],
+ [12,729,462],
+
+ /* 기존 하단 */
+
+ [10,595,406],
+ [11,596,438],
+ [2,631,438],
+ [2,708,438],
+ [13,746,438]
+
 ];
 
-const WIDTH = {
-  1:74, 2:48, 3:32, 4:44, 5:53,
-  6:59, 7:71, 8:15, 9:52, 10:58,
-  11:29, 12:18, 13:57, 14:44, 15:68
+/* 이미지 번호별 상대 크기 */
+
+const HOME_WIDTH={
+ 1:74,
+ 2:48,
+ 3:32,
+ 4:44,
+ 5:53,
+ 6:59,
+ 7:71,
+ 8:15,
+ 9:52,
+ 10:58,
+ 11:29,
+ 12:18,
+ 13:57,
+ 14:44,
+ 15:68
 };
 
-const homeNodes = [];
-const motionTimers = new Set();
-let motionOn = false;
+/*
+ 개별 이미지 크기 비율.
+
+ 위치는 전체 화면으로 확장하고
+ 크기는 별도로 제어한다.
+
+ 숫자가 작을수록 이미지 작아짐.
+*/
+
+const MOTIF_SIZE_FACTOR=0.58;
+
+const homeNodes=[];
+const motionTimers=new Set();
+
+let motionRunning=false;
+
+/* =====================================
+   HOME IMAGE CREATION
+===================================== */
+
+function homeImagePath(number){
+
+ return "images/Home"+
+  String(number).padStart(2,"0")+
+  ".png";
+}
 
 function buildHome(){
-  const frag = document.createDocumentFragment();
 
-  L.forEach(([n,x,y],i)=>{
-    const img = document.createElement("img");
-    img.className = "motif";
-    img.alt = "";
-    img.draggable = false;
+ const root=$("homeScene");
+ const frag=document.createDocumentFragment();
 
-    const src = "images/Home" + String(n).padStart(2,"0") + ".png";
-    img.src = src;
+ HOME_LAYOUT.forEach(([number,x,y],i)=>{
 
-    /* 깨진 이미지 방지 */
-    img.onerror = () => {
-      if(img.dataset.fallbackDone === "1"){
-        img.style.display = "none";
-        return;
-      }
-      img.dataset.fallbackDone = "1";
-      img.src = "images/Home08.png";
-    };
+  const image=document.createElement("img");
 
-    img.style.setProperty("--x", x / 848 * 100 + "%");
-    img.style.setProperty("--y", y / 490 * 100 + "%");
-    img.style.setProperty("--w", WIDTH[n] / 848 * 100 + "%");
-    img.style.zIndex = String(i);
-    img.dataset.rotation = "0";
+  image.className="motif";
+  image.alt="";
+  image.draggable=false;
+  image.decoding="async";
 
-    frag.append(img);
-    homeNodes.push(img);
-  });
+  image.src=homeImagePath(number);
 
-  $("homeScene").append(frag);
+  /*
+   PNG 로딩 실패 시:
+   깨진 이미지 아이콘을 노출하지 않고 숨김.
+   다른 패턴으로 임의 대체하지 않음.
+  */
+
+  image.onerror=()=>{
+   image.style.display="none";
+   console.warn(
+    "홈 이미지 로딩 실패:",
+    image.src
+   );
+  };
+
+  /* X / Y는 화면 전체 비율 기준 */
+
+  image.style.setProperty(
+   "--x",
+   (x/BASE_WIDTH*100)+"%"
+  );
+
+  image.style.setProperty(
+   "--y",
+   (y/BASE_HEIGHT*100)+"%"
+  );
+
+  /*
+   그래픽 너비는 화면 전체 확대와
+   무관하게 제한된 범위로 계산
+  */
+
+  const relativeWidth=
+   HOME_WIDTH[number]*
+   MOTIF_SIZE_FACTOR;
+
+  const widthVW=
+   relativeWidth/BASE_WIDTH*100;
+
+  const maxWidth=
+   relativeWidth*1.75;
+
+  image.style.setProperty(
+   "--w",
+   `clamp(10px, ${widthVW}vw, ${maxWidth}px)`
+  );
+
+  image.style.zIndex=String(i%8);
+  image.dataset.rotation="0";
+
+  frag.appendChild(image);
+  homeNodes.push(image);
+
+ });
+
+ root.replaceChildren(frag);
 }
+
+/* =====================================
+   HOME MOTION
+===================================== */
 
 function stopHomeMotion(){
-  motionOn = false;
-  for(const t of motionTimers){
-    clearTimeout(t);
-  }
-  motionTimers.clear();
+
+ motionRunning=false;
+
+ for(const timer of motionTimers){
+  clearTimeout(timer);
+ }
+
+ motionTimers.clear();
 }
 
-function scheduleMotion(img){
-  if(!motionOn) return;
+function scheduleMotion(image){
 
-  const t = setTimeout(()=>{
-    motionTimers.delete(t);
-    if(!motionOn) return;
+ if(!motionRunning)return;
 
-    const angles = [90,180,270,360];
-    const add = angles[Math.floor(Math.random()*4)];
-    const next = Number(img.dataset.rotation) + add;
+ const delay=
+  900+Math.random()*3000;
 
-    img.dataset.rotation = next;
-    img.style.setProperty("--angle", next + "deg");
+ const timer=setTimeout(()=>{
 
-    scheduleMotion(img);
-  }, 850 + Math.random()*2700);
+  motionTimers.delete(timer);
 
-  motionTimers.add(t);
+  if(!motionRunning)return;
+
+  if(image.style.display==="none"){
+   return;
+  }
+
+  const angles=[
+   90,180,270,360
+  ];
+
+  const angle=angles[
+   Math.floor(Math.random()*angles.length)
+  ];
+
+  const rotation=
+   Number(image.dataset.rotation)+angle;
+
+  image.dataset.rotation=String(rotation);
+
+  image.style.setProperty(
+   "--angle",
+   rotation+"deg"
+  );
+
+  scheduleMotion(image);
+
+ },delay);
+
+ motionTimers.add(timer);
 }
 
 function startHomeMotion(){
-  stopHomeMotion();
 
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+ stopHomeMotion();
 
-  motionOn = true;
-  homeNodes.forEach(scheduleMotion);
+ if(window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+ ).matches)return;
+
+ motionRunning=true;
+
+ homeNodes.forEach(scheduleMotion);
 }
 
-/* =========================
-   SCREEN TRANSITION
-========================= */
+/* =====================================
+   GAME STATE
+===================================== */
 
-let tick = null;
-let matchTimeout = null;
-let paused = false;
-let busy = false;
-let finished = false;
+const LEVELS={
+ easy:{rows:4,cols:6,time:360},
+ normal:{rows:5,cols:8,time:300},
+ hard:{rows:6,cols:10,time:240}
+};
+
+let stage=1;
+let rows=0;
+let cols=0;
+let board=[];
+
+let score=0;
+let seconds=0;
+let initialTime=0;
+
+let selected=null;
+let hints=[];
+
+let paused=false;
+let finished=false;
+let busy=false;
+
+let timer=null;
+let matchTimer=null;
+
+let soundEnabled=true;
+let audioContext=null;
+
+let tileRatio=184/223;
+
+function imagePath(number){
+
+ return "images/tile"+
+  String(number).padStart(2,"0")+
+  ".jpg";
+}
+
+function groupForStage(number){
+
+ return Array.from(
+  {length:9},
+  (_,i)=>i+(number%2?1:10)
+ );
+}
+
+function formatTime(value){
+
+ return String(
+  Math.floor(value/60)
+ ).padStart(2,"0")+
+ ":"+
+ String(value%60).padStart(2,"0");
+}
+
+function index(r,c){
+ return r*cols+c;
+}
+
+function coords(i){
+ return[
+  Math.floor(i/cols),
+  i%cols
+ ];
+}
+
+function shuffleArray(array){
+
+ for(let i=array.length-1;i>0;i--){
+
+  const j=Math.floor(
+   Math.random()*(i+1)
+  );
+
+  [array[i],array[j]]=[
+   array[j],array[i]
+  ];
+ }
+
+ return array;
+}
+
+function message(text){
+ $("message").textContent=text;
+}
+
+/* =====================================
+   SCREEN TRANSITION
+===================================== */
 
 function openHome(){
-  clearInterval(tick);
-  clearTimeout(matchTimeout);
-  tick = null;
-  matchTimeout = null;
 
-  $("overlay").hidden = true;
-  $("home").hidden = false;
-  $("game").hidden = true;
+ clearInterval(timer);
+ clearTimeout(matchTimer);
 
-  paused = false;
-  busy = false;
+ timer=null;
+ matchTimer=null;
 
-  startHomeMotion();
+ busy=false;
+ paused=false;
+
+ $("overlay").hidden=true;
+ $("game").hidden=true;
+ $("home").hidden=false;
+
+ startHomeMotion();
 }
 
 function openGame(){
-  stopHomeMotion();
 
-  $("home").hidden = true;
-  $("game").hidden = false;
+ stopHomeMotion();
 
-  stage = 1;
-  newGame();
+ $("home").hidden=true;
+ $("game").hidden=false;
 
-  requestAnimationFrame(fitBoard);
+ stage=1;
+ newGame();
+
+ requestAnimationFrame(fitBoard);
 }
 
-/* =========================
-   MODAL
-========================= */
-
-let modalPrimary = null;
-let modalSecondary = null;
-
-function modal(
-  eyebrow,
-  title,
-  text,
-  primary="확인",
-  secondary="닫기",
-  onPrimary=null,
-  onSecondary=null
-){
-  $("dialogEyebrow").textContent = eyebrow;
-  $("dialogTitle").textContent = title;
-  $("dialogText").textContent = text;
-  $("dialogPrimary").textContent = primary;
-  $("dialogSecondary").textContent = secondary;
-
-  modalPrimary = onPrimary;
-  modalSecondary = onSecondary;
-  $("overlay").hidden = false;
-}
-
-function closeModal(){
-  $("overlay").hidden = true;
-}
-
-$("dialogPrimary").onclick = ()=>{
-  const fn = modalPrimary;
-  closeModal();
-  if(fn) fn();
-};
-
-$("dialogSecondary").onclick = ()=>{
-  const fn = modalSecondary;
-  closeModal();
-  if(fn) fn();
-};
-
-$("howBtn").onclick = ()=>modal(
-  "HOW TO PLAY",
-  "게임 방법",
-  "① 같은 디자인의 패 두 개를 선택하세요.\n" +
-  "② 최대 두 번 꺾이는 경로로 연결해야 합니다.\n" +
-  "③ 제한 시간 안에 모든 패를 제거하세요.\n" +
-  "④ 홀수 스테이지는 01~09, 짝수 스테이지는 10~18 이미지를 사용합니다.",
-  "게임 시작",
-  "닫기",
-  openGame
-);
-
-$("startBtn").onclick = openGame;
-
-/* =========================
-   GAME CONFIG
-========================= */
-
-const LEVELS = {
-  easy:{rows:4,cols:6,time:360},
-  normal:{rows:5,cols:8,time:300},
-  hard:{rows:6,cols:10,time:240}
-};
-
-let stage = 1;
-let rows = 0;
-let cols = 0;
-let board = [];
-
-let score = 0;
-let seconds = 0;
-let initialTime = 0;
-
-let selected = null;
-let hints = [];
-
-let ratio = 184/223;
-let soundOn = true;
-let audio = null;
-
-const imgPath = n => "images/tile" + String(n).padStart(2,"0") + ".jpg";
-const groupForStage = n => Array.from({length:9},(_,i)=>i+(n%2?1:10));
-const formatTime = s => String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0");
-const ix = (r,c)=>r*cols+c;
-const rc = i=>[Math.floor(i/cols), i%cols];
-
-function shuffled(a){
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
-
-function say(s){
-  $("message").textContent = s;
-}
-
-/* =========================
+/* =====================================
    SOUND
-========================= */
+===================================== */
 
-function play(type){
-  if(!soundOn) return;
+function playSound(type){
 
-  try{
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if(!AC) return;
+ if(!soundEnabled)return;
 
-    if(!audio) audio = new AC();
-    if(audio.state === "suspended") audio.resume();
+ try{
 
-    const patterns = {
-      pick:[440],
-      good:[660,880],
-      bad:[210],
-      hint:[560],
-      win:[523,659,784,1046],
-      lose:[350,260]
-    };
+  const AC=
+   window.AudioContext||
+   window.webkitAudioContext;
 
-    patterns[type].forEach((hz,i)=>{
-      const t = audio.currentTime + i*.10;
-      const osc = audio.createOscillator();
-      const gain = audio.createGain();
+  if(!AC)return;
 
-      osc.frequency.value = hz;
-      osc.type = "sine";
-
-      gain.gain.setValueAtTime(.0001,t);
-      gain.gain.exponentialRampToValueAtTime(.08,t+.01);
-      gain.gain.exponentialRampToValueAtTime(.0001,t+.09);
-
-      osc.connect(gain);
-      gain.connect(audio.destination);
-
-      osc.start(t);
-      osc.stop(t+.1);
-    });
-
-  }catch(e){
-    console.warn(e);
+  if(!audioContext){
+   audioContext=new AC();
   }
-}
 
-/* =========================
-   PATH FINDING
-========================= */
+  if(audioContext.state==="suspended"){
+   audioContext.resume();
+  }
 
-function pathBetween(a,b){
-  if(a===b || board[a]==null || board[a]!==board[b]) return null;
+  const patterns={
+   select:[440],
+   match:[660,880],
+   wrong:[210],
+   hint:[560],
+   win:[523,659,784,1047],
+   lose:[350,260]
+  };
 
-  const H = rows+2;
-  const W = cols+2;
+  const frequencies=patterns[type]||[];
 
-  const grid = Array.from({length:H},()=>Array(W).fill(null));
+  frequencies.forEach((frequency,i)=>{
 
-  board.forEach((v,i)=>{
-    const [r,c]=rc(i);
-    grid[r+1][c+1]=v;
+   const t=
+    audioContext.currentTime+
+    i*.11;
+
+   const oscillator=
+    audioContext.createOscillator();
+
+   const gain=
+    audioContext.createGain();
+
+   oscillator.type="sine";
+   oscillator.frequency.value=frequency;
+
+   gain.gain.setValueAtTime(
+    .0001,t
+   );
+
+   gain.gain.exponentialRampToValueAtTime(
+    .075,t+.015
+   );
+
+   gain.gain.exponentialRampToValueAtTime(
+    .0001,t+.1
+   );
+
+   oscillator.connect(gain);
+   gain.connect(audioContext.destination);
+
+   oscillator.start(t);
+   oscillator.stop(t+.11);
+
   });
 
-  const [ar,ac]=rc(a);
-  const [br,bc]=rc(b);
-
-  const sr=ar+1, sc=ac+1, tr=br+1, tc=bc+1;
-
-  const dr=[-1,0,1,0];
-  const dc=[0,1,0,-1];
-
-  const best = Array.from({length:H},()=>Array.from({length:W},()=>[3,3,3,3]));
-  const q=[];
-
-  for(let d=0;d<4;d++){
-    best[sr][sc][d]=0;
-    q.push({r:sr,c:sc,d,t:0,p:[[sr,sc]]});
-  }
-
-  for(let h=0;h<q.length;h++){
-    const s=q[h];
-    if(s.t!==best[s.r][s.c][s.d]) continue;
-    if(s.r===tr&&s.c===tc) return s.p;
-
-    for(let nd=0;nd<4;nd++){
-      const nt=s.t+(nd===s.d?0:1);
-      const nr=s.r+dr[nd];
-      const nc=s.c+dc[nd];
-
-      if(nt>2||nr<0||nc<0||nr>=H||nc>=W) continue;
-      if(grid[nr][nc]!==null&&!(nr===tr&&nc===tc)) continue;
-      if(nt>=best[nr][nc][nd]) continue;
-
-      best[nr][nc][nd]=nt;
-      q.push({r:nr,c:nc,d:nd,t:nt,p:[...s.p,[nr,nc]]});
-    }
-  }
-
-  return null;
+ }catch(error){
+  console.warn(error);
+ }
 }
 
-function availablePair(){
-  for(let a=0;a<board.length;a++){
-    if(board[a]===null) continue;
-    for(let b=a+1;b<board.length;b++){
-      if(board[a]===board[b] && pathBetween(a,b)) return [a,b];
-    }
+/* =====================================
+   PATH FINDING
+
+   최대 두 번 방향 전환
+===================================== */
+
+function findPath(a,b){
+
+ if(
+  a===b||
+  board[a]===null||
+  board[a]!==board[b]
+ )return null;
+
+ const H=rows+2;
+ const W=cols+2;
+
+ const grid=Array.from(
+  {length:H},
+  ()=>Array(W).fill(null)
+ );
+
+ board.forEach((value,i)=>{
+
+  const [r,c]=coords(i);
+
+  grid[r+1][c+1]=value;
+
+ });
+
+ const [ar,ac]=coords(a);
+ const [br,bc]=coords(b);
+
+ const sr=ar+1;
+ const sc=ac+1;
+ const tr=br+1;
+ const tc=bc+1;
+
+ const dr=[-1,0,1,0];
+ const dc=[0,1,0,-1];
+
+ const best=Array.from(
+  {length:H},
+  ()=>Array.from(
+   {length:W},
+   ()=>[3,3,3,3]
+  )
+ );
+
+ const queue=[];
+
+ for(let d=0;d<4;d++){
+
+  best[sr][sc][d]=0;
+
+  queue.push({
+   r:sr,
+   c:sc,
+   d,
+   turns:0,
+   path:[[sr,sc]]
+  });
+ }
+
+ for(let head=0;head<queue.length;head++){
+
+  const current=queue[head];
+
+  if(
+   current.turns!==
+   best[current.r][current.c][current.d]
+  )continue;
+
+  if(
+   current.r===tr&&
+   current.c===tc
+  ){
+   return current.path;
   }
-  return null;
+
+  for(let nd=0;nd<4;nd++){
+
+   const turns=
+    current.turns+
+    (nd===current.d?0:1);
+
+   const nr=current.r+dr[nd];
+   const nc=current.c+dc[nd];
+
+   if(
+    turns>2||
+    nr<0||nr>=H||
+    nc<0||nc>=W
+   )continue;
+
+   if(
+    grid[nr][nc]!==null&&
+    !(nr===tr&&nc===tc)
+   )continue;
+
+   if(turns>=best[nr][nc][nd])
+    continue;
+
+   best[nr][nc][nd]=turns;
+
+   queue.push({
+    r:nr,
+    c:nc,
+    d:nd,
+    turns,
+    path:[
+     ...current.path,
+     [nr,nc]
+    ]
+   });
+  }
+ }
+
+ return null;
 }
 
-/* =========================
+function findPair(){
+
+ for(let a=0;a<board.length;a++){
+
+  if(board[a]===null)continue;
+
+  for(let b=a+1;b<board.length;b++){
+
+   if(
+    board[a]===board[b]&&
+    findPath(a,b)
+   ){
+    return[a,b];
+   }
+  }
+ }
+
+ return null;
+}
+
+/* =====================================
    BOARD GENERATION
-========================= */
+===================================== */
 
-function buildSolvableBoard(group){
-  const num = rows*cols;
-  const pairs = num/2;
+function generateBoard(group,positions=null,ids=null){
 
-  const ids = shuffled(Array.from({length:pairs},(_,i)=>group[i%group.length]));
+ const count=rows*cols;
 
-  for(let attempt=0;attempt<100;attempt++){
-    board = Array(num).fill(null);
-    let ok = true;
+ const occupied=positions||
+  Array.from({length:count},(_,i)=>i);
 
-    for(const id of ids){
-      const empties = shuffled(board.flatMap((v,i)=>v===null?[i]:[]));
-      let added = false;
+ const pairIds=ids||
+  Array.from(
+   {length:occupied.length/2},
+   (_,i)=>group[i%group.length]
+  );
 
-      for(const a of empties){
-        for(const b of empties){
-          if(a>=b) continue;
+ /*
+  빈 게임판에 연결 가능한 두 칸을
+  차례로 채우는 방식.
 
-          board[a]=id;
-          board[b]=id;
+  나중에 배치한 쌍부터 제거하면
+  경로를 확보할 수 있다.
+ */
 
-          if(pathBetween(a,b)){
-            added = true;
-            break;
-          }
+ for(let attempt=0;attempt<80;attempt++){
 
-          board[a]=null;
-          board[b]=null;
-        }
-        if(added) break;
-      }
+  board=Array(count).fill(null);
 
-      if(!added){
-        ok = false;
-        break;
-      }
+  const order=shuffleArray([...pairIds]);
+
+  let success=true;
+
+  for(const id of order){
+
+   const empty=shuffleArray(
+    occupied.filter(i=>board[i]===null)
+   );
+
+   let placed=false;
+
+   for(const a of empty){
+
+    for(const b of empty){
+
+     if(a>=b)continue;
+
+     board[a]=id;
+     board[b]=id;
+
+     if(findPath(a,b)){
+      placed=true;
+      break;
+     }
+
+     board[a]=null;
+     board[b]=null;
     }
 
-    if(ok) return;
+    if(placed)break;
+   }
+
+   if(!placed){
+    success=false;
+    break;
+   }
   }
 
-  board = Array(num).fill(null);
-  let k = 0;
+  if(success)return true;
+ }
 
-  for(let r=0;r<rows;r++){
-    for(let c=0;c<cols;c+=2){
-      board[ix(r,c)] = ids[k];
-      board[ix(r,c+1)] = ids[k];
-      k++;
-    }
-  }
+ return false;
 }
 
-/* =========================
-   BOARD SIZE
-========================= */
+function buildBoard(){
+
+ const group=groupForStage(stage);
+
+ if(generateBoard(group))return;
+
+ /*
+  예비 게임판:
+  가로로 인접한 패를 같은 이미지로 배치
+ */
+
+ board=Array(rows*cols).fill(null);
+
+ let k=0;
+
+ for(let r=0;r<rows;r++){
+
+  for(let c=0;c<cols;c+=2){
+
+   const id=group[k%group.length];
+
+   board[index(r,c)]=id;
+   board[index(r,c+1)]=id;
+
+   k++;
+  }
+ }
+}
+
+/* =====================================
+   RESPONSIVE BOARD
+===================================== */
 
 function fitBoard(){
-  if(!rows || !cols || $("game").hidden) return;
 
-  const area = $("gameArea");
-  const W = area.clientWidth;
-  const H = area.clientHeight;
+ if(
+  !rows||
+  !cols||
+  $("game").hidden
+ )return;
 
-  const gap = Math.max(2, Math.min(18, W/(cols*5), H/(rows*5)));
-  const size = Math.max(1, Math.min(106, (W-gap*(cols-1))/cols, (H-gap*(rows-1))*ratio/rows));
+ const area=$("gameArea");
 
-  $("board").style.setProperty("--cols", cols);
-  $("board").style.setProperty("--gap", gap+"px");
-  $("board").style.setProperty("--tile-width", size+"px");
-  $("board").style.setProperty("--ratio", ratio);
+ const W=area.clientWidth;
+ const H=area.clientHeight;
+
+ const gap=Math.max(
+  2,
+  Math.min(
+   18,
+   W/(cols*5),
+   H/(rows*5)
+  )
+ );
+
+ const tileWidth=Math.max(
+  1,
+  Math.min(
+   106,
+   (W-gap*(cols-1))/cols,
+   (H-gap*(rows-1))*tileRatio/rows
+  )
+ );
+
+ const root=$("board");
+
+ root.style.setProperty("--cols",cols);
+ root.style.setProperty("--gap",gap+"px");
+ root.style.setProperty(
+  "--tile-width",
+  tileWidth+"px"
+ );
+ root.style.setProperty(
+  "--ratio",
+  tileRatio
+ );
 }
 
-window.addEventListener("resize", fitBoard);
+window.addEventListener("resize",fitBoard);
 
-/* =========================
+/* =====================================
    CONNECTION ANIMATION
-========================= */
+===================================== */
 
 function clearRoute(){
-  $("route").replaceChildren();
+ $("route").replaceChildren();
 }
 
 function drawRoute(path){
-  clearRoute();
 
-  const root = $("board");
-  const first = root.querySelector(".tile");
-  if(!first) return;
+ clearRoute();
 
-  const css = getComputedStyle(root);
-  const gx = parseFloat(css.columnGap)||0;
-  const gy = parseFloat(css.rowGap)||0;
-  const w = first.getBoundingClientRect().width;
-  const h = first.getBoundingClientRect().height;
+ const root=$("board");
+ const first=root.querySelector(".tile");
 
-  const pts = path.map(([r,c])=>[
-    w/2+(c-1)*(w+gx),
-    h/2+(r-1)*(h+gy)
-  ]);
+ if(!first)return;
 
-  const points = pts.filter((p,i)=>{
-    if(i===0||i===pts.length-1) return true;
-    const a=pts[i-1];
-    const b=pts[i+1];
-    return ((p[0]-a[0])*(b[1]-p[1]) !== (p[1]-a[1])*(b[0]-p[0]));
-  });
+ const style=getComputedStyle(root);
 
-  const line = document.createElementNS("http://www.w3.org/2000/svg","polyline");
-  line.setAttribute("points", points.map(p=>p.join(",")).join(" "));
-  line.setAttribute("fill","none");
-  line.setAttribute("stroke","#47b5a8");
-  line.setAttribute("stroke-width","3");
-  line.setAttribute("stroke-linecap","round");
-  line.setAttribute("stroke-linejoin","round");
+ const gx=parseFloat(style.columnGap)||0;
+ const gy=parseFloat(style.rowGap)||0;
 
-  $("route").append(line);
+ const w=first.getBoundingClientRect().width;
+ const h=first.getBoundingClientRect().height;
 
-  const len = Math.max(1,line.getTotalLength());
+ const points=path.map(([r,c])=>[
+  w/2+(c-1)*(w+gx),
+  h/2+(r-1)*(h+gy)
+ ]);
 
-  line.animate(
-    [
-      {strokeDasharray:len,strokeDashoffset:len},
-      {strokeDasharray:len,strokeDashoffset:0}
-    ],
-    {duration:250,fill:"forwards"}
+ const simplified=points.filter((p,i)=>{
+
+  if(i===0||i===points.length-1)
+   return true;
+
+  const a=points[i-1];
+  const b=points[i+1];
+
+  return(
+   (p[0]-a[0])*(b[1]-p[1])!==
+   (p[1]-a[1])*(b[0]-p[0])
   );
+ });
+
+ const line=document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "polyline"
+ );
+
+ line.setAttribute(
+  "points",
+  simplified.map(p=>p.join(",")).join(" ")
+ );
+
+ line.setAttribute("fill","none");
+ line.setAttribute("stroke","#f15b7e");
+ line.setAttribute("stroke-width","3");
+ line.setAttribute(
+  "stroke-linecap","round"
+ );
+ line.setAttribute(
+  "stroke-linejoin","round"
+ );
+
+ $("route").append(line);
+
+ const len=Math.max(
+  1,line.getTotalLength()
+ );
+
+ line.animate(
+  [
+   {
+    strokeDasharray:len,
+    strokeDashoffset:len
+   },
+   {
+    strokeDasharray:len,
+    strokeDashoffset:0
+   }
+  ],
+  {
+   duration:280,
+   easing:"ease-out",
+   fill:"forwards"
+  }
+ );
 }
 
-/* =========================
-   RENDER
-========================= */
+/* =====================================
+   GAME RENDERING
+===================================== */
 
 function render(){
-  $("board").querySelectorAll(".tile").forEach(t=>t.remove());
 
-  const frag = document.createDocumentFragment();
+ const root=$("board");
 
-  board.forEach((id,i)=>{
-    const btn = document.createElement("button");
-    btn.className = "tile";
-    btn.type = "button";
+ root.querySelectorAll(".tile")
+  .forEach(tile=>tile.remove());
 
-    if(id===null) btn.classList.add("empty");
-    if(i===selected) btn.classList.add("selected");
-    if(hints.includes(i)) btn.classList.add("hint");
+ const fragment=document.createDocumentFragment();
 
-    if(id!==null){
-      const img=document.createElement("img");
-      img.src=imgPath(id);
-      img.alt="패턴 "+id;
-      img.draggable=false;
-      btn.append(img);
-    }
+ board.forEach((id,i)=>{
 
-    btn.disabled = id===null || busy || paused || finished;
-    btn.onclick = ()=>pickTile(i);
-    frag.append(btn);
-  });
+  const button=document.createElement("button");
 
-  $("board").insertBefore(frag,$("route"));
+  button.type="button";
+  button.className="tile";
 
-  $("stageLabel").textContent = "STAGE " + String(stage).padStart(2,"0");
-  $("groupLabel").textContent = stage%2 ? "Pattern Collection 01–09" : "Pattern Collection 10–18";
-  $("score").textContent = score.toLocaleString("ko-KR");
-  $("remaining").textContent = board.filter(v=>v!==null).length;
-  $("time").textContent = formatTime(seconds);
-
-  fitBoard();
-}
-
-/* =========================
-   TILE PICK
-========================= */
-
-function pickTile(i){
-  if(paused||busy||finished||board[i]===null) return;
-
-  hints=[];
-
-  if(selected===null){
-    selected=i;
-    play("pick");
-    render();
-    return;
+  if(id===null){
+   button.classList.add("empty");
   }
 
   if(selected===i){
-    selected=null;
-    render();
-    return;
+   button.classList.add("selected");
   }
 
-  const a=selected;
-  const path=pathBetween(a,i);
-  selected=null;
-
-  if(!path){
-    play("bad");
-    say("연결할 수 없는 패입니다.");
-    render();
-    return;
+  if(hints.includes(i)){
+   button.classList.add("hint");
   }
 
-  busy=true;
-  score+=100;
+  if(id!==null){
 
-  play("good");
-  render();
-  drawRoute(path);
+   const img=document.createElement("img");
 
-  matchTimeout=setTimeout(()=>{
-    matchTimeout=null;
-    board[a]=null;
-    board[i]=null;
-    busy=false;
+   img.src=imagePath(id);
+   img.alt="패턴 "+id;
+   img.draggable=false;
 
-    clearRoute();
+   img.onerror=()=>{
+    img.style.visibility="hidden";
+    console.warn(
+     "게임 패 이미지 로딩 실패:",
+     img.src
+    );
+   };
 
-    if(board.every(v=>v===null)){
-      finish(true);
-      return;
-    }
-
-    say("연결 성공! +100점");
-    render();
-
-    if(!availablePair()){
-      shuffleTiles(true);
-    }
-  },320);
-}
-
-/* =========================
-   SHUFFLE
-========================= */
-
-function shuffleTiles(automatic=false){
-  if(paused||busy||finished) return;
-
-  const occupied = board.flatMap((v,i)=>v===null?[]:[i]);
-  const ids = shuffled(occupied.map(i=>board[i]));
-
-  const pairIds=[];
-  const counts=new Map();
-
-  ids.forEach(v=>{
-    counts.set(v,(counts.get(v)||0)+1);
-  });
-
-  for(const [id,count] of counts){
-    for(let k=0;k<count/2;k++) pairIds.push(id);
+   button.append(img);
   }
 
-  const original=[...board];
-  let success=false;
+  button.disabled=
+   id===null||
+   busy||
+   paused||
+   finished;
 
-  for(let tries=0;tries<80&&!success;tries++){
-    board=Array(board.length).fill(null);
-
-    const order=shuffled([...pairIds]);
-    success=true;
-
-    for(const id of order){
-      const empty=shuffled(occupied.filter(i=>board[i]===null));
-      let placed=false;
-
-      for(const a of empty){
-        for(const b of empty){
-          if(a>=b) continue;
-
-          board[a]=id;
-          board[b]=id;
-
-          if(pathBetween(a,b)){
-            placed=true;
-            break;
-          }
-
-          board[a]=null;
-          board[b]=null;
-        }
-        if(placed) break;
-      }
-
-      if(!placed){
-        success=false;
-        break;
-      }
-    }
-  }
-
-  if(!success){
-    board=original;
-    say("패를 섞지 못했습니다. 다시 시도하세요.");
-    render();
-    return;
-  }
-
-  selected=null;
-  hints=[];
-
-  if(!automatic){
-    score=Math.max(0,score-50);
-  }
-
-  say(
-    automatic
-      ? "연결 가능한 패가 없어 자동으로 섞었습니다."
-      : "패를 섞었습니다. -50점"
+  button.addEventListener(
+   "click",
+   ()=>pickTile(i)
   );
 
-  render();
+  fragment.append(button);
+ });
+
+ root.insertBefore(fragment,$("route"));
+
+ $("stageLabel").textContent=
+  "STAGE "+
+  String(stage).padStart(2,"0");
+
+ $("groupLabel").textContent=
+  stage%2
+  ?"Pattern Collection 01–09"
+  :"Pattern Collection 10–18";
+
+ $("score").textContent=
+  score.toLocaleString("ko-KR");
+
+ $("remaining").textContent=
+  board.filter(v=>v!==null).length;
+
+ $("time").textContent=
+  formatTime(seconds);
+
+ fitBoard();
 }
 
-/* =========================
-   HINT
-========================= */
+/* =====================================
+   TILE SELECTION
+===================================== */
 
-function hint(){
-  if(paused||busy||finished) return;
+function pickTile(i){
 
-  let p=availablePair();
+ if(
+  paused||
+  busy||
+  finished||
+  board[i]===null
+ )return;
 
-  if(!p){
-    shuffleTiles(true);
-    p=availablePair();
-  }
+ hints=[];
 
-  if(!p){
-    say("연결 가능한 패를 찾지 못했습니다.");
-    return;
-  }
+ if(selected===null){
+
+  selected=i;
+
+  playSound("select");
+  render();
+
+  return;
+ }
+
+ if(selected===i){
 
   selected=null;
-  hints=p;
-  score=Math.max(0,score-30);
-
-  play("hint");
-  say("표시된 두 패를 연결하세요. -30점");
   render();
-}
 
-/* =========================
-   RECORD
-========================= */
+  return;
+ }
 
-const recordKey = ()=>"pattern_connect_v5_" + $("difficulty").value + "_" + stage;
+ const first=selected;
+ const path=findPath(first,i);
 
-function readRecord(){
-  try{
-    return JSON.parse(localStorage.getItem(recordKey()) || "null");
-  }catch{
-    return null;
-  }
-}
+ selected=null;
 
-function updateBest(){
-  const r=readRecord();
-  $("bestScore").textContent = r ? r.score.toLocaleString("ko-KR") : "—";
-}
+ if(!path){
 
-function saveRecord(){
-  try{
-    const r=readRecord()||{};
-    const time=initialTime-seconds;
+  playSound("wrong");
 
-    localStorage.setItem(
-      recordKey(),
-      JSON.stringify({
-        score:Math.max(r.score||0,score),
-        time:r.time===undefined ? time : Math.min(r.time,time),
-        clears:(r.clears||0)+1
-      })
-    );
-  }catch(e){
-    console.warn("기록 저장 불가",e);
-  }
-
-  updateBest();
-}
-
-/* =========================
-   FINISH
-========================= */
-
-function finish(won){
-  finished=true;
-  clearInterval(tick);
-  tick=null;
+  message("연결할 수 없는 패입니다.");
 
   render();
 
-  if(won){
-    saveRecord();
-    play("win");
+  return;
+ }
 
-    modal(
-      "STAGE COMPLETE",
-      "Stage " + stage + " Clear!",
-      "점수 " + score.toLocaleString("ko-KR") + "점\n완료 시간 " + formatTime(initialTime-seconds),
-      "다음 스테이지",
-      "다시 플레이",
-      ()=>{ stage++; newGame(); },
-      ()=>newGame()
-    );
-  }else{
-    play("lose");
+ busy=true;
+ score+=100;
 
-    modal(
-      "TIME OVER",
-      "시간 종료",
-      "제한 시간 안에 모든 패를 제거하세요.",
-      "다시 시작",
-      "홈으로",
-      ()=>newGame(),
-      openHome
-    );
-  }
-}
+ playSound("match");
 
-/* =========================
-   PAUSE
-========================= */
+ render();
+ drawRoute(path);
 
-function pauseGame(){
-  if(finished||busy) return;
+ matchTimer=setTimeout(()=>{
 
-  paused=!paused;
-  $("pauseBtn").textContent = paused ? "계속하기" : "일시정지";
-  render();
+  matchTimer=null;
 
-  if(paused){
-    modal(
-      "PAUSE",
-      "일시정지",
-      "게임 타이머가 멈췄습니다.",
-      "계속하기",
-      "홈으로",
-      resume,
-      openHome
-    );
-  }
-}
+  board[first]=null;
+  board[i]=null;
 
-function resume(){
-  paused=false;
-  $("pauseBtn").textContent="일시정지";
-  render();
-}
-
-/* =========================
-   NEW GAME
-========================= */
-
-function newGame(){
-  clearInterval(tick);
-  clearTimeout(matchTimeout);
-
-  tick=null;
-  matchTimeout=null;
+  busy=false;
 
   clearRoute();
 
-  const config=LEVELS[$("difficulty").value];
-  rows=config.rows;
-  cols=config.cols;
+  if(board.every(v=>v===null)){
 
-  initialTime=Math.max(90, config.time-(stage-1)*12);
-  seconds=initialTime;
-  score=0;
-  selected=null;
-  hints=[];
-  busy=false;
-  paused=false;
-  finished=false;
+   finishGame(true);
+   return;
+  }
 
-  $("pauseBtn").textContent="일시정지";
-
-  buildSolvableBoard(groupForStage(stage));
-  say("같은 패턴 두 개를 연결하세요.");
+  message("연결 성공! +100");
 
   render();
-  updateBest();
 
-  tick=setInterval(()=>{
-    if(paused||finished||busy||$("game").hidden) return;
+  if(!findPair()){
+   shuffleTiles(true);
+  }
 
-    seconds=Math.max(0,seconds-1);
-    $("time").textContent=formatTime(seconds);
-
-    if(!seconds){
-      finish(false);
-    }
-  },1000);
+ },340);
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* =====================================
+   SHUFFLE
+===================================== */
 
+function shuffleTiles(automatic=false){
+
+ if(paused||busy||finished)return;
+
+ const original=[...board];
+
+ const positions=original.flatMap(
+  (v,i)=>v===null?[]:[i]
+ );
+
+ const counts=new Map();
+
+ positions.forEach(i=>{
+
+  const id=original[i];
+
+  counts.set(
+   id,
+   (counts.get(id)||0)+1
+  );
+
+ });
+
+ const ids=[];
+
+ for(const [id,count] of counts){
+
+  for(let i=0;i<count/2;i++){
+   ids.push(id);
+  }
+ }
+
+ const group=groupForStage(stage);
+
+ const success=generateBoard(
+  group,
+  positions,
+  ids
+ );
+
+ if(!success){
+
+  board=original;
+
+  message("패를 섞지 못했습니다. 다시 시도하세요.");
+
+  render();
+  return;
+ }
+
+ selected=null;
+ hints=[];
+
+ if(!automatic){
+  score=Math.max(0,score-50);
+ }
+
+ message(
+  automatic
+  ?"연결 가능한 패가 없어 자동으로 섞었습니다."
+  :"패를 섞었습니다. -50"
+ );
+
+ render();
+}
+
+/* =====================================
+   HINT
+===================================== */
+
+function showHint(){
+
+ if(paused||busy||finished)return;
+
+ let pair=findPair();
+
+ if(!pair){
+
+  shuffleTiles(true);
+  pair=findPair();
+ }
+
+ if(!pair){
+
+  message("연결 가능한 패를 찾지 못했습니다.");
+  return;
+ }
+
+ selected=null;
+ hints=pair;
+
+ score=Math.max(0,score-30);
+
+ playSound("hint");
+
+ message("표시된 두 패를 연결하세요. -30");
+
+ render();
+}
+
+/* =====================================
+   RECORD STORAGE
+===================================== */
+
+function recordKey(){
+
+ return "pattern_connect_v5_"+
+  $("difficulty").value+
+  "_"+
+  stage;
+}
+
+function readRecord(){
+
+ try{
+
+  return JSON.parse(
+   localStorage.getItem(
+    recordKey()
+   )||"null"
+  );
+
+ }catch{
+  return null;
+ }
+}
+
+function updateBest(){
+
+ const record=readRecord();
+
+ $("bestScore").textContent=
+  record
+  ?record.score.toLocaleString("ko-KR")
+  :"—";
+}
+
+function saveRecord(){
+
+ try{
+
+  const old=readRecord()||{};
+
+  const elapsed=
+   initialTime-seconds;
+
+  localStorage.setItem(
+   recordKey(),
+   JSON.stringify({
+    score:Math.max(
+     old.score||0,
+     score
+    ),
+    time:old.time===undefined
+     ?elapsed
+     :Math.min(old.time,elapsed),
+    clears:(old.clears||0)+1
+   })
+  );
+
+ }catch(error){
+  console.warn(error);
+ }
+
+ updateBest();
+}
+
+/* =====================================
+   MODAL
+===================================== */
+
+let primaryAction=null;
+let secondaryAction=null;
+
+function showModal(
+ eyebrow,
+ title,
+ text,
+ primary="OK",
+ secondary="Close",
+ onPrimary=null,
+ onSecondary=null
+){
+
+ $("dialogEyebrow").textContent=eyebrow;
+ $("dialogTitle").textContent=title;
+ $("dialogText").textContent=text;
+
+ $("dialogPrimary").textContent=primary;
+ $("dialogSecondary").textContent=secondary;
+
+ primaryAction=onPrimary;
+ secondaryAction=onSecondary;
+
+ $("overlay").hidden=false;
+}
+
+function closeModal(){
+ $("overlay").hidden=true;
+}
+
+$("dialogPrimary").onclick=()=>{
+
+ const action=primaryAction;
+
+ closeModal();
+
+ if(action)action();
+};
+
+$("dialogSecondary").onclick=()=>{
+
+ const action=secondaryAction;
+
+ closeModal();
+
+ if(action)action();
+};
+
+/* =====================================
+   HOW TO PLAY
+===================================== */
+
+$("howBtn").onclick=()=>{
+
+ showModal(
+  "HOW TO PLAY",
+  "How to Play",
+  "1. Select two identical patterns.\n"+
+  "2. Connect them with a path that turns no more than twice.\n"+
+  "3. Clear all tiles before time runs out.\n"+
+  "4. Odd stages use patterns 01–09, and even stages use 10–18.",
+  "Start Game",
+  "Close",
+  openGame
+ );
+
+};
+
+/* =====================================
+   GAME FINISH
+===================================== */
+
+function finishGame(won){
+
+ finished=true;
+
+ clearInterval(timer);
+ timer=null;
+
+ render();
+
+ if(won){
+
+  saveRecord();
+  playSound("win");
+
+  showModal(
+   "STAGE COMPLETE",
+   "Stage "+stage+" Clear!",
+   "Score: "+
+   score.toLocaleString("ko-KR")+
+   "\nTime: "+
+   formatTime(initialTime-seconds),
+   "Next Stage",
+   "Play Again",
+   ()=>{
+    stage++;
+    newGame();
+   },
+   ()=>newGame()
+  );
+
+ }else{
+
+  playSound("lose");
+
+  showModal(
+   "TIME OVER",
+   "Time Over",
+   "Try to clear all the patterns before time runs out.",
+   "Restart",
+   "Home",
+   ()=>newGame(),
+   openHome
+  );
+ }
+}
+
+/* =====================================
+   PAUSE
+===================================== */
+
+function pauseGame(){
+
+ if(finished||busy)return;
+
+ paused=!paused;
+
+ $("pauseBtn").textContent=
+  paused?"Resume":"Pause";
+
+ render();
+
+ if(paused){
+
+  showModal(
+   "PAUSED",
+   "Game Paused",
+   "The timer has stopped.",
+   "Resume",
+   "Home",
+   resumeGame,
+   openHome
+  );
+ }
+}
+
+function resumeGame(){
+
+ paused=false;
+
+ $("pauseBtn").textContent="Pause";
+
+ render();
+}
+
+/* =====================================
+   NEW GAME
+===================================== */
+
+function newGame(){
+
+ clearInterval(timer);
+ clearTimeout(matchTimer);
+
+ timer=null;
+ matchTimer=null;
+
+ clearRoute();
+
+ const config=
+  LEVELS[$("difficulty").value];
+
+ rows=config.rows;
+ cols=config.cols;
+
+ initialTime=Math.max(
+  90,
+  config.time-(stage-1)*12
+ );
+
+ seconds=initialTime;
+
+ score=0;
+ selected=null;
+ hints=[];
+
+ paused=false;
+ finished=false;
+ busy=false;
+
+ $("pauseBtn").textContent="Pause";
+
+ buildBoard();
+
+ message("같은 디자인의 패 두 개를 연결하세요.");
+
+ render();
+ updateBest();
+
+ timer=setInterval(()=>{
+
+  if(
+   paused||
+   finished||
+   busy||
+   $("game").hidden
+  )return;
+
+  seconds=Math.max(
+   0,seconds-1
+  );
+
+  $("time").textContent=
+   formatTime(seconds);
+
+  if(seconds===0){
+   finishGame(false);
+  }
+
+ },1000);
+}
+
+/* =====================================
+   BUTTON EVENTS
+===================================== */
+
+$("startBtn").onclick=openGame;
 $("homeBtn").onclick=openHome;
-$("hintBtn").onclick=hint;
-$("shuffleBtn").onclick=()=>shuffleTiles(false);
+
+$("hintBtn").onclick=showHint;
+
+$("shuffleBtn").onclick=()=>{
+ shuffleTiles(false);
+};
+
 $("pauseBtn").onclick=pauseGame;
+
 $("restartBtn").onclick=newGame;
 
 $("soundBtn").onclick=()=>{
-  soundOn=!soundOn;
-  $("soundBtn").textContent = soundOn ? "소리 켜짐" : "음소거";
-  if(soundOn) play("pick");
+
+ soundEnabled=!soundEnabled;
+
+ $("soundBtn").textContent=
+  soundEnabled?"Sound On":"Sound Off";
+
+ if(soundEnabled){
+  playSound("select");
+ }
 };
 
 $("difficulty").onchange=()=>{
-  stage=1;
-  newGame();
+
+ stage=1;
+ newGame();
 };
 
 $("recordBtn").onclick=()=>{
-  if(!finished){
-    paused=true;
-    $("pauseBtn").textContent="계속하기";
-    render();
-  }
 
-  const r=readRecord();
+ if(!finished){
 
-  modal(
-    "YOUR RECORD",
-    "나의 기록",
-    r
-      ? `최고 점수 ${r.score.toLocaleString("ko-KR")}점
-최단 완료 시간 ${formatTime(r.time)}
-클리어 횟수 ${r.clears}회`
-      : "아직 완료 기록이 없습니다.",
-    "게임으로",
-    "홈으로",
-    ()=>{ if(!finished) resume(); },
-    openHome
-  );
+  paused=true;
+
+  $("pauseBtn").textContent="Resume";
+
+  render();
+ }
+
+ const record=readRecord();
+
+ showModal(
+  "YOUR RECORD",
+  "My Records",
+  record
+  ?"Best Score: "+
+   record.score.toLocaleString("ko-KR")+
+   "\nBest Time: "+
+   formatTime(record.time)+
+   "\nClears: "+
+   record.clears
+  :"No records yet.",
+  "Back to Game",
+  "Home",
+  ()=>{
+   if(!finished)resumeGame();
+  },
+  openHome
+ );
 };
 
-/* =========================
+/* =====================================
    IMAGE RATIO
-========================= */
+===================================== */
 
 const sample=new Image();
-sample.onload=()=>{
-  ratio=sample.naturalWidth/sample.naturalHeight;
-  fitBoard();
-};
-sample.src=imgPath(1);
 
-/* =========================
-   INIT
-========================= */
+sample.onload=()=>{
+
+ if(
+  sample.naturalWidth&&
+  sample.naturalHeight
+ ){
+
+  tileRatio=
+   sample.naturalWidth/
+   sample.naturalHeight;
+
+  fitBoard();
+ }
+};
+
+sample.src=imagePath(1);
+
+/* =====================================
+   INITIALIZE
+===================================== */
 
 buildHome();
 openHome();
+
 </script>
 </body>
 </html>
