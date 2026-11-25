@@ -3,14 +3,11 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
- content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pattern Connect</title>
 
 <style>
-*{
- box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 :root{
  --pink:#f15b7e;
@@ -27,9 +24,7 @@ html,body{
  min-height:100%;
 }
 
-body{
- background:#fff;
-}
+body{background:#fff}
 
 button,select{
  font:inherit;
@@ -41,9 +36,7 @@ button:disabled{
  cursor:default;
 }
 
-[hidden]{
- display:none!important;
-}
+[hidden]{display:none!important}
 
 /* ===================================
    HOME SCREEN
@@ -70,34 +63,76 @@ button:disabled{
  z-index:1;
 }
 
-.motif{
+/* ===================================
+   HOME HOVER INTERACTION
+
+   바깥쪽 요소: 확대/축소
+   안쪽 이미지: 회전
+
+   두 모션을 분리하여 충돌 방지
+=================================== */
+
+.motif-wrap{
  position:absolute;
  left:var(--x);
  top:var(--y);
  width:var(--w);
- height:auto;
+
  display:block;
 
  translate:-50% -50%;
 
- transform:rotate(var(--angle,0deg));
+ transform:scale(1);
+ transform-origin:center center;
+
+ transition:
+  transform .32s
+  cubic-bezier(.22,1.35,.45,1);
+
+ pointer-events:auto;
+ z-index:var(--z,1);
+}
+
+/* 이미지 자체는 회전만 담당 */
+
+.motif{
+ display:block;
+ width:100%;
+ height:auto;
+
+ transform:
+  rotate(var(--angle,0deg));
+
  transform-origin:50% 50%;
 
  transition:
-  transform .16s cubic-bezier(.18,.85,.3,1);
+  transform .16s
+  cubic-bezier(.18,.85,.3,1);
 
  pointer-events:none;
  user-select:none;
  -webkit-user-drag:none;
 }
 
+/* 마우스가 그래픽 위로 들어왔을 때 */
+
+@media(hover:hover) and (pointer:fine){
+
+ .motif-wrap:hover{
+  transform:scale(1.12);
+  z-index:50;
+ }
+
+}
+
 /* ===================================
-   HOME TITLE IMAGE
+   HOME TITLE
 =================================== */
 
 .home-menu{
  position:absolute;
- z-index:10;
+ z-index:100;
+
  left:50%;
  bottom:5.5%;
  transform:translateX(-50%);
@@ -113,24 +148,16 @@ button:disabled{
  background:transparent;
 }
 
-/* 타이틀 PNG — 크기 70%로 축소 */
-
 .home-title-image{
  display:block;
-
  width:70%;
  max-width:310px;
  height:auto;
-
  object-fit:contain;
-
  margin:0 auto 22px;
-
  user-select:none;
  -webkit-user-drag:none;
 }
-
-/* 버튼 그룹 */
 
 .home-actions{
  display:flex;
@@ -168,7 +195,7 @@ button:disabled{
 .home-button.filled{
  background:var(--pink);
  border-color:var(--pink);
- color:#fff;
+ color:white;
 }
 
 /* ===================================
@@ -178,14 +205,11 @@ button:disabled{
 #game{
  display:flex;
  flex-direction:column;
-
  height:100dvh;
  min-height:480px;
  max-width:1300px;
-
  margin:auto;
  padding:12px 22px 18px;
-
  background:#fff;
 }
 
@@ -200,10 +224,8 @@ button:disabled{
 .icon-button{
  width:44px;
  height:44px;
-
  border:0;
  background:transparent;
-
  color:#222;
  font-size:24px;
 }
@@ -234,12 +256,9 @@ button:disabled{
 
 .stats{
  flex:none;
-
  display:flex;
  justify-content:center;
-
  gap:clamp(15px,4vw,50px);
-
  text-align:center;
  margin:6px 0 12px;
 }
@@ -260,23 +279,18 @@ button:disabled{
 .game-area{
  flex:1;
  min-height:0;
-
  display:flex;
  align-items:center;
  justify-content:center;
-
  padding:8px 0;
 }
 
 .board{
  position:relative;
  display:grid;
-
  grid-template-columns:
   repeat(var(--cols),var(--tile-width));
-
  gap:var(--gap);
-
  width:max-content;
  max-width:100%;
  margin:auto;
@@ -285,33 +299,26 @@ button:disabled{
 .tile{
  position:relative;
  display:block;
-
  padding:0;
  border:0;
  background:transparent;
-
  width:var(--tile-width);
  aspect-ratio:var(--ratio);
-
  transition:transform .15s;
 }
 
 .tile img{
  display:block;
-
  width:100%;
  height:100%;
-
  object-fit:contain;
-
- user-select:none;
  pointer-events:none;
+ user-select:none;
 }
 
 .tile.selected{
  outline:2px solid var(--pink);
  outline-offset:3px;
-
  transform:scale(.94);
 }
 
@@ -320,20 +327,15 @@ button:disabled{
  outline-offset:3px;
 }
 
-.tile.empty{
- visibility:hidden;
-}
+.tile.empty{visibility:hidden}
 
 .route{
  position:absolute;
  inset:0;
-
  width:100%;
  height:100%;
-
  overflow:visible;
  pointer-events:none;
-
  z-index:5;
 }
 
@@ -344,10 +346,8 @@ button:disabled{
 
 #message{
  min-height:20px;
-
  color:#888;
  font-size:12px;
-
  margin:7px 0 13px;
 }
 
@@ -361,12 +361,9 @@ button:disabled{
 .tool{
  border:1px solid #ddd;
  border-radius:24px;
-
  padding:9px 14px;
-
  background:#fff;
  color:#222;
-
  font-size:12px;
 }
 
@@ -384,26 +381,20 @@ button:disabled{
  position:fixed;
  inset:0;
  z-index:100;
-
  display:flex;
  align-items:center;
  justify-content:center;
-
  background:rgba(234,232,233,.94);
  backdrop-filter:blur(9px);
-
  padding:20px;
 }
 
 .dialog{
  width:min(100%,440px);
-
  background:#fff;
  border-radius:18px;
-
  padding:37px 28px;
  text-align:center;
-
  box-shadow:0 12px 60px #00000010;
 }
 
@@ -439,20 +430,14 @@ button:disabled{
 
 @media(max-width:700px){
 
- #home{
-  min-height:520px;
- }
+ #home{min-height:520px}
 
- .home-scene{
-  height:67%;
- }
+ .home-scene{height:67%}
 
  .home-menu{
   bottom:6%;
   width:94%;
  }
-
- /* 모바일 타이틀 PNG 축소 */
 
  .home-title-image{
   width:70%;
@@ -464,7 +449,6 @@ button:disabled{
  .home-button{
   min-width:125px;
   height:45px;
-
   padding:0 15px;
   font-size:12px;
  }
@@ -473,17 +457,9 @@ button:disabled{
   padding:8px 7px 13px;
  }
 
- .game-heading h2{
-  font-size:21px;
- }
-
- .stats{
-  gap:17px;
- }
-
- .stat strong{
-  font-size:14px;
- }
+ .game-heading h2{font-size:21px}
+ .stats{gap:17px}
+ .stat strong{font-size:14px}
 
  .tool{
   padding:8px 10px;
@@ -494,9 +470,14 @@ button:disabled{
 @media(prefers-reduced-motion:reduce){
 
  .motif,
+ .motif-wrap,
  .tile,
  .home-button{
   transition:none;
+ }
+
+ .motif-wrap:hover{
+  transform:none;
  }
 }
 </style>
@@ -505,7 +486,7 @@ button:disabled{
 <body>
 
 <!-- ===================================
-     1 DEPTH : HOME
+     HOME
 =================================== -->
 
 <section id="home">
@@ -541,13 +522,12 @@ button:disabled{
    </button>
 
   </div>
-
  </div>
 
 </section>
 
 <!-- ===================================
-     2 DEPTH : GAME
+     GAME
 =================================== -->
 
 <section id="game" hidden>
@@ -577,13 +557,10 @@ button:disabled{
  </header>
 
  <div class="game-heading">
-
   <h2>Pattern Connect</h2>
-
   <p id="groupLabel">
    Pattern Collection 01–09
   </p>
-
  </div>
 
  <div class="stats">
@@ -610,20 +587,14 @@ button:disabled{
 
  </div>
 
- <div
-  class="game-area"
-  id="gameArea">
+ <div class="game-area" id="gameArea">
 
-  <div
-   class="board"
-   id="board">
-
+  <div class="board" id="board">
    <svg
     id="route"
     class="route"
     aria-hidden="true">
    </svg>
-
   </div>
 
  </div>
@@ -636,14 +607,10 @@ button:disabled{
 
   <div class="tools">
 
-   <select
-    class="tool"
-    id="difficulty">
-
+   <select class="tool" id="difficulty">
     <option value="easy">Easy</option>
     <option value="normal" selected>Normal</option>
     <option value="hard">Hard</option>
-
    </select>
 
    <button class="tool" id="hintBtn">
@@ -669,7 +636,6 @@ button:disabled{
    </button>
 
   </div>
-
  </div>
 
 </section>
@@ -695,7 +661,6 @@ button:disabled{
   </div>
 
   <h2 id="dialogTitle"></h2>
-
   <p id="dialogText"></p>
 
   <div class="modal-actions">
@@ -713,7 +678,6 @@ button:disabled{
    </button>
 
   </div>
-
  </div>
 
 </div>
@@ -725,8 +689,7 @@ const $=id=>document.getElementById(id);
 
 /* =====================================
    HOME LAYOUT
-
-   좌표 기준 : 848 × 490
+   기준 좌표: 848 × 490
 ===================================== */
 
 const BASE_WIDTH=848;
@@ -859,7 +822,7 @@ const HOME_LAYOUT=[
 ];
 
 /* =====================================
-   HOME GRAPHIC SIZE
+   HOME IMAGE SIZES
 ===================================== */
 
 const HOME_WIDTH={
@@ -888,11 +851,17 @@ const motionTimers=new Set();
 let motionRunning=false;
 
 function homeImagePath(number){
-
  return "images/Home"+
   String(number).padStart(2,"0")+
   ".png";
 }
+
+/* =====================================
+   BUILD HOME
+
+   wrapper: hover scale
+   image: random rotation
+===================================== */
 
 function buildHome(){
 
@@ -900,6 +869,45 @@ function buildHome(){
  const fragment=document.createDocumentFragment();
 
  HOME_LAYOUT.forEach(([number,x,y],i)=>{
+
+  /* 확대/축소 전용 래퍼 */
+
+  const wrapper=document.createElement("div");
+
+  wrapper.className="motif-wrap";
+
+  wrapper.dataset.pattern=String(number);
+
+  wrapper.style.setProperty(
+   "--x",
+   (x/BASE_WIDTH*100)+"%"
+  );
+
+  wrapper.style.setProperty(
+   "--y",
+   (y/BASE_HEIGHT*100)+"%"
+  );
+
+  const relativeWidth=
+   HOME_WIDTH[number]*MOTIF_SIZE_FACTOR;
+
+  const widthVW=
+   relativeWidth/BASE_WIDTH*100;
+
+  const maxWidth=
+   relativeWidth*1.75;
+
+  wrapper.style.setProperty(
+   "--w",
+   `clamp(10px, ${widthVW}vw, ${maxWidth}px)`
+  );
+
+  wrapper.style.setProperty(
+   "--z",
+   String(i%8)
+  );
+
+  /* 회전 전용 이미지 */
 
   const image=document.createElement("img");
 
@@ -910,52 +918,28 @@ function buildHome(){
 
   image.src=homeImagePath(number);
 
+  image.dataset.rotation="0";
+
   image.onerror=()=>{
-   image.style.display="none";
+   wrapper.style.display="none";
    console.warn(
     "홈 이미지 로딩 실패:",
     image.src
    );
   };
 
-  image.style.setProperty(
-   "--x",
-   (x/BASE_WIDTH*100)+"%"
-  );
+  wrapper.appendChild(image);
 
-  image.style.setProperty(
-   "--y",
-   (y/BASE_HEIGHT*100)+"%"
-  );
+  fragment.appendChild(wrapper);
 
-  const relativeWidth=
-   HOME_WIDTH[number]*
-   MOTIF_SIZE_FACTOR;
-
-  const widthVW=
-   relativeWidth/BASE_WIDTH*100;
-
-  const maxWidth=
-   relativeWidth*1.75;
-
-  image.style.setProperty(
-   "--w",
-   `clamp(10px, ${widthVW}vw, ${maxWidth}px)`
-  );
-
-  image.style.zIndex=String(i%8);
-  image.dataset.rotation="0";
-
-  fragment.appendChild(image);
   homeNodes.push(image);
-
  });
 
  root.replaceChildren(fragment);
 }
 
 /* =====================================
-   HOME MOTION
+   HOME RANDOM ROTATION
 ===================================== */
 
 function stopHomeMotion(){
@@ -973,8 +957,7 @@ function scheduleMotion(image){
 
  if(!motionRunning)return;
 
- const delay=
-  900+Math.random()*3000;
+ const delay=900+Math.random()*3000;
 
  const timer=setTimeout(()=>{
 
@@ -982,13 +965,11 @@ function scheduleMotion(image){
 
   if(!motionRunning)return;
 
-  if(image.style.display==="none"){
+  if(image.parentElement.style.display==="none"){
    return;
   }
 
-  const angles=[
-   90,180,270,360
-  ];
+  const angles=[90,180,270,360];
 
   const angle=angles[
    Math.floor(Math.random()*angles.length)
@@ -1041,7 +1022,6 @@ homeTitleImage.onerror=()=>{
  fallback.style.margin="0 0 22px";
  fallback.style.fontSize="32px";
  fallback.style.fontWeight="600";
- fallback.style.letterSpacing="-1.8px";
 
  homeTitleImage.parentElement.insertBefore(
   fallback,
@@ -1058,23 +1038,9 @@ homeTitleImage.onerror=()=>{
 ===================================== */
 
 const LEVELS={
- easy:{
-  rows:4,
-  cols:6,
-  time:360
- },
-
- normal:{
-  rows:5,
-  cols:8,
-  time:300
- },
-
- hard:{
-  rows:6,
-  cols:10,
-  time:240
- }
+ easy:{rows:4,cols:6,time:360},
+ normal:{rows:5,cols:8,time:300},
+ hard:{rows:6,cols:10,time:240}
 };
 
 let stage=1;
@@ -1102,15 +1068,17 @@ let audioContext=null;
 
 let tileRatio=184/223;
 
-function imagePath(number){
+/* =====================================
+   GAME IMAGE PATH
+===================================== */
 
+function imagePath(number){
  return "images/tile"+
   String(number).padStart(2,"0")+
   ".jpg";
 }
 
 function groupForStage(number){
-
  return Array.from(
   {length:9},
   (_,i)=>i+(number%2?1:10)
@@ -1118,7 +1086,6 @@ function groupForStage(number){
 }
 
 function formatTime(value){
-
  return String(
   Math.floor(value/60)
  ).padStart(2,"0")+
@@ -1259,7 +1226,6 @@ function playSound(type){
 
    oscillator.start(t);
    oscillator.stop(t+.11);
-
   });
 
  }catch(error){
@@ -1292,7 +1258,6 @@ function findPath(a,b){
   const [r,c]=coords(i);
 
   grid[r+1][c+1]=value;
-
  });
 
  const [ar,ac]=coords(a);
@@ -1535,10 +1500,12 @@ function fitBoard(){
 
  root.style.setProperty("--cols",cols);
  root.style.setProperty("--gap",gap+"px");
+
  root.style.setProperty(
   "--tile-width",
   tileWidth+"px"
  );
+
  root.style.setProperty(
   "--ratio",
   tileRatio
@@ -1604,9 +1571,11 @@ function drawRoute(path){
  line.setAttribute("fill","none");
  line.setAttribute("stroke","#f15b7e");
  line.setAttribute("stroke-width","3");
+
  line.setAttribute(
   "stroke-linecap","round"
  );
+
  line.setAttribute(
   "stroke-linejoin","round"
  );
@@ -1829,7 +1798,6 @@ function shuffleTiles(automatic=false){
    id,
    (counts.get(id)||0)+1
   );
-
  });
 
  const ids=[];
@@ -2045,7 +2013,6 @@ $("howBtn").onclick=()=>{
   "Close",
   openGame
  );
-
 };
 
 /* =====================================
