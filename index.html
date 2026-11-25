@@ -5,37 +5,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pattern Connect</title>
-
 <style>
 *{box-sizing:border-box}
-
 :root{
- --pink:#f15b7e;
- --pink-line:#ff4e79;
- --background:#eae8e9;
- font-family:-apple-system,BlinkMacSystemFont,
- "Apple SD Gothic Neo",Arial,sans-serif;
- color:#242424;
+  --pink:#f15b7e;
+  --pink-line:#ff4e79;
+  --background:#eae8e9;
+  font-family:-apple-system,BlinkMacSystemFont,
+    "Apple SD Gothic Neo",Arial,sans-serif;
+  color:#242424;
 }
-
-html,body{
- margin:0;
- width:100%;
- min-height:100%;
-}
-
+html,body{margin:0;width:100%;min-height:100%}
 body{background:#fff}
-
-button,select{
- font:inherit;
- cursor:pointer;
-}
-
-button:disabled{
- opacity:.38;
- cursor:default;
-}
-
+button,select{font:inherit;cursor:pointer}
+button:disabled{opacity:.38;cursor:default}
 [hidden]{display:none!important}
 
 /* ===================================
@@ -43,86 +26,88 @@ button:disabled{
 =================================== */
 
 #home{
- position:relative;
- width:100%;
- height:100dvh;
- min-height:530px;
- background:var(--background);
- overflow:hidden;
- isolation:isolate;
+  position:relative;
+  width:100%;
+  height:100dvh;
+  min-height:530px;
+  background:var(--background);
+  overflow:hidden;
+  isolation:isolate;
 }
-
 .home-scene{
- position:absolute;
- top:0;
- left:0;
- width:100%;
- height:70%;
- overflow:hidden;
- pointer-events:none;
- z-index:1;
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  height:70%;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:1;
 }
 
 /* ===================================
-   HOME HOVER INTERACTION
-
-   바깥쪽 요소: 확대/축소
-   안쪽 이미지: 회전
-
-   두 모션을 분리하여 충돌 방지
+   HOVER INTERACTION
 =================================== */
 
+/*
+  바깥쪽 wrapper = 확대 및 불투명도
+  안쪽 img = 개별 회전
+*/
+
 .motif-wrap{
- position:absolute;
- left:var(--x);
- top:var(--y);
- width:var(--w);
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--w);
+  translate:-50% -50%;
 
- display:block;
+  transform:scale(1);
+  transform-origin:center;
 
- translate:-50% -50%;
+  opacity:1;
+  pointer-events:auto;
 
- transform:scale(1);
- transform-origin:center center;
+  transition:
+    transform .28s cubic-bezier(.2,1.1,.35,1),
+    opacity .27s ease;
 
- transition:
-  transform .32s
-  cubic-bezier(.22,1.35,.45,1);
-
- pointer-events:auto;
- z-index:var(--z,1);
+  z-index:var(--z,1);
+  will-change:transform,opacity;
 }
-
-/* 이미지 자체는 회전만 담당 */
 
 .motif{
- display:block;
- width:100%;
- height:auto;
+  display:block;
+  width:100%;
+  height:auto;
 
- transform:
-  rotate(var(--angle,0deg));
+  transform:rotate(var(--angle,0deg));
+  transform-origin:50% 50%;
 
- transform-origin:50% 50%;
+  transition:
+    transform .16s cubic-bezier(.18,.85,.3,1);
 
- transition:
-  transform .16s
-  cubic-bezier(.18,.85,.3,1);
-
- pointer-events:none;
- user-select:none;
- -webkit-user-drag:none;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
 }
 
-/* 마우스가 그래픽 위로 들어왔을 때 */
+/*
+  마우스가 그래픽 위에 있을 때
+  다른 패턴의 불투명도 감소
+*/
 
 @media(hover:hover) and (pointer:fine){
 
- .motif-wrap:hover{
-  transform:scale(1.12);
-  z-index:50;
- }
+  .home-scene.is-hovering
+  .motif-wrap:not(.is-active){
+    opacity:.25;
+  }
 
+  .home-scene
+  .motif-wrap.is-active{
+    transform:scale(1.35);
+    opacity:1;
+    z-index:999!important;
+  }
 }
 
 /* ===================================
@@ -130,72 +115,57 @@ button:disabled{
 =================================== */
 
 .home-menu{
- position:absolute;
- z-index:100;
-
- left:50%;
- bottom:5.5%;
- transform:translateX(-50%);
-
- width:min(92%,520px);
-
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
-
- text-align:center;
- background:transparent;
+  position:absolute;
+  z-index:1000;
+  left:50%;
+  bottom:5.5%;
+  transform:translateX(-50%);
+  width:min(92%,520px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:transparent;
 }
-
 .home-title-image{
- display:block;
- width:70%;
- max-width:310px;
- height:auto;
- object-fit:contain;
- margin:0 auto 22px;
- user-select:none;
- -webkit-user-drag:none;
+  display:block;
+  width:70%;
+  max-width:310px;
+  height:auto;
+  object-fit:contain;
+  margin:0 auto 22px;
+  user-select:none;
+  -webkit-user-drag:none;
 }
-
 .home-actions{
- display:flex;
- justify-content:center;
- align-items:center;
- gap:13px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:13px;
 }
-
 .home-button{
- min-width:148px;
- height:49px;
- padding:0 21px;
-
- border-radius:999px;
- border:1.7px solid var(--pink-line);
-
- font-size:13px;
- font-weight:600;
-
- transition:
-  background .18s,
-  transform .18s,
-  color .18s;
+  min-width:148px;
+  height:49px;
+  padding:0 21px;
+  border-radius:999px;
+  border:1.7px solid var(--pink-line);
+  font-size:13px;
+  font-weight:600;
+  transition:
+    background .18s,
+    transform .18s,
+    color .18s;
 }
-
-.home-button:hover{
- transform:translateY(-2px);
-}
-
+.home-button:hover{transform:translateY(-2px)}
 .home-button.outline{
- background:rgba(241,91,126,.035);
- color:var(--pink-line);
+  background:rgba(241,91,126,.035);
+  color:var(--pink-line);
 }
-
 .home-button.filled{
- background:var(--pink);
- border-color:var(--pink);
- color:white;
+  background:var(--pink);
+  border-color:var(--pink);
+  color:#fff;
 }
 
 /* ===================================
@@ -203,174 +173,152 @@ button:disabled{
 =================================== */
 
 #game{
- display:flex;
- flex-direction:column;
- height:100dvh;
- min-height:480px;
- max-width:1300px;
- margin:auto;
- padding:12px 22px 18px;
- background:#fff;
+  display:flex;
+  flex-direction:column;
+  height:100dvh;
+  min-height:480px;
+  max-width:1300px;
+  margin:auto;
+  padding:12px 22px 18px;
+  background:#fff;
 }
-
 .game-header{
- flex:none;
- display:flex;
- align-items:center;
- justify-content:space-between;
- height:47px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:47px;
 }
-
 .icon-button{
- width:44px;
- height:44px;
- border:0;
- background:transparent;
- color:#222;
- font-size:24px;
+  width:44px;
+  height:44px;
+  border:0;
+  background:transparent;
+  color:#222;
+  font-size:24px;
 }
-
 .stage-label{
- font-size:11px;
- letter-spacing:2.5px;
- color:#777;
+  font-size:11px;
+  letter-spacing:2.5px;
+  color:#777;
 }
-
 .game-heading{
- flex:none;
- text-align:center;
- margin:2px 0 11px;
+  flex:none;
+  text-align:center;
+  margin:2px 0 11px;
 }
-
 .game-heading h2{
- font-size:25px;
- font-weight:500;
- margin:0 0 6px;
+  font-size:25px;
+  font-weight:500;
+  margin:0 0 6px;
 }
-
 .game-heading p{
- font-size:11px;
- color:#999;
- margin:0;
+  font-size:11px;
+  color:#999;
+  margin:0;
 }
-
 .stats{
- flex:none;
- display:flex;
- justify-content:center;
- gap:clamp(15px,4vw,50px);
- text-align:center;
- margin:6px 0 12px;
+  flex:none;
+  display:flex;
+  justify-content:center;
+  gap:clamp(15px,4vw,50px);
+  text-align:center;
+  margin:6px 0 12px;
 }
-
 .stat small{
- display:block;
- font-size:10px;
- color:#999;
- margin-bottom:5px;
+  display:block;
+  font-size:10px;
+  color:#999;
+  margin-bottom:5px;
 }
-
 .stat strong{
- font-size:16px;
- font-weight:500;
- font-variant-numeric:tabular-nums;
+  font-size:16px;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
 }
-
 .game-area{
- flex:1;
- min-height:0;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:8px 0;
+  flex:1;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 0;
 }
-
 .board{
- position:relative;
- display:grid;
- grid-template-columns:
-  repeat(var(--cols),var(--tile-width));
- gap:var(--gap);
- width:max-content;
- max-width:100%;
- margin:auto;
+  position:relative;
+  display:grid;
+  grid-template-columns:
+    repeat(var(--cols),var(--tile-width));
+  gap:var(--gap);
+  width:max-content;
+  max-width:100%;
+  margin:auto;
 }
-
 .tile{
- position:relative;
- display:block;
- padding:0;
- border:0;
- background:transparent;
- width:var(--tile-width);
- aspect-ratio:var(--ratio);
- transition:transform .15s;
+  position:relative;
+  display:block;
+  padding:0;
+  border:0;
+  background:transparent;
+  width:var(--tile-width);
+  aspect-ratio:var(--ratio);
+  transition:transform .15s;
 }
-
 .tile img{
- display:block;
- width:100%;
- height:100%;
- object-fit:contain;
- pointer-events:none;
- user-select:none;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  user-select:none;
+  pointer-events:none;
 }
-
 .tile.selected{
- outline:2px solid var(--pink);
- outline-offset:3px;
- transform:scale(.94);
+  outline:2px solid var(--pink);
+  outline-offset:3px;
+  transform:scale(.94);
 }
-
 .tile.hint{
- outline:2px solid #edbf4d;
- outline-offset:3px;
+  outline:2px solid #edbf4d;
+  outline-offset:3px;
 }
-
 .tile.empty{visibility:hidden}
-
 .route{
- position:absolute;
- inset:0;
- width:100%;
- height:100%;
- overflow:visible;
- pointer-events:none;
- z-index:5;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+  z-index:5;
 }
-
 .game-footer{
- flex:none;
- text-align:center;
+  flex:none;
+  text-align:center;
 }
-
 #message{
- min-height:20px;
- color:#888;
- font-size:12px;
- margin:7px 0 13px;
+  min-height:20px;
+  color:#888;
+  font-size:12px;
+  margin:7px 0 13px;
 }
-
 .tools{
- display:flex;
- justify-content:center;
- flex-wrap:wrap;
- gap:7px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
 }
-
 .tool{
- border:1px solid #ddd;
- border-radius:24px;
- padding:9px 14px;
- background:#fff;
- color:#222;
- font-size:12px;
+  border:1px solid #ddd;
+  border-radius:24px;
+  padding:9px 14px;
+  background:#fff;
+  color:#222;
+  font-size:12px;
 }
-
 .tool.primary{
- background:var(--pink);
- border-color:var(--pink);
- color:#fff;
+  background:var(--pink);
+  border-color:var(--pink);
+  color:#fff;
 }
 
 /* ===================================
@@ -378,50 +326,45 @@ button:disabled{
 =================================== */
 
 .overlay{
- position:fixed;
- inset:0;
- z-index:100;
- display:flex;
- align-items:center;
- justify-content:center;
- background:rgba(234,232,233,.94);
- backdrop-filter:blur(9px);
- padding:20px;
+  position:fixed;
+  inset:0;
+  z-index:1001;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(234,232,233,.94);
+  backdrop-filter:blur(9px);
+  padding:20px;
 }
-
 .dialog{
- width:min(100%,440px);
- background:#fff;
- border-radius:18px;
- padding:37px 28px;
- text-align:center;
- box-shadow:0 12px 60px #00000010;
+  width:min(100%,440px);
+  background:#fff;
+  border-radius:18px;
+  padding:37px 28px;
+  text-align:center;
+  box-shadow:0 12px 60px #00000010;
 }
-
 .dialog-kicker{
- font-size:10px;
- letter-spacing:3px;
- color:var(--pink);
+  font-size:10px;
+  letter-spacing:3px;
+  color:var(--pink);
 }
-
 .dialog h2{
- font-size:27px;
- font-weight:500;
- margin:15px 0 20px;
+  font-size:27px;
+  font-weight:500;
+  margin:15px 0 20px;
 }
-
 .dialog p{
- font-size:13px;
- line-height:1.9;
- color:#666;
- white-space:pre-line;
+  font-size:13px;
+  line-height:1.9;
+  color:#666;
+  white-space:pre-line;
 }
-
 .modal-actions{
- display:flex;
- justify-content:center;
- gap:10px;
- margin-top:25px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:25px;
 }
 
 /* ===================================
@@ -429,257 +372,164 @@ button:disabled{
 =================================== */
 
 @media(max-width:700px){
-
- #home{min-height:520px}
-
- .home-scene{height:67%}
-
- .home-menu{
-  bottom:6%;
-  width:94%;
- }
-
- .home-title-image{
-  width:70%;
-  max-width:230px;
-  height:auto;
-  margin-bottom:18px;
- }
-
- .home-button{
-  min-width:125px;
-  height:45px;
-  padding:0 15px;
-  font-size:12px;
- }
-
- #game{
-  padding:8px 7px 13px;
- }
-
- .game-heading h2{font-size:21px}
- .stats{gap:17px}
- .stat strong{font-size:14px}
-
- .tool{
-  padding:8px 10px;
-  font-size:11px;
- }
+  #home{min-height:520px}
+  .home-scene{height:67%}
+  .home-menu{
+    bottom:6%;
+    width:94%;
+  }
+  .home-title-image{
+    width:70%;
+    max-width:230px;
+    height:auto;
+    margin-bottom:18px;
+  }
+  .home-button{
+    min-width:125px;
+    height:45px;
+    padding:0 15px;
+    font-size:12px;
+  }
+  #game{padding:8px 7px 13px}
+  .game-heading h2{font-size:21px}
+  .stats{gap:17px}
+  .stat strong{font-size:14px}
+  .tool{
+    padding:8px 10px;
+    font-size:11px;
+  }
 }
-
 @media(prefers-reduced-motion:reduce){
-
- .motif,
- .motif-wrap,
- .tile,
- .home-button{
-  transition:none;
- }
-
- .motif-wrap:hover{
-  transform:none;
- }
+  .motif,
+  .motif-wrap,
+  .tile,
+  .home-button{
+    transition:none;
+  }
+  .home-scene .motif-wrap.is-active{
+    transform:none;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===================================
-     HOME
-=================================== -->
+<!-- HOME -->
 
 <section id="home">
-
- <div
-  class="home-scene"
-  id="homeScene"
-  aria-hidden="true">
- </div>
-
- <div class="home-menu">
-
-  <img
-   src="images/Hometitle.png"
-   alt="Pattern Connect"
-   class="home-title-image"
-   id="homeTitleImage"
-   draggable="false"
-  >
-
-  <div class="home-actions">
-
-   <button
-    class="home-button outline"
-    id="howBtn">
-    How to Play
-   </button>
-
-   <button
-    class="home-button filled"
-    id="startBtn">
-    Start Game
-   </button>
-
+  <div
+    class="home-scene"
+    id="homeScene"
+    aria-hidden="true">
   </div>
- </div>
 
+  <div class="home-menu">
+    <img
+      src="images/Hometitle.png"
+      alt="Pattern Connect"
+      class="home-title-image"
+      id="homeTitleImage"
+      draggable="false">
+
+    <div class="home-actions">
+      <button class="home-button outline" id="howBtn">
+        How to Play
+      </button>
+      <button class="home-button filled" id="startBtn">
+        Start Game
+      </button>
+    </div>
+  </div>
 </section>
 
-<!-- ===================================
-     GAME
-=================================== -->
+<!-- GAME -->
 
 <section id="game" hidden>
+  <header class="game-header">
+    <button class="icon-button" id="homeBtn" aria-label="홈으로">
+      ←
+    </button>
+    <span class="stage-label" id="stageLabel">
+      STAGE 01
+    </span>
+    <button class="icon-button" id="recordBtn" aria-label="기록">
+      ♡
+    </button>
+  </header>
 
- <header class="game-header">
-
-  <button
-   class="icon-button"
-   id="homeBtn"
-   aria-label="홈으로">
-   ←
-  </button>
-
-  <span
-   class="stage-label"
-   id="stageLabel">
-   STAGE 01
-  </span>
-
-  <button
-   class="icon-button"
-   id="recordBtn"
-   aria-label="최고 기록">
-   ♡
-  </button>
-
- </header>
-
- <div class="game-heading">
-  <h2>Pattern Connect</h2>
-  <p id="groupLabel">
-   Pattern Collection 01–09
-  </p>
- </div>
-
- <div class="stats">
-
-  <div class="stat">
-   <small>SCORE</small>
-   <strong id="score">0</strong>
+  <div class="game-heading">
+    <h2>Pattern Connect</h2>
+    <p id="groupLabel">Pattern Collection 01–09</p>
   </div>
 
-  <div class="stat">
-   <small>TIME</small>
-   <strong id="time">05:00</strong>
+  <div class="stats">
+    <div class="stat">
+      <small>SCORE</small>
+      <strong id="score">0</strong>
+    </div>
+    <div class="stat">
+      <small>TIME</small>
+      <strong id="time">05:00</strong>
+    </div>
+    <div class="stat">
+      <small>TILES</small>
+      <strong id="remaining">40</strong>
+    </div>
+    <div class="stat">
+      <small>BEST</small>
+      <strong id="bestScore">—</strong>
+    </div>
   </div>
 
-  <div class="stat">
-   <small>TILES</small>
-   <strong id="remaining">40</strong>
+  <div class="game-area" id="gameArea">
+    <div class="board" id="board">
+      <svg id="route" class="route" aria-hidden="true"></svg>
+    </div>
   </div>
 
-  <div class="stat">
-   <small>BEST</small>
-   <strong id="bestScore">—</strong>
+  <div class="game-footer">
+    <p id="message" role="status">
+      같은 디자인의 패 두 개를 연결하세요.
+    </p>
+    <div class="tools">
+      <select class="tool" id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button class="tool" id="hintBtn">Hint</button>
+      <button class="tool" id="shuffleBtn">Shuffle</button>
+      <button class="tool" id="pauseBtn">Pause</button>
+      <button class="tool" id="soundBtn">Sound On</button>
+      <button class="tool primary" id="restartBtn">
+        Restart
+      </button>
+    </div>
   </div>
-
- </div>
-
- <div class="game-area" id="gameArea">
-
-  <div class="board" id="board">
-   <svg
-    id="route"
-    class="route"
-    aria-hidden="true">
-   </svg>
-  </div>
-
- </div>
-
- <div class="game-footer">
-
-  <p id="message" role="status">
-   같은 디자인의 패 두 개를 연결하세요.
-  </p>
-
-  <div class="tools">
-
-   <select class="tool" id="difficulty">
-    <option value="easy">Easy</option>
-    <option value="normal" selected>Normal</option>
-    <option value="hard">Hard</option>
-   </select>
-
-   <button class="tool" id="hintBtn">
-    Hint
-   </button>
-
-   <button class="tool" id="shuffleBtn">
-    Shuffle
-   </button>
-
-   <button class="tool" id="pauseBtn">
-    Pause
-   </button>
-
-   <button class="tool" id="soundBtn">
-    Sound On
-   </button>
-
-   <button
-    class="tool primary"
-    id="restartBtn">
-    Restart
-   </button>
-
-  </div>
- </div>
-
 </section>
 
-<!-- ===================================
-     MODAL
-=================================== -->
+<!-- MODAL -->
 
-<div
- class="overlay"
- id="overlay"
- hidden>
+<div class="overlay" id="overlay" hidden>
+  <div class="dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="dialogTitle">
 
- <div
-  class="dialog"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="dialogTitle">
+    <div class="dialog-kicker" id="dialogEyebrow"></div>
+    <h2 id="dialogTitle"></h2>
+    <p id="dialogText"></p>
 
-  <div
-   class="dialog-kicker"
-   id="dialogEyebrow">
+    <div class="modal-actions">
+      <button class="home-button outline" id="dialogSecondary">
+        Close
+      </button>
+      <button class="home-button filled" id="dialogPrimary">
+        OK
+      </button>
+    </div>
   </div>
-
-  <h2 id="dialogTitle"></h2>
-  <p id="dialogText"></p>
-
-  <div class="modal-actions">
-
-   <button
-    class="home-button outline"
-    id="dialogSecondary">
-    Close
-   </button>
-
-   <button
-    class="home-button filled"
-    id="dialogPrimary">
-    OK
-   </button>
-
-  </div>
- </div>
-
 </div>
 
 <script>
@@ -689,166 +539,88 @@ const $=id=>document.getElementById(id);
 
 /* =====================================
    HOME LAYOUT
-   기준 좌표: 848 × 490
 ===================================== */
 
 const BASE_WIDTH=848;
 const BASE_HEIGHT=490;
 
 const HOME_LAYOUT=[
+ [8,35,25],[12,68,57],[3,91,25],
+ [9,112,80],[8,145,37],[11,168,57],
 
- [8,35,25],
- [12,68,57],
- [3,91,25],
- [9,112,80],
- [8,145,37],
- [11,168,57],
+ [4,205,28],[5,244,28],[6,267,28],
+ [8,305,28],[8,317,28],[8,340,28],
+ [9,378,28],[10,415,28],[11,450,28],
 
- [4,205,28],
- [5,244,28],
- [6,267,28],
- [8,305,28],
- [8,317,28],
- [8,340,28],
- [9,378,28],
- [10,415,28],
- [11,450,28],
+ [8,506,32],[12,543,60],[3,583,34],
+ [5,626,74],[8,670,27],[11,712,57],
+ [9,760,33],[8,811,73],
 
- [8,506,32],
- [12,543,60],
- [3,583,34],
- [5,626,74],
- [8,670,27],
- [11,712,57],
- [9,760,33],
- [8,811,73],
+ [1,34,144],[13,112,143],[8,67,201],
+ [6,165,187],[3,204,117],
 
- [1,34,144],
- [13,112,143],
- [8,67,201],
- [6,165,187],
- [3,204,117],
+ [2,233,91],[3,256,91],[7,324,91],
+ [3,363,91],[12,385,91],[12,407,91],
 
- [2,233,91],
- [3,256,91],
- [7,324,91],
- [3,363,91],
- [12,385,91],
- [12,407,91],
+ [1,479,80],[2,534,105],[5,630,99],
+ [6,650,90],[11,811,78],
 
- [1,479,80],
- [2,534,105],
- [5,630,99],
- [6,650,90],
- [11,811,78],
+ [8,85,110],[12,145,105],[3,180,142],
+ [8,560,48],[12,704,124],
 
- [8,85,110],
- [12,145,105],
- [3,180,142],
- [8,560,48],
- [12,704,124],
+ [1,70,166],[13,286,146],[1,336,148],
+ [3,538,127],[7,757,144],
 
- [1,70,166],
- [13,286,146],
- [1,336,148],
- [3,538,127],
- [7,757,144],
+ [8,337,186],[8,337,201],[4,592,170],
+ [10,628,171],[10,720,170],[15,775,168],
 
- [8,337,186],
- [8,337,201],
- [4,592,170],
- [10,628,171],
- [10,720,170],
- [15,775,168],
+ [14,44,270],[8,98,256],[3,151,282],
+ [12,192,239],[6,221,311],[8,254,265],
 
- [14,44,270],
- [8,98,256],
- [3,151,282],
- [12,192,239],
- [6,221,311],
- [8,254,265],
-
- [8,337,248],
- [14,478,248],
- [6,628,236],
+ [8,337,248],[14,478,248],[6,628,236],
  [15,775,236],
 
- [13,478,276],
- [3,535,263],
- [12,535,279],
- [8,595,294],
- [8,595,306],
+ [13,478,276],[3,535,263],[12,535,279],
+ [8,595,294],[8,595,306],
 
- [8,802,270],
- [3,726,305],
- [12,765,330],
- [9,820,358],
- [8,692,273],
+ [8,802,270],[3,726,305],[12,765,330],
+ [9,820,358],[8,692,273],
 
- [8,30,387],
- [12,78,364],
- [5,113,416],
- [3,172,396],
- [8,207,445],
- [11,250,383],
+ [8,30,387],[12,78,364],[5,113,416],
+ [3,172,396],[8,207,445],[11,250,383],
 
- [1,479,319],
- [12,535,318],
- [12,535,331],
- [8,595,329],
- [10,445,346],
+ [1,479,319],[12,535,318],[12,535,331],
+ [8,595,329],[10,445,346],
 
- [8,337,365],
- [4,409,370],
- [9,595,368],
+ [8,337,365],[4,409,370],[9,595,368],
  [7,656,366],
 
- [3,75,465],
- [8,154,471],
- [12,283,430],
+ [3,75,465],[8,154,471],[12,283,430],
  [6,350,452],
 
- [8,710,415],
- [14,764,412],
- [3,810,458],
+ [8,710,415],[14,764,412],[3,810,458],
  [12,729,462],
 
- [10,595,406],
- [11,596,438],
- [2,631,438],
- [2,708,438],
- [13,746,438]
-
+ [10,595,406],[11,596,438],
+ [2,631,438],[2,708,438],[13,746,438]
 ];
 
-/* =====================================
-   HOME IMAGE SIZES
-===================================== */
-
 const HOME_WIDTH={
- 1:74,
- 2:48,
- 3:32,
- 4:44,
- 5:53,
- 6:59,
- 7:71,
- 8:15,
- 9:52,
- 10:58,
- 11:29,
- 12:18,
- 13:57,
- 14:44,
- 15:68
+ 1:74,2:48,3:32,4:44,5:53,
+ 6:59,7:71,8:15,9:52,10:58,
+ 11:29,12:18,13:57,14:44,15:68
 };
 
-const MOTIF_SIZE_FACTOR=0.58;
+const MOTIF_SIZE_FACTOR=.58;
 
 const homeNodes=[];
 const motionTimers=new Set();
 
 let motionRunning=false;
+
+/* =====================================
+   HOME IMAGES + HOVER
+===================================== */
 
 function homeImagePath(number){
  return "images/Home"+
@@ -856,12 +628,14 @@ function homeImagePath(number){
   ".png";
 }
 
-/* =====================================
-   BUILD HOME
+function clearHomeHover(){
+ const root=$("homeScene");
 
-   wrapper: hover scale
-   image: random rotation
-===================================== */
+ root.classList.remove("is-hovering");
+
+ root.querySelectorAll(".motif-wrap.is-active")
+  .forEach(el=>el.classList.remove("is-active"));
+}
 
 function buildHome(){
 
@@ -870,22 +644,18 @@ function buildHome(){
 
  HOME_LAYOUT.forEach(([number,x,y],i)=>{
 
-  /* 확대/축소 전용 래퍼 */
-
+  // 확대 축소와 오퍼시티 전용 요소
   const wrapper=document.createElement("div");
 
   wrapper.className="motif-wrap";
-
   wrapper.dataset.pattern=String(number);
 
   wrapper.style.setProperty(
-   "--x",
-   (x/BASE_WIDTH*100)+"%"
+   "--x",(x/BASE_WIDTH*100)+"%"
   );
 
   wrapper.style.setProperty(
-   "--y",
-   (y/BASE_HEIGHT*100)+"%"
+   "--y",(y/BASE_HEIGHT*100)+"%"
   );
 
   const relativeWidth=
@@ -903,43 +673,64 @@ function buildHome(){
   );
 
   wrapper.style.setProperty(
-   "--z",
-   String(i%8)
+   "--z",String(i%8)
   );
 
-  /* 회전 전용 이미지 */
-
+  // 개별 회전 전용 이미지
   const image=document.createElement("img");
 
   image.className="motif";
   image.alt="";
   image.draggable=false;
   image.decoding="async";
-
   image.src=homeImagePath(number);
-
   image.dataset.rotation="0";
 
   image.onerror=()=>{
    wrapper.style.display="none";
-   console.warn(
-    "홈 이미지 로딩 실패:",
-    image.src
-   );
+   console.warn("이미지 로딩 실패:",image.src);
   };
 
-  wrapper.appendChild(image);
+  /*
+   호버:
+   1. 현재 활성 그래픽 표시
+   2. 나머지 그래픽 불투명도 25%
+   3. 현재 그래픽 135% 확대
+  */
 
+  wrapper.addEventListener("pointerenter",event=>{
+
+   if(event.pointerType==="touch")return;
+
+   clearHomeHover();
+
+   wrapper.classList.add("is-active");
+   root.classList.add("is-hovering");
+  });
+
+  wrapper.addEventListener("pointerleave",()=>{
+
+   wrapper.classList.remove("is-active");
+
+   // 다른 그래픽 위로 넘어가는 상황에 대비
+   if(!root.querySelector(".motif-wrap.is-active")){
+    root.classList.remove("is-hovering");
+   }
+  });
+
+  wrapper.appendChild(image);
   fragment.appendChild(wrapper);
 
   homeNodes.push(image);
  });
 
  root.replaceChildren(fragment);
+
+ root.addEventListener("pointerleave",clearHomeHover);
 }
 
 /* =====================================
-   HOME RANDOM ROTATION
+   HOME ROTATION
 ===================================== */
 
 function stopHomeMotion(){
@@ -965,9 +756,7 @@ function scheduleMotion(image){
 
   if(!motionRunning)return;
 
-  if(image.parentElement.style.display==="none"){
-   return;
-  }
+  if(image.parentElement.style.display==="none")return;
 
   const angles=[90,180,270,360];
 
@@ -981,8 +770,7 @@ function scheduleMotion(image){
   image.dataset.rotation=String(rotation);
 
   image.style.setProperty(
-   "--angle",
-   rotation+"deg"
+   "--angle",rotation+"deg"
   );
 
   scheduleMotion(image);
@@ -1001,12 +789,11 @@ function startHomeMotion(){
  ).matches)return;
 
  motionRunning=true;
-
  homeNodes.forEach(scheduleMotion);
 }
 
 /* =====================================
-   HOME TITLE IMAGE CHECK
+   HOME TITLE
 ===================================== */
 
 const homeTitleImage=$("homeTitleImage");
@@ -1018,18 +805,12 @@ homeTitleImage.onerror=()=>{
  const fallback=document.createElement("h1");
 
  fallback.textContent="Pattern Connect";
-
  fallback.style.margin="0 0 22px";
  fallback.style.fontSize="32px";
  fallback.style.fontWeight="600";
 
  homeTitleImage.parentElement.insertBefore(
-  fallback,
-  homeTitleImage
- );
-
- console.warn(
-  "Hometitle.png 파일을 찾지 못했습니다."
+  fallback,homeTitleImage
  );
 };
 
@@ -1046,7 +827,6 @@ const LEVELS={
 let stage=1;
 let rows=0;
 let cols=0;
-
 let board=[];
 
 let score=0;
@@ -1068,14 +848,9 @@ let audioContext=null;
 
 let tileRatio=184/223;
 
-/* =====================================
-   GAME IMAGE PATH
-===================================== */
-
 function imagePath(number){
  return "images/tile"+
-  String(number).padStart(2,"0")+
-  ".jpg";
+  String(number).padStart(2,"0")+".jpg";
 }
 
 function groupForStage(number){
@@ -1086,37 +861,21 @@ function groupForStage(number){
 }
 
 function formatTime(value){
- return String(
-  Math.floor(value/60)
- ).padStart(2,"0")+
- ":"+
- String(value%60).padStart(2,"0");
+ return String(Math.floor(value/60)).padStart(2,"0")+
+ ":"+String(value%60).padStart(2,"0");
 }
 
-function index(r,c){
- return r*cols+c;
-}
+function index(r,c){return r*cols+c}
 
 function coords(i){
- return[
-  Math.floor(i/cols),
-  i%cols
- ];
+ return[Math.floor(i/cols),i%cols];
 }
 
 function shuffleArray(array){
-
  for(let i=array.length-1;i>0;i--){
-
-  const j=Math.floor(
-   Math.random()*(i+1)
-  );
-
-  [array[i],array[j]]=[
-   array[j],array[i]
-  ];
+  const j=Math.floor(Math.random()*(i+1));
+  [array[i],array[j]]=[array[j],array[i]];
  }
-
  return array;
 }
 
@@ -1143,11 +902,13 @@ function openHome(){
  $("game").hidden=true;
  $("home").hidden=false;
 
+ clearHomeHover();
  startHomeMotion();
 }
 
 function openGame(){
 
+ clearHomeHover();
  stopHomeMotion();
 
  $("home").hidden=true;
@@ -1168,16 +929,13 @@ function playSound(type){
  if(!soundEnabled)return;
 
  try{
-
   const AC=
    window.AudioContext||
    window.webkitAudioContext;
 
   if(!AC)return;
 
-  if(!audioContext){
-   audioContext=new AC();
-  }
+  if(!audioContext)audioContext=new AC();
 
   if(audioContext.state==="suspended"){
    audioContext.resume();
@@ -1192,26 +950,17 @@ function playSound(type){
    lose:[350,260]
   };
 
-  const frequencies=patterns[type]||[];
+  (patterns[type]||[]).forEach((frequency,i)=>{
 
-  frequencies.forEach((frequency,i)=>{
+   const t=audioContext.currentTime+i*.11;
 
-   const t=
-    audioContext.currentTime+
-    i*.11;
-
-   const oscillator=
-    audioContext.createOscillator();
-
-   const gain=
-    audioContext.createGain();
+   const oscillator=audioContext.createOscillator();
+   const gain=audioContext.createGain();
 
    oscillator.type="sine";
    oscillator.frequency.value=frequency;
 
-   gain.gain.setValueAtTime(
-    .0001,t
-   );
+   gain.gain.setValueAtTime(.0001,t);
 
    gain.gain.exponentialRampToValueAtTime(
     .075,t+.015
@@ -1239,58 +988,41 @@ function playSound(type){
 
 function findPath(a,b){
 
- if(
-  a===b||
-  board[a]===null||
-  board[a]!==board[b]
- )return null;
+ if(a===b||board[a]===null||board[a]!==board[b])
+  return null;
 
  const H=rows+2;
  const W=cols+2;
 
  const grid=Array.from(
-  {length:H},
-  ()=>Array(W).fill(null)
+  {length:H},()=>Array(W).fill(null)
  );
 
  board.forEach((value,i)=>{
-
   const [r,c]=coords(i);
-
   grid[r+1][c+1]=value;
  });
 
  const [ar,ac]=coords(a);
  const [br,bc]=coords(b);
 
- const sr=ar+1;
- const sc=ac+1;
- const tr=br+1;
- const tc=bc+1;
+ const sr=ar+1,sc=ac+1;
+ const tr=br+1,tc=bc+1;
 
  const dr=[-1,0,1,0];
  const dc=[0,1,0,-1];
 
  const best=Array.from(
   {length:H},
-  ()=>Array.from(
-   {length:W},
-   ()=>[3,3,3,3]
-  )
+  ()=>Array.from({length:W},()=>[3,3,3,3])
  );
 
  const queue=[];
 
  for(let d=0;d<4;d++){
-
   best[sr][sc][d]=0;
-
   queue.push({
-   r:sr,
-   c:sc,
-   d,
-   turns:0,
-   path:[[sr,sc]]
+   r:sr,c:sc,d,turns:0,path:[[sr,sc]]
   });
  }
 
@@ -1298,52 +1030,35 @@ function findPath(a,b){
 
   const current=queue[head];
 
-  if(
-   current.turns!==
-   best[current.r][current.c][current.d]
-  )continue;
+  if(current.turns!==
+   best[current.r][current.c][current.d])
+   continue;
 
-  if(
-   current.r===tr&&
-   current.c===tc
-  ){
+  if(current.r===tr&&current.c===tc)
    return current.path;
-  }
 
   for(let nd=0;nd<4;nd++){
 
-   const turns=
-    current.turns+
+   const turns=current.turns+
     (nd===current.d?0:1);
 
    const nr=current.r+dr[nd];
    const nc=current.c+dc[nd];
 
-   if(
-    turns>2||
-    nr<0||nr>=H||
-    nc<0||nc>=W
-   )continue;
-
-   if(
-    grid[nr][nc]!==null&&
-    !(nr===tr&&nc===tc)
-   )continue;
-
-   if(turns>=best[nr][nc][nd])
+   if(turns>2||nr<0||nr>=H||nc<0||nc>=W)
     continue;
+
+   if(grid[nr][nc]!==null&&
+    !(nr===tr&&nc===tc))
+    continue;
+
+   if(turns>=best[nr][nc][nd])continue;
 
    best[nr][nc][nd]=turns;
 
    queue.push({
-    r:nr,
-    c:nc,
-    d:nd,
-    turns,
-    path:[
-     ...current.path,
-     [nr,nc]
-    ]
+    r:nr,c:nc,d:nd,turns,
+    path:[...current.path,[nr,nc]]
    });
   }
  }
@@ -1358,13 +1073,8 @@ function findPair(){
   if(board[a]===null)continue;
 
   for(let b=a+1;b<board.length;b++){
-
-   if(
-    board[a]===board[b]&&
-    findPath(a,b)
-   ){
+   if(board[a]===board[b]&&findPath(a,b))
     return[a,b];
-   }
   }
  }
 
@@ -1393,7 +1103,6 @@ function generateBoard(group,positions=null,ids=null){
   board=Array(count).fill(null);
 
   const order=shuffleArray([...pairIds]);
-
   let success=true;
 
   for(const id of order){
@@ -1405,7 +1114,6 @@ function generateBoard(group,positions=null,ids=null){
    let placed=false;
 
    for(const a of empty){
-
     for(const b of empty){
 
      if(a>=b)continue;
@@ -1421,7 +1129,6 @@ function generateBoard(group,positions=null,ids=null){
      board[a]=null;
      board[b]=null;
     }
-
     if(placed)break;
    }
 
@@ -1448,14 +1155,12 @@ function buildBoard(){
  let k=0;
 
  for(let r=0;r<rows;r++){
-
   for(let c=0;c<cols;c+=2){
 
    const id=group[k%group.length];
 
    board[index(r,c)]=id;
    board[index(r,c+1)]=id;
-
    k++;
   }
  }
@@ -1467,24 +1172,14 @@ function buildBoard(){
 
 function fitBoard(){
 
- if(
-  !rows||
-  !cols||
-  $("game").hidden
- )return;
+ if(!rows||!cols||$("game").hidden)return;
 
  const area=$("gameArea");
-
  const W=area.clientWidth;
  const H=area.clientHeight;
 
  const gap=Math.max(
-  2,
-  Math.min(
-   18,
-   W/(cols*5),
-   H/(rows*5)
-  )
+  2,Math.min(18,W/(cols*5),H/(rows*5))
  );
 
  const tileWidth=Math.max(
@@ -1500,16 +1195,8 @@ function fitBoard(){
 
  root.style.setProperty("--cols",cols);
  root.style.setProperty("--gap",gap+"px");
-
- root.style.setProperty(
-  "--tile-width",
-  tileWidth+"px"
- );
-
- root.style.setProperty(
-  "--ratio",
-  tileRatio
- );
+ root.style.setProperty("--tile-width",tileWidth+"px");
+ root.style.setProperty("--ratio",tileRatio);
 }
 
 window.addEventListener("resize",fitBoard);
@@ -1532,7 +1219,6 @@ function drawRoute(path){
  if(!first)return;
 
  const style=getComputedStyle(root);
-
  const gx=parseFloat(style.columnGap)||0;
  const gy=parseFloat(style.rowGap)||0;
 
@@ -1546,8 +1232,7 @@ function drawRoute(path){
 
  const simplified=points.filter((p,i)=>{
 
-  if(i===0||i===points.length-1)
-   return true;
+  if(i===0||i===points.length-1)return true;
 
   const a=points[i-1];
   const b=points[i+1];
@@ -1559,8 +1244,7 @@ function drawRoute(path){
  });
 
  const line=document.createElementNS(
-  "http://www.w3.org/2000/svg",
-  "polyline"
+  "http://www.w3.org/2000/svg","polyline"
  );
 
  line.setAttribute(
@@ -1571,31 +1255,17 @@ function drawRoute(path){
  line.setAttribute("fill","none");
  line.setAttribute("stroke","#f15b7e");
  line.setAttribute("stroke-width","3");
-
- line.setAttribute(
-  "stroke-linecap","round"
- );
-
- line.setAttribute(
-  "stroke-linejoin","round"
- );
+ line.setAttribute("stroke-linecap","round");
+ line.setAttribute("stroke-linejoin","round");
 
  $("route").append(line);
 
- const len=Math.max(
-  1,line.getTotalLength()
- );
+ const len=Math.max(1,line.getTotalLength());
 
  line.animate(
   [
-   {
-    strokeDasharray:len,
-    strokeDashoffset:len
-   },
-   {
-    strokeDasharray:len,
-    strokeDashoffset:0
-   }
+   {strokeDasharray:len,strokeDashoffset:len},
+   {strokeDasharray:len,strokeDashoffset:0}
   ],
   {
    duration:280,
@@ -1621,26 +1291,15 @@ function render(){
  board.forEach((id,i)=>{
 
   const button=document.createElement("button");
-
   button.type="button";
   button.className="tile";
 
-  if(id===null){
-   button.classList.add("empty");
-  }
-
-  if(selected===i){
-   button.classList.add("selected");
-  }
-
-  if(hints.includes(i)){
-   button.classList.add("hint");
-  }
+  if(id===null)button.classList.add("empty");
+  if(selected===i)button.classList.add("selected");
+  if(hints.includes(i))button.classList.add("hint");
 
   if(id!==null){
-
    const img=document.createElement("img");
-
    img.src=imagePath(id);
    img.alt="패턴 "+id;
    img.draggable=false;
@@ -1653,14 +1312,10 @@ function render(){
   }
 
   button.disabled=
-   id===null||
-   busy||
-   paused||
-   finished;
+   id===null||busy||paused||finished;
 
   button.addEventListener(
-   "click",
-   ()=>pickTile(i)
+   "click",()=>pickTile(i)
   );
 
   fragment.append(button);
@@ -1669,8 +1324,7 @@ function render(){
  root.insertBefore(fragment,$("route"));
 
  $("stageLabel").textContent=
-  "STAGE "+
-  String(stage).padStart(2,"0");
+  "STAGE "+String(stage).padStart(2,"0");
 
  $("groupLabel").textContent=
   stage%2
@@ -1683,8 +1337,7 @@ function render(){
  $("remaining").textContent=
   board.filter(v=>v!==null).length;
 
- $("time").textContent=
-  formatTime(seconds);
+ $("time").textContent=formatTime(seconds);
 
  fitBoard();
 }
@@ -1695,30 +1348,21 @@ function render(){
 
 function pickTile(i){
 
- if(
-  paused||
-  busy||
-  finished||
-  board[i]===null
- )return;
+ if(paused||busy||finished||board[i]===null)
+  return;
 
  hints=[];
 
  if(selected===null){
-
   selected=i;
-
   playSound("select");
   render();
-
   return;
  }
 
  if(selected===i){
-
   selected=null;
   render();
-
   return;
  }
 
@@ -1728,13 +1372,9 @@ function pickTile(i){
  selected=null;
 
  if(!path){
-
   playSound("wrong");
-
   message("연결할 수 없는 패입니다.");
-
   render();
-
   return;
  }
 
@@ -1752,25 +1392,21 @@ function pickTile(i){
 
   board[first]=null;
   board[i]=null;
-
   busy=false;
 
   clearRoute();
 
   if(board.every(v=>v===null)){
-
    finishGame(true);
    return;
   }
 
   message("연결 성공! +100");
-
   render();
 
   if(!findPair()){
    shuffleTiles(true);
   }
-
  },340);
 }
 
@@ -1791,38 +1427,23 @@ function shuffleTiles(automatic=false){
  const counts=new Map();
 
  positions.forEach(i=>{
-
   const id=original[i];
-
-  counts.set(
-   id,
-   (counts.get(id)||0)+1
-  );
+  counts.set(id,(counts.get(id)||0)+1);
  });
 
  const ids=[];
 
  for(const [id,count] of counts){
-
-  for(let i=0;i<count/2;i++){
-   ids.push(id);
-  }
+  for(let i=0;i<count/2;i++)ids.push(id);
  }
 
- const group=groupForStage(stage);
-
  const success=generateBoard(
-  group,
-  positions,
-  ids
+  groupForStage(stage),positions,ids
  );
 
  if(!success){
-
   board=original;
-
   message("패를 섞지 못했습니다. 다시 시도하세요.");
-
   render();
   return;
  }
@@ -1854,13 +1475,11 @@ function showHint(){
  let pair=findPair();
 
  if(!pair){
-
   shuffleTiles(true);
   pair=findPair();
  }
 
  if(!pair){
-
   message("연결 가능한 패를 찾지 못했습니다.");
   return;
  }
@@ -1873,70 +1492,50 @@ function showHint(){
  playSound("hint");
 
  message("표시된 두 패를 연결하세요. -30");
-
  render();
 }
 
 /* =====================================
-   RECORD STORAGE
+   RECORDS
 ===================================== */
 
 function recordKey(){
-
  return "pattern_connect_v5_"+
-  $("difficulty").value+
-  "_"+
-  stage;
+  $("difficulty").value+"_"+stage;
 }
 
 function readRecord(){
-
  try{
-
   return JSON.parse(
-   localStorage.getItem(
-    recordKey()
-   )||"null"
+   localStorage.getItem(recordKey())||"null"
   );
-
  }catch{
   return null;
  }
 }
 
 function updateBest(){
-
  const record=readRecord();
 
- $("bestScore").textContent=
-  record
+ $("bestScore").textContent=record
   ?record.score.toLocaleString("ko-KR")
   :"—";
 }
 
 function saveRecord(){
-
  try{
-
   const old=readRecord()||{};
-
-  const elapsed=
-   initialTime-seconds;
+  const elapsed=initialTime-seconds;
 
   localStorage.setItem(
    recordKey(),
    JSON.stringify({
-    score:Math.max(
-     old.score||0,
-     score
-    ),
+    score:Math.max(old.score||0,score),
     time:old.time===undefined
-     ?elapsed
-     :Math.min(old.time,elapsed),
+     ?elapsed:Math.min(old.time,elapsed),
     clears:(old.clears||0)+1
    })
   );
-
  }catch(error){
   console.warn(error);
  }
@@ -1952,15 +1551,10 @@ let primaryAction=null;
 let secondaryAction=null;
 
 function showModal(
- eyebrow,
- title,
- text,
- primary="OK",
- secondary="Close",
- onPrimary=null,
- onSecondary=null
+ eyebrow,title,text,
+ primary="OK",secondary="Close",
+ onPrimary=null,onSecondary=null
 ){
-
  $("dialogEyebrow").textContent=eyebrow;
  $("dialogTitle").textContent=title;
  $("dialogText").textContent=text;
@@ -1979,20 +1573,14 @@ function closeModal(){
 }
 
 $("dialogPrimary").onclick=()=>{
-
  const action=primaryAction;
-
  closeModal();
-
  if(action)action();
 };
 
 $("dialogSecondary").onclick=()=>{
-
  const action=secondaryAction;
-
  closeModal();
-
  if(action)action();
 };
 
@@ -2001,7 +1589,6 @@ $("dialogSecondary").onclick=()=>{
 ===================================== */
 
 $("howBtn").onclick=()=>{
-
  showModal(
   "HOW TO PLAY",
   "How to Play",
@@ -2009,58 +1596,45 @@ $("howBtn").onclick=()=>{
   "2. Connect them with a path that turns no more than twice.\n"+
   "3. Clear all tiles before time runs out.\n"+
   "4. Odd stages use patterns 01–09, and even stages use 10–18.",
-  "Start Game",
-  "Close",
-  openGame
+  "Start Game","Close",openGame
  );
 };
 
 /* =====================================
-   GAME FINISH
+   FINISH
 ===================================== */
 
 function finishGame(won){
 
  finished=true;
-
  clearInterval(timer);
  timer=null;
-
  render();
 
  if(won){
-
   saveRecord();
   playSound("win");
 
   showModal(
    "STAGE COMPLETE",
    "Stage "+stage+" Clear!",
-   "Score: "+
-   score.toLocaleString("ko-KR")+
-   "\nTime: "+
-   formatTime(initialTime-seconds),
-   "Next Stage",
-   "Play Again",
+   "Score: "+score.toLocaleString("ko-KR")+
+   "\nTime: "+formatTime(initialTime-seconds),
+   "Next Stage","Play Again",
    ()=>{
     stage++;
     newGame();
    },
    ()=>newGame()
   );
-
  }else{
-
   playSound("lose");
 
   showModal(
-   "TIME OVER",
-   "Time Over",
+   "TIME OVER","Time Over",
    "Try to clear all the patterns before time runs out.",
-   "Restart",
-   "Home",
-   ()=>newGame(),
-   openHome
+   "Restart","Home",
+   ()=>newGame(),openHome
   );
  }
 }
@@ -2074,32 +1648,22 @@ function pauseGame(){
  if(finished||busy)return;
 
  paused=!paused;
-
- $("pauseBtn").textContent=
-  paused?"Resume":"Pause";
-
+ $("pauseBtn").textContent=paused?"Resume":"Pause";
  render();
 
  if(paused){
-
   showModal(
-   "PAUSED",
-   "Game Paused",
+   "PAUSED","Game Paused",
    "The timer has stopped.",
-   "Resume",
-   "Home",
-   resumeGame,
-   openHome
+   "Resume","Home",
+   resumeGame,openHome
   );
  }
 }
 
 function resumeGame(){
-
  paused=false;
-
  $("pauseBtn").textContent="Pause";
-
  render();
 }
 
@@ -2117,23 +1681,19 @@ function newGame(){
 
  clearRoute();
 
- const config=
-  LEVELS[$("difficulty").value];
+ const config=LEVELS[$("difficulty").value];
 
  rows=config.rows;
  cols=config.cols;
 
  initialTime=Math.max(
-  90,
-  config.time-(stage-1)*12
+  90,config.time-(stage-1)*12
  );
 
  seconds=initialTime;
-
  score=0;
  selected=null;
  hints=[];
-
  paused=false;
  finished=false;
  busy=false;
@@ -2149,24 +1709,13 @@ function newGame(){
 
  timer=setInterval(()=>{
 
-  if(
-   paused||
-   finished||
-   busy||
-   $("game").hidden
-  )return;
+  if(paused||finished||busy||$("game").hidden)
+   return;
 
-  seconds=Math.max(
-   0,seconds-1
-  );
+  seconds=Math.max(0,seconds-1);
+  $("time").textContent=formatTime(seconds);
 
-  $("time").textContent=
-   formatTime(seconds);
-
-  if(seconds===0){
-   finishGame(false);
-  }
-
+  if(seconds===0)finishGame(false);
  },1000);
 }
 
@@ -2176,31 +1725,21 @@ function newGame(){
 
 $("startBtn").onclick=openGame;
 $("homeBtn").onclick=openHome;
-
 $("hintBtn").onclick=showHint;
-
-$("shuffleBtn").onclick=()=>{
- shuffleTiles(false);
-};
-
+$("shuffleBtn").onclick=()=>shuffleTiles(false);
 $("pauseBtn").onclick=pauseGame;
-
 $("restartBtn").onclick=newGame;
 
 $("soundBtn").onclick=()=>{
-
  soundEnabled=!soundEnabled;
 
  $("soundBtn").textContent=
   soundEnabled?"Sound On":"Sound Off";
 
- if(soundEnabled){
-  playSound("select");
- }
+ if(soundEnabled)playSound("select");
 };
 
 $("difficulty").onchange=()=>{
-
  stage=1;
  newGame();
 };
@@ -2208,29 +1747,22 @@ $("difficulty").onchange=()=>{
 $("recordBtn").onclick=()=>{
 
  if(!finished){
-
   paused=true;
-
   $("pauseBtn").textContent="Resume";
-
   render();
  }
 
  const record=readRecord();
 
  showModal(
-  "YOUR RECORD",
-  "My Records",
+  "YOUR RECORD","My Records",
   record
   ?"Best Score: "+
    record.score.toLocaleString("ko-KR")+
-   "\nBest Time: "+
-   formatTime(record.time)+
-   "\nClears: "+
-   record.clears
+   "\nBest Time: "+formatTime(record.time)+
+   "\nClears: "+record.clears
   :"No records yet.",
-  "Back to Game",
-  "Home",
+  "Back to Game","Home",
   ()=>{
    if(!finished)resumeGame();
   },
@@ -2245,16 +1777,9 @@ $("recordBtn").onclick=()=>{
 const sample=new Image();
 
 sample.onload=()=>{
-
- if(
-  sample.naturalWidth&&
-  sample.naturalHeight
- ){
-
+ if(sample.naturalWidth&&sample.naturalHeight){
   tileRatio=
-   sample.naturalWidth/
-   sample.naturalHeight;
-
+   sample.naturalWidth/sample.naturalHeight;
   fitBoard();
  }
 };
