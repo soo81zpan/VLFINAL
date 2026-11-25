@@ -59,8 +59,6 @@ button:disabled{
  isolation:isolate;
 }
 
-/* 홈 그래픽 전체 배치 영역 */
-
 .home-scene{
  position:absolute;
  top:0;
@@ -71,8 +69,6 @@ button:disabled{
  pointer-events:none;
  z-index:1;
 }
-
-/* 개별 홈 그래픽 */
 
 .motif{
  position:absolute;
@@ -99,11 +95,6 @@ button:disabled{
    HOME TITLE IMAGE
 =================================== */
 
-/*
- 텍스트 타이틀 대신
- Hometitle.png 사용
-*/
-
 .home-menu{
  position:absolute;
  z-index:10;
@@ -122,13 +113,13 @@ button:disabled{
  background:transparent;
 }
 
-/* 타이틀 PNG */
+/* 타이틀 PNG — 크기 70%로 축소 */
 
 .home-title-image{
  display:block;
 
- width:100%;
- max-width:440px;
+ width:70%;
+ max-width:310px;
  height:auto;
 
  object-fit:contain;
@@ -147,8 +138,6 @@ button:disabled{
  align-items:center;
  gap:13px;
 }
-
-/* 홈 버튼 */
 
 .home-button{
  min-width:148px;
@@ -171,14 +160,10 @@ button:disabled{
  transform:translateY(-2px);
 }
 
-/* How to Play */
-
 .home-button.outline{
  background:rgba(241,91,126,.035);
  color:var(--pink-line);
 }
-
-/* Start Game */
 
 .home-button.filled{
  background:var(--pink);
@@ -247,8 +232,6 @@ button:disabled{
  margin:0;
 }
 
-/* 게임 정보 */
-
 .stats{
  flex:none;
 
@@ -274,8 +257,6 @@ button:disabled{
  font-variant-numeric:tabular-nums;
 }
 
-/* 게임판 영역 */
-
 .game-area{
  flex:1;
  min-height:0;
@@ -300,8 +281,6 @@ button:disabled{
  max-width:100%;
  margin:auto;
 }
-
-/* 개별 게임 타일 */
 
 .tile{
  position:relative;
@@ -329,16 +308,12 @@ button:disabled{
  pointer-events:none;
 }
 
-/* 선택 상태 */
-
 .tile.selected{
  outline:2px solid var(--pink);
  outline-offset:3px;
 
  transform:scale(.94);
 }
-
-/* 힌트 상태 */
 
 .tile.hint{
  outline:2px solid #edbf4d;
@@ -348,8 +323,6 @@ button:disabled{
 .tile.empty{
  visibility:hidden;
 }
-
-/* 연결선 */
 
 .route{
  position:absolute;
@@ -363,8 +336,6 @@ button:disabled{
 
  z-index:5;
 }
-
-/* 게임 하단 */
 
 .game-footer{
  flex:none;
@@ -481,9 +452,11 @@ button:disabled{
   width:94%;
  }
 
+ /* 모바일 타이틀 PNG 축소 */
+
  .home-title-image{
-  width:100%;
-  max-width:320px;
+  width:70%;
+  max-width:230px;
   height:auto;
   margin-bottom:18px;
  }
@@ -545,8 +518,6 @@ button:disabled{
 
  <div class="home-menu">
 
-  <!-- 직접 디자인한 타이틀 PNG -->
-
   <img
    src="images/Hometitle.png"
    alt="Pattern Connect"
@@ -554,8 +525,6 @@ button:disabled{
    id="homeTitleImage"
    draggable="false"
   >
-
-  <!-- 홈 버튼 -->
 
   <div class="home-actions">
 
@@ -671,17 +640,9 @@ button:disabled{
     class="tool"
     id="difficulty">
 
-    <option value="easy">
-     Easy
-    </option>
-
-    <option value="normal" selected>
-     Normal
-    </option>
-
-    <option value="hard">
-     Hard
-    </option>
+    <option value="easy">Easy</option>
+    <option value="normal" selected>Normal</option>
+    <option value="hard">Hard</option>
 
    </select>
 
@@ -766,21 +727,12 @@ const $=id=>document.getElementById(id);
    HOME LAYOUT
 
    좌표 기준 : 848 × 490
-
-   기존 패턴 배치 및
-   좌우 확장 레이아웃 유지
 ===================================== */
 
 const BASE_WIDTH=848;
 const BASE_HEIGHT=490;
 
-/*
- [이미지 번호, X, Y]
-*/
-
 const HOME_LAYOUT=[
-
- /* 왼쪽 상단 */
 
  [8,35,25],
  [12,68,57],
@@ -788,8 +740,6 @@ const HOME_LAYOUT=[
  [9,112,80],
  [8,145,37],
  [11,168,57],
-
- /* 상단 중앙 */
 
  [4,205,28],
  [5,244,28],
@@ -801,8 +751,6 @@ const HOME_LAYOUT=[
  [10,415,28],
  [11,450,28],
 
- /* 오른쪽 상단 */
-
  [8,506,32],
  [12,543,60],
  [3,583,34],
@@ -812,15 +760,11 @@ const HOME_LAYOUT=[
  [9,760,33],
  [8,811,73],
 
- /* 왼쪽 두 번째 영역 */
-
  [1,34,144],
  [13,112,143],
  [8,67,201],
  [6,165,187],
  [3,204,117],
-
- /* 중앙 상단 */
 
  [2,233,91],
  [3,256,91],
@@ -835,15 +779,11 @@ const HOME_LAYOUT=[
  [6,650,90],
  [11,811,78],
 
- /* 중상단 장식 */
-
  [8,85,110],
  [12,145,105],
  [3,180,142],
  [8,560,48],
  [12,704,124],
-
- /* 중앙 두 번째 그룹 */
 
  [1,70,166],
  [13,286,146],
@@ -858,16 +798,12 @@ const HOME_LAYOUT=[
  [10,720,170],
  [15,775,168],
 
- /* 왼쪽 중간 */
-
  [14,44,270],
  [8,98,256],
  [3,151,282],
  [12,192,239],
  [6,221,311],
  [8,254,265],
-
- /* 중앙 */
 
  [8,337,248],
  [14,478,248],
@@ -880,15 +816,11 @@ const HOME_LAYOUT=[
  [8,595,294],
  [8,595,306],
 
- /* 오른쪽 중간 */
-
  [8,802,270],
  [3,726,305],
  [12,765,330],
  [9,820,358],
  [8,692,273],
-
- /* 왼쪽 하단 */
 
  [8,30,387],
  [12,78,364],
@@ -896,8 +828,6 @@ const HOME_LAYOUT=[
  [3,172,396],
  [8,207,445],
  [11,250,383],
-
- /* 중앙 하단 */
 
  [1,479,319],
  [12,535,318],
@@ -910,8 +840,6 @@ const HOME_LAYOUT=[
  [9,595,368],
  [7,656,366],
 
- /* 하단 좌우 */
-
  [3,75,465],
  [8,154,471],
  [12,283,430],
@@ -921,8 +849,6 @@ const HOME_LAYOUT=[
  [14,764,412],
  [3,810,458],
  [12,729,462],
-
- /* 오른쪽 하단 */
 
  [10,595,406],
  [11,596,438],
@@ -961,20 +887,12 @@ const motionTimers=new Set();
 
 let motionRunning=false;
 
-/* =====================================
-   HOME IMAGE PATH
-===================================== */
-
 function homeImagePath(number){
 
  return "images/Home"+
   String(number).padStart(2,"0")+
   ".png";
 }
-
-/* =====================================
-   CREATE HOME GRAPHICS
-===================================== */
 
 function buildHome(){
 
@@ -992,19 +910,13 @@ function buildHome(){
 
   image.src=homeImagePath(number);
 
-  /* 이미지 로딩 오류 시 숨김 */
-
   image.onerror=()=>{
-
    image.style.display="none";
-
    console.warn(
     "홈 이미지 로딩 실패:",
     image.src
    );
   };
-
-  /* 위치 */
 
   image.style.setProperty(
    "--x",
@@ -1015,8 +927,6 @@ function buildHome(){
    "--y",
    (y/BASE_HEIGHT*100)+"%"
   );
-
-  /* 크기 */
 
   const relativeWidth=
    HOME_WIDTH[number]*
@@ -1122,12 +1032,6 @@ const homeTitleImage=$("homeTitleImage");
 
 homeTitleImage.onerror=()=>{
 
- /*
-  PNG 파일을 못 찾으면
-  깨진 이미지 아이콘 대신
-  기존 텍스트 타이틀 표시
- */
-
  homeTitleImage.style.display="none";
 
  const fallback=document.createElement("h1");
@@ -1135,7 +1039,7 @@ homeTitleImage.onerror=()=>{
  fallback.textContent="Pattern Connect";
 
  fallback.style.margin="0 0 22px";
- fallback.style.fontSize="42px";
+ fallback.style.fontSize="32px";
  fallback.style.fontWeight="600";
  fallback.style.letterSpacing="-1.8px";
 
@@ -1198,20 +1102,12 @@ let audioContext=null;
 
 let tileRatio=184/223;
 
-/* =====================================
-   GAME IMAGE PATH
-===================================== */
-
 function imagePath(number){
 
  return "images/tile"+
   String(number).padStart(2,"0")+
   ".jpg";
 }
-
-/* =====================================
-   STAGE IMAGE GROUP
-===================================== */
 
 function groupForStage(number){
 
@@ -1220,10 +1116,6 @@ function groupForStage(number){
   (_,i)=>i+(number%2?1:10)
  );
 }
-
-/* =====================================
-   UTILITIES
-===================================== */
 
 function formatTime(value){
 
@@ -1493,10 +1385,6 @@ function findPath(a,b){
 
  return null;
 }
-
-/* =====================================
-   FIND AVAILABLE PAIR
-===================================== */
 
 function findPair(){
 
