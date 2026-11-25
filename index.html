@@ -1,13 +1,16 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport"
+ content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pattern Connect</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+ box-sizing:border-box;
+}
 
 :root{
  --pink:#f15b7e;
@@ -24,7 +27,9 @@ html,body{
  min-height:100%;
 }
 
-body{background:#fff}
+body{
+ background:#fff;
+}
 
 button,select{
  font:inherit;
@@ -36,7 +41,9 @@ button:disabled{
  cursor:default;
 }
 
-[hidden]{display:none!important}
+[hidden]{
+ display:none!important;
+}
 
 /* ===================================
    HOME SCREEN
@@ -52,13 +59,7 @@ button:disabled{
  isolation:isolate;
 }
 
-/*
- 그래픽 배치 영역
-
- 기존 그룹 전체 축소 방식 제거.
- 화면 전체 너비에 개별 그래픽 배치.
- 타이틀 영역과는 분리.
-*/
+/* 홈 그래픽 전체 배치 영역 */
 
 .home-scene{
  position:absolute;
@@ -71,7 +72,7 @@ button:disabled{
  z-index:1;
 }
 
-/* 개별 그래픽 */
+/* 개별 홈 그래픽 */
 
 .motif{
  position:absolute;
@@ -80,18 +81,28 @@ button:disabled{
  width:var(--w);
  height:auto;
  display:block;
+
  translate:-50% -50%;
+
  transform:rotate(var(--angle,0deg));
  transform-origin:50% 50%;
- transition:transform .16s cubic-bezier(.18,.85,.3,1);
+
+ transition:
+  transform .16s cubic-bezier(.18,.85,.3,1);
+
  pointer-events:none;
  user-select:none;
  -webkit-user-drag:none;
 }
 
 /* ===================================
-   HOME TITLE
+   HOME TITLE IMAGE
 =================================== */
+
+/*
+ 텍스트 타이틀 대신
+ Hometitle.png 사용
+*/
 
 .home-menu{
  position:absolute;
@@ -99,24 +110,36 @@ button:disabled{
  left:50%;
  bottom:5.5%;
  transform:translateX(-50%);
+
  width:min(92%,520px);
+
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+
  text-align:center;
  background:transparent;
 }
 
-.home-menu h1{
- margin:0 0 9px;
- font-size:clamp(30px,3.1vw,46px);
- line-height:1.2;
- font-weight:600;
- letter-spacing:-1.8px;
+/* 타이틀 PNG */
+
+.home-title-image{
+ display:block;
+
+ width:100%;
+ max-width:440px;
+ height:auto;
+
+ object-fit:contain;
+
+ margin:0 auto 22px;
+
+ user-select:none;
+ -webkit-user-drag:none;
 }
 
-.home-menu p{
- margin:0 0 21px;
- font-size:13px;
- color:#777;
-}
+/* 버튼 그룹 */
 
 .home-actions{
  display:flex;
@@ -125,47 +148,59 @@ button:disabled{
  gap:13px;
 }
 
+/* 홈 버튼 */
+
 .home-button{
  min-width:148px;
  height:49px;
  padding:0 21px;
+
  border-radius:999px;
  border:1.7px solid var(--pink-line);
+
  font-size:13px;
  font-weight:600;
+
  transition:
- background .18s,
- transform .18s,
- color .18s;
+  background .18s,
+  transform .18s,
+  color .18s;
 }
 
 .home-button:hover{
  transform:translateY(-2px);
 }
 
+/* How to Play */
+
 .home-button.outline{
  background:rgba(241,91,126,.035);
  color:var(--pink-line);
 }
 
+/* Start Game */
+
 .home-button.filled{
  background:var(--pink);
  border-color:var(--pink);
- color:white;
+ color:#fff;
 }
 
 /* ===================================
-   GAME
+   GAME SCREEN
 =================================== */
 
 #game{
  display:flex;
  flex-direction:column;
+
  height:100dvh;
  min-height:480px;
  max-width:1300px;
+
  margin:auto;
  padding:12px 22px 18px;
+
  background:#fff;
 }
 
@@ -180,8 +215,10 @@ button:disabled{
 .icon-button{
  width:44px;
  height:44px;
+
  border:0;
  background:transparent;
+
  color:#222;
  font-size:24px;
 }
@@ -210,11 +247,16 @@ button:disabled{
  margin:0;
 }
 
+/* 게임 정보 */
+
 .stats{
  flex:none;
+
  display:flex;
  justify-content:center;
+
  gap:clamp(15px,4vw,50px);
+
  text-align:center;
  margin:6px 0 12px;
 }
@@ -232,51 +274,71 @@ button:disabled{
  font-variant-numeric:tabular-nums;
 }
 
+/* 게임판 영역 */
+
 .game-area{
  flex:1;
  min-height:0;
+
  display:flex;
  align-items:center;
  justify-content:center;
+
  padding:8px 0;
 }
 
 .board{
  position:relative;
  display:grid;
+
  grid-template-columns:
- repeat(var(--cols),var(--tile-width));
+  repeat(var(--cols),var(--tile-width));
+
  gap:var(--gap);
+
  width:max-content;
  max-width:100%;
  margin:auto;
 }
 
+/* 개별 게임 타일 */
+
 .tile{
  position:relative;
  display:block;
+
  padding:0;
  border:0;
  background:transparent;
+
  width:var(--tile-width);
  aspect-ratio:var(--ratio);
+
  transition:transform .15s;
 }
 
 .tile img{
  display:block;
+
  width:100%;
  height:100%;
+
  object-fit:contain;
+
  user-select:none;
  pointer-events:none;
 }
 
+/* 선택 상태 */
+
 .tile.selected{
  outline:2px solid var(--pink);
  outline-offset:3px;
+
  transform:scale(.94);
 }
+
+/* 힌트 상태 */
 
 .tile.hint{
  outline:2px solid #edbf4d;
@@ -287,15 +349,22 @@ button:disabled{
  visibility:hidden;
 }
 
+/* 연결선 */
+
 .route{
  position:absolute;
  inset:0;
+
  width:100%;
  height:100%;
+
  overflow:visible;
  pointer-events:none;
+
  z-index:5;
 }
+
+/* 게임 하단 */
 
 .game-footer{
  flex:none;
@@ -304,8 +373,10 @@ button:disabled{
 
 #message{
  min-height:20px;
+
  color:#888;
  font-size:12px;
+
  margin:7px 0 13px;
 }
 
@@ -319,9 +390,12 @@ button:disabled{
 .tool{
  border:1px solid #ddd;
  border-radius:24px;
+
  padding:9px 14px;
+
  background:#fff;
  color:#222;
+
  font-size:12px;
 }
 
@@ -339,20 +413,26 @@ button:disabled{
  position:fixed;
  inset:0;
  z-index:100;
+
  display:flex;
  align-items:center;
  justify-content:center;
+
  background:rgba(234,232,233,.94);
  backdrop-filter:blur(9px);
+
  padding:20px;
 }
 
 .dialog{
  width:min(100%,440px);
- background:white;
+
+ background:#fff;
  border-radius:18px;
+
  padding:37px 28px;
  text-align:center;
+
  box-shadow:0 12px 60px #00000010;
 }
 
@@ -401,17 +481,17 @@ button:disabled{
   width:94%;
  }
 
- .home-menu h1{
-  font-size:31px;
- }
-
- .home-menu p{
-  font-size:11px;
+ .home-title-image{
+  width:100%;
+  max-width:320px;
+  height:auto;
+  margin-bottom:18px;
  }
 
  .home-button{
   min-width:125px;
   height:45px;
+
   padding:0 15px;
   font-size:12px;
  }
@@ -439,6 +519,7 @@ button:disabled{
 }
 
 @media(prefers-reduced-motion:reduce){
+
  .motif,
  .tile,
  .home-button{
@@ -464,11 +545,17 @@ button:disabled{
 
  <div class="home-menu">
 
-  <h1>Pattern Connect</h1>
+  <!-- 직접 디자인한 타이틀 PNG -->
 
-  <p>
-   Find the same patterns. Connect the moments.
-  </p>
+  <img
+   src="images/Hometitle.png"
+   alt="Pattern Connect"
+   class="home-title-image"
+   id="homeTitleImage"
+   draggable="false"
+  >
+
+  <!-- 홈 버튼 -->
 
   <div class="home-actions">
 
@@ -614,7 +701,9 @@ button:disabled{
     Sound On
    </button>
 
-   <button class="tool primary" id="restartBtn">
+   <button
+    class="tool primary"
+    id="restartBtn">
     Restart
    </button>
 
@@ -633,7 +722,8 @@ button:disabled{
  id="overlay"
  hidden>
 
- <div class="dialog"
+ <div
+  class="dialog"
   role="dialog"
   aria-modal="true"
   aria-labelledby="dialogTitle">
@@ -677,17 +767,15 @@ const $=id=>document.getElementById(id);
 
    좌표 기준 : 848 × 490
 
-   기존 패턴의 상대적인 위치 유지.
-   전체 너비에 분산되도록 변환.
+   기존 패턴 배치 및
+   좌우 확장 레이아웃 유지
 ===================================== */
 
 const BASE_WIDTH=848;
 const BASE_HEIGHT=490;
 
 /*
-  [이미지 번호, X, Y]
-
-  가운데 원래 배치 + 좌우 확장.
+ [이미지 번호, X, Y]
 */
 
 const HOME_LAYOUT=[
@@ -701,7 +789,7 @@ const HOME_LAYOUT=[
  [8,145,37],
  [11,168,57],
 
- /* 기존 상단 그래픽 */
+ /* 상단 중앙 */
 
  [4,205,28],
  [5,244,28],
@@ -713,7 +801,7 @@ const HOME_LAYOUT=[
  [10,415,28],
  [11,450,28],
 
- /* 오른쪽 상단 확장 */
+ /* 오른쪽 상단 */
 
  [8,506,32],
  [12,543,60],
@@ -732,7 +820,7 @@ const HOME_LAYOUT=[
  [6,165,187],
  [3,204,117],
 
- /* 기존 중상단 */
+ /* 중앙 상단 */
 
  [2,233,91],
  [3,256,91],
@@ -747,7 +835,7 @@ const HOME_LAYOUT=[
  [6,650,90],
  [11,811,78],
 
- /* 중상단 추가 */
+ /* 중상단 장식 */
 
  [8,85,110],
  [12,145,105],
@@ -755,7 +843,7 @@ const HOME_LAYOUT=[
  [8,560,48],
  [12,704,124],
 
- /* 기존 두 번째 그룹 */
+ /* 중앙 두 번째 그룹 */
 
  [1,70,166],
  [13,286,146],
@@ -770,7 +858,7 @@ const HOME_LAYOUT=[
  [10,720,170],
  [15,775,168],
 
- /* 왼쪽 중간 보강 */
+ /* 왼쪽 중간 */
 
  [14,44,270],
  [8,98,256],
@@ -779,7 +867,7 @@ const HOME_LAYOUT=[
  [6,221,311],
  [8,254,265],
 
- /* 기존 중앙 */
+ /* 중앙 */
 
  [8,337,248],
  [14,478,248],
@@ -792,7 +880,7 @@ const HOME_LAYOUT=[
  [8,595,294],
  [8,595,306],
 
- /* 오른쪽 중간 보강 */
+ /* 오른쪽 중간 */
 
  [8,802,270],
  [3,726,305],
@@ -809,7 +897,7 @@ const HOME_LAYOUT=[
  [8,207,445],
  [11,250,383],
 
- /* 기존 하단 중앙 */
+ /* 중앙 하단 */
 
  [1,479,319],
  [12,535,318],
@@ -822,7 +910,7 @@ const HOME_LAYOUT=[
  [9,595,368],
  [7,656,366],
 
- /* 하단 좌우 추가 */
+ /* 하단 좌우 */
 
  [3,75,465],
  [8,154,471],
@@ -834,7 +922,7 @@ const HOME_LAYOUT=[
  [3,810,458],
  [12,729,462],
 
- /* 기존 하단 */
+ /* 오른쪽 하단 */
 
  [10,595,406],
  [11,596,438],
@@ -844,7 +932,9 @@ const HOME_LAYOUT=[
 
 ];
 
-/* 이미지 번호별 상대 크기 */
+/* =====================================
+   HOME GRAPHIC SIZE
+===================================== */
 
 const HOME_WIDTH={
  1:74,
@@ -864,15 +954,6 @@ const HOME_WIDTH={
  15:68
 };
 
-/*
- 개별 이미지 크기 비율.
-
- 위치는 전체 화면으로 확장하고
- 크기는 별도로 제어한다.
-
- 숫자가 작을수록 이미지 작아짐.
-*/
-
 const MOTIF_SIZE_FACTOR=0.58;
 
 const homeNodes=[];
@@ -881,7 +962,7 @@ const motionTimers=new Set();
 let motionRunning=false;
 
 /* =====================================
-   HOME IMAGE CREATION
+   HOME IMAGE PATH
 ===================================== */
 
 function homeImagePath(number){
@@ -891,10 +972,14 @@ function homeImagePath(number){
   ".png";
 }
 
+/* =====================================
+   CREATE HOME GRAPHICS
+===================================== */
+
 function buildHome(){
 
  const root=$("homeScene");
- const frag=document.createDocumentFragment();
+ const fragment=document.createDocumentFragment();
 
  HOME_LAYOUT.forEach(([number,x,y],i)=>{
 
@@ -907,21 +992,19 @@ function buildHome(){
 
   image.src=homeImagePath(number);
 
-  /*
-   PNG 로딩 실패 시:
-   깨진 이미지 아이콘을 노출하지 않고 숨김.
-   다른 패턴으로 임의 대체하지 않음.
-  */
+  /* 이미지 로딩 오류 시 숨김 */
 
   image.onerror=()=>{
+
    image.style.display="none";
+
    console.warn(
     "홈 이미지 로딩 실패:",
     image.src
    );
   };
 
-  /* X / Y는 화면 전체 비율 기준 */
+  /* 위치 */
 
   image.style.setProperty(
    "--x",
@@ -933,10 +1016,7 @@ function buildHome(){
    (y/BASE_HEIGHT*100)+"%"
   );
 
-  /*
-   그래픽 너비는 화면 전체 확대와
-   무관하게 제한된 범위로 계산
-  */
+  /* 크기 */
 
   const relativeWidth=
    HOME_WIDTH[number]*
@@ -956,12 +1036,12 @@ function buildHome(){
   image.style.zIndex=String(i%8);
   image.dataset.rotation="0";
 
-  frag.appendChild(image);
+  fragment.appendChild(image);
   homeNodes.push(image);
 
  });
 
- root.replaceChildren(frag);
+ root.replaceChildren(fragment);
 }
 
 /* =====================================
@@ -1035,18 +1115,68 @@ function startHomeMotion(){
 }
 
 /* =====================================
-   GAME STATE
+   HOME TITLE IMAGE CHECK
+===================================== */
+
+const homeTitleImage=$("homeTitleImage");
+
+homeTitleImage.onerror=()=>{
+
+ /*
+  PNG 파일을 못 찾으면
+  깨진 이미지 아이콘 대신
+  기존 텍스트 타이틀 표시
+ */
+
+ homeTitleImage.style.display="none";
+
+ const fallback=document.createElement("h1");
+
+ fallback.textContent="Pattern Connect";
+
+ fallback.style.margin="0 0 22px";
+ fallback.style.fontSize="42px";
+ fallback.style.fontWeight="600";
+ fallback.style.letterSpacing="-1.8px";
+
+ homeTitleImage.parentElement.insertBefore(
+  fallback,
+  homeTitleImage
+ );
+
+ console.warn(
+  "Hometitle.png 파일을 찾지 못했습니다."
+ );
+};
+
+/* =====================================
+   GAME SETTINGS
 ===================================== */
 
 const LEVELS={
- easy:{rows:4,cols:6,time:360},
- normal:{rows:5,cols:8,time:300},
- hard:{rows:6,cols:10,time:240}
+ easy:{
+  rows:4,
+  cols:6,
+  time:360
+ },
+
+ normal:{
+  rows:5,
+  cols:8,
+  time:300
+ },
+
+ hard:{
+  rows:6,
+  cols:10,
+  time:240
+ }
 };
 
 let stage=1;
 let rows=0;
 let cols=0;
+
 let board=[];
 
 let score=0;
@@ -1068,12 +1198,20 @@ let audioContext=null;
 
 let tileRatio=184/223;
 
+/* =====================================
+   GAME IMAGE PATH
+===================================== */
+
 function imagePath(number){
 
  return "images/tile"+
   String(number).padStart(2,"0")+
   ".jpg";
 }
+
+/* =====================================
+   STAGE IMAGE GROUP
+===================================== */
 
 function groupForStage(number){
 
@@ -1082,6 +1220,10 @@ function groupForStage(number){
   (_,i)=>i+(number%2?1:10)
  );
 }
+
+/* =====================================
+   UTILITIES
+===================================== */
 
 function formatTime(value){
 
@@ -1235,8 +1377,6 @@ function playSound(type){
 
 /* =====================================
    PATH FINDING
-
-   최대 두 번 방향 전환
 ===================================== */
 
 function findPath(a,b){
@@ -1354,6 +1494,10 @@ function findPath(a,b){
  return null;
 }
 
+/* =====================================
+   FIND AVAILABLE PAIR
+===================================== */
+
 function findPair(){
 
  for(let a=0;a<board.length;a++){
@@ -1390,14 +1534,6 @@ function generateBoard(group,positions=null,ids=null){
    {length:occupied.length/2},
    (_,i)=>group[i%group.length]
   );
-
- /*
-  빈 게임판에 연결 가능한 두 칸을
-  차례로 채우는 방식.
-
-  나중에 배치한 쌍부터 제거하면
-  경로를 확보할 수 있다.
- */
 
  for(let attempt=0;attempt<80;attempt++){
 
@@ -1453,11 +1589,6 @@ function buildBoard(){
  const group=groupForStage(stage);
 
  if(generateBoard(group))return;
-
- /*
-  예비 게임판:
-  가로로 인접한 패를 같은 이미지로 배치
- */
 
  board=Array(rows*cols).fill(null);
 
@@ -1659,10 +1790,6 @@ function render(){
 
    img.onerror=()=>{
     img.style.visibility="hidden";
-    console.warn(
-     "게임 패 이미지 로딩 실패:",
-     img.src
-    );
    };
 
    button.append(img);
