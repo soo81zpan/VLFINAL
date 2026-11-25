@@ -8,14 +8,14 @@
 
 <style>
 /* ===================================
-   CUSTOM FONT
+   사용자 지정 폰트
 =================================== */
 
 @font-face{
   font-family:"ARCHISCULPTURE";
   src:url("fonts/ARCHISCULPTURE_v375.ttf") format("truetype");
   font-style:normal;
-  font-weight:100 900;
+  font-weight:400;
   font-display:swap;
 }
 
@@ -70,7 +70,7 @@ button:disabled{
 }
 
 /* ===================================
-   HOME
+   홈 화면
 =================================== */
 
 #home{
@@ -95,7 +95,7 @@ button:disabled{
 }
 
 /* ===================================
-   HOME GRAPHIC MOTION
+   홈 그래픽 및 호버 모션
 =================================== */
 
 .motif-wrap{
@@ -146,6 +146,7 @@ button:disabled{
 }
 
 @media(hover:hover) and (pointer:fine){
+
   .home-scene.is-hovering
   .motif-wrap:not(.is-active){
     opacity:.25;
@@ -159,7 +160,7 @@ button:disabled{
 }
 
 /* ===================================
-   HOME TITLE
+   홈 타이틀과 버튼
 =================================== */
 
 .home-menu{
@@ -175,7 +176,6 @@ button:disabled{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-
   text-align:center;
 }
 
@@ -192,21 +192,22 @@ button:disabled{
 
 .home-actions{
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   gap:13px;
 }
 
 .home-button{
-  min-width:148px;
-  height:49px;
-  padding:0 21px;
+  min-width:160px;
+  height:54px;
+  padding:0 22px;
 
   border-radius:999px;
   border:1.7px solid var(--pink-line);
 
-  font-size:15px;
+  font-size:23px;
   font-weight:400;
+  white-space:nowrap;
 
   transition:
     background .18s,
@@ -230,7 +231,7 @@ button:disabled{
 }
 
 /* ===================================
-   DETAIL PAGE
+   상세 페이지
 =================================== */
 
 #detail{
@@ -238,6 +239,7 @@ button:disabled{
   width:100%;
   height:100dvh;
   min-height:100dvh;
+
   background:var(--detail-background);
   overflow:auto;
   isolation:isolate;
@@ -271,11 +273,11 @@ button:disabled{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:9px;
+  gap:10px;
 
-  min-width:112px;
-  height:43px;
-  padding:0 17px;
+  min-width:130px;
+  height:52px;
+  padding:0 20px;
 
   border:1px solid rgba(255,255,255,.5);
   border-radius:999px;
@@ -283,7 +285,7 @@ button:disabled{
   background:rgba(48,48,48,.8);
   color:#fff;
 
-  font-size:15px;
+  font-size:23px;
   font-weight:400;
 
   backdrop-filter:blur(8px);
@@ -301,31 +303,34 @@ button:disabled{
 }
 
 .detail-back-arrow{
-  font-size:19px;
+  font-size:24px;
   line-height:1;
 }
 
 .detail-error{
   padding:30px;
   text-align:center;
-  color:white;
-  font-size:16px;
+  color:#fff;
+  font-size:24px;
   line-height:1.9;
   white-space:pre-line;
 }
 
 /* ===================================
-   GAME SCREEN
+   게임 화면
 =================================== */
 
 #game{
   display:flex;
   flex-direction:column;
+
   height:100dvh;
   min-height:480px;
   max-width:1300px;
+
   margin:auto;
   padding:12px 22px 18px;
+
   background:#fff;
 }
 
@@ -334,20 +339,23 @@ button:disabled{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  height:47px;
+  height:52px;
 }
 
 .icon-button{
-  width:44px;
-  height:44px;
+  width:48px;
+  height:48px;
+
   border:0;
   background:transparent;
+
   color:#222;
-  font-size:24px;
+  font-size:28px;
 }
 
 .stage-label{
-  font-size:15px;
+  font-size:24px;
+  font-weight:400;
   letter-spacing:1px;
   color:#777;
 }
@@ -355,58 +363,79 @@ button:disabled{
 .game-heading{
   flex:none;
   text-align:center;
-  margin:2px 0 11px;
+  margin:2px 0 12px;
 }
 
 .game-heading h2{
-  font-size:29px;
+  font-size:45px;
   font-weight:400;
+  line-height:1.25;
   margin:0 0 6px;
 }
 
 .game-heading p{
-  font-size:14px;
+  font-size:23px;
+  line-height:1.25;
   color:#999;
   margin:0;
 }
 
+/* ===================================
+   점수 및 시간
+=================================== */
+
 .stats{
   flex:none;
+
   display:flex;
   justify-content:center;
+
   gap:clamp(15px,4vw,50px);
+
   text-align:center;
-  margin:6px 0 12px;
+  margin:8px 0 12px;
 }
 
 .stat small{
   display:block;
-  font-size:13px;
+  font-size:21px;
+  line-height:1.2;
   color:#999;
-  margin-bottom:5px;
+  margin-bottom:7px;
 }
 
 .stat strong{
-  font-size:19px;
+  display:block;
+  font-size:30px;
+  line-height:1.15;
   font-weight:400;
   font-variant-numeric:tabular-nums;
 }
 
+/* ===================================
+   게임판
+=================================== */
+
 .game-area{
   flex:1;
   min-height:0;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   padding:8px 0;
 }
 
 .board{
   position:relative;
   display:grid;
+
   grid-template-columns:
     repeat(var(--cols),var(--tile-width));
+
   gap:var(--gap);
+
   width:max-content;
   max-width:100%;
   margin:auto;
@@ -415,11 +444,14 @@ button:disabled{
 .tile{
   position:relative;
   display:block;
+
   padding:0;
   border:0;
   background:transparent;
+
   width:var(--tile-width);
   aspect-ratio:var(--ratio);
+
   transition:transform .15s;
 }
 
@@ -427,7 +459,9 @@ button:disabled{
   display:block;
   width:100%;
   height:100%;
+
   object-fit:contain;
+
   user-select:none;
   pointer-events:none;
 }
@@ -450,12 +484,19 @@ button:disabled{
 .route{
   position:absolute;
   inset:0;
+
   width:100%;
   height:100%;
+
   overflow:visible;
   pointer-events:none;
+
   z-index:5;
 }
+
+/* ===================================
+   게임 하단
+=================================== */
 
 .game-footer{
   flex:none;
@@ -463,26 +504,35 @@ button:disabled{
 }
 
 #message{
-  min-height:22px;
+  min-height:30px;
   color:#888;
-  font-size:15px;
+  font-size:24px;
+  line-height:1.2;
   margin:7px 0 13px;
 }
 
 .tools{
   display:flex;
+  align-items:center;
   justify-content:center;
   flex-wrap:wrap;
   gap:7px;
 }
 
 .tool{
+  min-height:46px;
+
   border:1px solid #ddd;
   border-radius:24px;
-  padding:9px 14px;
+
+  padding:8px 17px;
+
   background:#fff;
   color:#222;
-  font-size:15px;
+
+  font-size:24px;
+  line-height:1.1;
+  white-space:nowrap;
 }
 
 .tool.primary{
@@ -492,7 +542,7 @@ button:disabled{
 }
 
 /* ===================================
-   MODAL
+   팝업
 =================================== */
 
 .overlay{
@@ -506,33 +556,38 @@ button:disabled{
 
   background:rgba(234,232,233,.94);
   backdrop-filter:blur(9px);
+
   padding:20px;
 }
 
 .dialog{
-  width:min(100%,440px);
+  width:min(100%,480px);
+
   background:#fff;
   border-radius:18px;
+
   padding:37px 28px;
   text-align:center;
+
   box-shadow:0 12px 60px #00000010;
 }
 
 .dialog-kicker{
-  font-size:14px;
+  font-size:22px;
   letter-spacing:1px;
   color:var(--pink);
 }
 
 .dialog h2{
-  font-size:29px;
+  font-size:42px;
   font-weight:400;
+  line-height:1.25;
   margin:15px 0 20px;
 }
 
 .dialog p{
-  font-size:16px;
-  line-height:1.9;
+  font-size:25px;
+  line-height:1.8;
   color:#666;
   white-space:pre-line;
 }
@@ -545,10 +600,11 @@ button:disabled{
 }
 
 /* ===================================
-   MOBILE
+   모바일
 =================================== */
 
 @media(max-width:700px){
+
   #home{
     min-height:520px;
   }
@@ -570,43 +626,95 @@ button:disabled{
 
   .home-button{
     min-width:125px;
-    height:45px;
+    height:47px;
     padding:0 15px;
-    font-size:14px;
+    font-size:19px;
   }
 
   .detail-back{
     top:16px;
     left:16px;
-    min-width:96px;
-    height:40px;
+
+    min-width:105px;
+    height:44px;
+
     padding:0 13px;
-    font-size:14px;
+    font-size:19px;
   }
 
   #game{
     padding:8px 7px 13px;
   }
 
+  .game-header{
+    height:44px;
+  }
+
+  .stage-label{
+    font-size:18px;
+  }
+
+  .game-heading{
+    margin-bottom:6px;
+  }
+
   .game-heading h2{
-    font-size:24px;
+    font-size:34px;
+  }
+
+  .game-heading p{
+    font-size:18px;
   }
 
   .stats{
-    gap:17px;
+    gap:15px;
+    margin:5px 0 8px;
+  }
+
+  .stat small{
+    font-size:16px;
+    margin-bottom:3px;
   }
 
   .stat strong{
-    font-size:16px;
+    font-size:23px;
+  }
+
+  #message{
+    font-size:19px;
+    min-height:24px;
+    margin:5px 0 9px;
   }
 
   .tool{
-    padding:8px 10px;
-    font-size:13px;
+    min-height:39px;
+    padding:7px 10px;
+    font-size:18px;
+  }
+
+  .dialog{
+    padding:28px 18px;
+  }
+
+  .dialog-kicker{
+    font-size:18px;
+  }
+
+  .dialog h2{
+    font-size:33px;
+  }
+
+  .dialog p{
+    font-size:20px;
   }
 }
 
+/* ===================================
+   애니메이션 최소화 설정
+=================================== */
+
 @media(prefers-reduced-motion:reduce){
+
   .motif,
   .motif-wrap,
   .tile,
@@ -624,9 +732,12 @@ button:disabled{
 
 <body>
 
-<!-- HOME -->
+<!-- ===================================
+   홈 화면
+=================================== -->
 
 <section id="home">
+
   <div
     class="home-scene"
     id="homeScene"
@@ -634,6 +745,7 @@ button:disabled{
   </div>
 
   <div class="home-menu">
+
     <img
       src="images/Hometitle.png"
       alt="패턴 연결"
@@ -642,6 +754,7 @@ button:disabled{
       draggable="false">
 
     <div class="home-actions">
+
       <button
         class="home-button outline"
         id="howBtn">
@@ -653,11 +766,14 @@ button:disabled{
         id="startBtn">
         게임 시작
       </button>
+
     </div>
   </div>
 </section>
 
-<!-- DETAIL -->
+<!-- ===================================
+   상세 페이지
+=================================== -->
 
 <section
   id="detail"
@@ -668,9 +784,11 @@ button:disabled{
     class="detail-back"
     id="detailBackBtn"
     aria-label="홈으로 돌아가기">
+
     <span
       class="detail-back-arrow"
       aria-hidden="true">←</span>
+
     <span>홈으로</span>
   </button>
 
@@ -688,11 +806,14 @@ button:disabled{
   </div>
 </section>
 
-<!-- GAME -->
+<!-- ===================================
+   게임 화면
+=================================== -->
 
 <section id="game" hidden>
 
   <header class="game-header">
+
     <button
       class="icon-button"
       id="homeBtn"
@@ -714,39 +835,48 @@ button:disabled{
   </div>
 
   <div class="stats">
+
     <div class="stat">
       <small>점수</small>
       <strong id="score">0</strong>
     </div>
+
     <div class="stat">
       <small>남은 시간</small>
       <strong id="time">05:00</strong>
     </div>
+
     <div class="stat">
       <small>남은 패</small>
       <strong id="remaining">40</strong>
     </div>
+
     <div class="stat">
       <small>최고 점수</small>
       <strong id="bestScore">—</strong>
     </div>
+
   </div>
 
   <div
     class="game-area"
     id="gameArea">
+
     <div
       class="board"
       id="board">
+
       <svg
         id="route"
         class="route"
         aria-hidden="true">
       </svg>
+
     </div>
   </div>
 
   <div class="game-footer">
+
     <p
       id="message"
       role="status">
@@ -754,37 +884,51 @@ button:disabled{
     </p>
 
     <div class="tools">
+
       <select
         class="tool"
         id="difficulty"
         aria-label="난이도 선택">
+
         <option value="easy">쉬움</option>
         <option value="normal" selected>보통</option>
         <option value="hard">어려움</option>
+
       </select>
 
-      <button class="tool" id="hintBtn">
-        힌트
-      </button>
-      <button class="tool" id="shuffleBtn">
-        패 섞기
-      </button>
-      <button class="tool" id="pauseBtn">
-        일시정지
-      </button>
-      <button class="tool" id="soundBtn">
-        소리 켜짐
-      </button>
-      <button class="tool primary" id="restartBtn">
-        다시 시작
-      </button>
+      <button
+        class="tool"
+        id="hintBtn">힌트</button>
+
+      <button
+        class="tool"
+        id="shuffleBtn">패 섞기</button>
+
+      <button
+        class="tool"
+        id="pauseBtn">일시정지</button>
+
+      <button
+        class="tool"
+        id="soundBtn">소리 켜짐</button>
+
+      <button
+        class="tool primary"
+        id="restartBtn">다시 시작</button>
+
     </div>
   </div>
 </section>
 
-<!-- MODAL -->
+<!-- ===================================
+   팝업
+=================================== -->
 
-<div class="overlay" id="overlay" hidden>
+<div
+  class="overlay"
+  id="overlay"
+  hidden>
+
   <div
     class="dialog"
     role="dialog"
@@ -793,22 +937,26 @@ button:disabled{
 
     <div
       class="dialog-kicker"
-      id="dialogEyebrow"></div>
+      id="dialogEyebrow">
+    </div>
 
     <h2 id="dialogTitle"></h2>
     <p id="dialogText"></p>
 
     <div class="modal-actions">
+
       <button
         class="home-button outline"
         id="dialogSecondary">
         닫기
       </button>
+
       <button
         class="home-button filled"
         id="dialogPrimary">
         확인
       </button>
+
     </div>
   </div>
 </div>
@@ -819,7 +967,7 @@ button:disabled{
 const $=id=>document.getElementById(id);
 
 /* =====================================
-   HOME GRAPHIC LAYOUT
+   홈 그래픽 배치
 ===================================== */
 
 const BASE_WIDTH=848;
@@ -896,6 +1044,7 @@ const MOTIF_SIZE_FACTOR=.58;
 
 const homeNodes=[];
 const motionTimers=new Set();
+
 let motionRunning=false;
 
 function homeImagePath(number){
@@ -913,7 +1062,7 @@ function clearHomeHover(){
 }
 
 /* =====================================
-   DETAIL PAGE
+   상세 페이지
 ===================================== */
 
 const DETAIL_PAGES={
@@ -974,7 +1123,7 @@ $("detailImage").addEventListener("error",()=>{
 });
 
 /* =====================================
-   BUILD HOME GRAPHICS
+   홈 그래픽 생성
 ===================================== */
 
 function buildHome(){
@@ -990,6 +1139,7 @@ function buildHome(){
     wrapper.style.setProperty(
       "--x",(x/BASE_WIDTH*100)+"%"
     );
+
     wrapper.style.setProperty(
       "--y",(y/BASE_HEIGHT*100)+"%"
     );
@@ -1004,6 +1154,7 @@ function buildHome(){
       "--w",
       `clamp(10px, ${widthVW}vw, ${maxWidth}px)`
     );
+
     wrapper.style.setProperty("--z",String(i%8));
 
     const image=document.createElement("img");
@@ -1039,6 +1190,7 @@ function buildHome(){
     if(DETAIL_PAGES[number]){
       wrapper.setAttribute("role","button");
       wrapper.setAttribute("tabindex","0");
+
       wrapper.setAttribute(
         "aria-label",
         "패턴 "+number+"번 상세 설명 보기"
@@ -1058,15 +1210,17 @@ function buildHome(){
 
     wrapper.appendChild(image);
     fragment.appendChild(wrapper);
+
     homeNodes.push(image);
   });
 
   root.replaceChildren(fragment);
+
   root.addEventListener("pointerleave",clearHomeHover);
 }
 
 /* =====================================
-   RANDOM ROTATION
+   홈 그래픽 회전
 ===================================== */
 
 function stopHomeMotion(){
@@ -1123,24 +1277,26 @@ function startHomeMotion(){
 }
 
 /* =====================================
-   HOME TITLE FALLBACK
+   홈 타이틀 예비 표시
 ===================================== */
 
 $("homeTitleImage").onerror=()=>{
   const image=$("homeTitleImage");
+
   image.style.display="none";
 
   const fallback=document.createElement("h1");
+
   fallback.textContent="패턴 연결";
   fallback.style.margin="0 0 22px";
-  fallback.style.fontSize="32px";
+  fallback.style.fontSize="45px";
   fallback.style.fontWeight="400";
 
   image.parentElement.insertBefore(fallback,image);
 };
 
 /* =====================================
-   GAME SETTINGS
+   게임 설정
 ===================================== */
 
 const LEVELS={
@@ -1211,7 +1367,7 @@ function message(text){
 }
 
 /* =====================================
-   SCREEN TRANSITION
+   화면 전환
 ===================================== */
 
 function openHome(){
@@ -1247,7 +1403,7 @@ function openGame(){
 }
 
 /* =====================================
-   SOUND
+   효과음
 ===================================== */
 
 function playSound(type){
@@ -1301,7 +1457,7 @@ function playSound(type){
 }
 
 /* =====================================
-   PATH FINDING
+   연결 경로 계산
 ===================================== */
 
 function findPath(a,b){
@@ -1408,7 +1564,7 @@ function findPair(){
 }
 
 /* =====================================
-   BOARD GENERATION
+   게임판 생성
 ===================================== */
 
 function generateBoard(group,positions=null,ids=null){
@@ -1487,7 +1643,7 @@ function buildBoard(){
 }
 
 /* =====================================
-   RESPONSIVE BOARD
+   게임판 반응형 크기
 ===================================== */
 
 function fitBoard(){
@@ -1521,7 +1677,7 @@ function fitBoard(){
 window.addEventListener("resize",fitBoard);
 
 /* =====================================
-   CONNECTION ANIMATION
+   연결선 애니메이션
 ===================================== */
 
 function clearRoute(){
@@ -1593,7 +1749,7 @@ function drawRoute(path){
 }
 
 /* =====================================
-   RENDER GAME
+   게임 화면 갱신
 ===================================== */
 
 function render(){
@@ -1656,7 +1812,7 @@ function render(){
 }
 
 /* =====================================
-   TILE SELECTION
+   게임 타일 선택
 ===================================== */
 
 function pickTile(i){
@@ -1723,7 +1879,7 @@ function pickTile(i){
 }
 
 /* =====================================
-   SHUFFLE
+   패 섞기
 ===================================== */
 
 function shuffleTiles(automatic=false){
@@ -1780,7 +1936,7 @@ function shuffleTiles(automatic=false){
 }
 
 /* =====================================
-   HINT
+   힌트
 ===================================== */
 
 function showHint(){
@@ -1808,7 +1964,7 @@ function showHint(){
 }
 
 /* =====================================
-   RECORDS
+   기록 저장
 ===================================== */
 
 function recordKey(){
@@ -1858,7 +2014,7 @@ function saveRecord(){
 }
 
 /* =====================================
-   MODAL
+   팝업
 ===================================== */
 
 let primaryAction=null;
@@ -1903,7 +2059,7 @@ $("dialogSecondary").onclick=()=>{
 };
 
 /* =====================================
-   HOW TO PLAY
+   게임 방법
 ===================================== */
 
 $("howBtn").onclick=()=>{
@@ -1921,7 +2077,7 @@ $("howBtn").onclick=()=>{
 };
 
 /* =====================================
-   FINISH GAME
+   게임 종료
 ===================================== */
 
 function finishGame(won){
@@ -1967,7 +2123,7 @@ function finishGame(won){
 }
 
 /* =====================================
-   PAUSE
+   일시정지
 ===================================== */
 
 function pauseGame(){
@@ -2000,7 +2156,7 @@ function resumeGame(){
 }
 
 /* =====================================
-   NEW GAME
+   새 게임
 ===================================== */
 
 function newGame(){
@@ -2054,7 +2210,7 @@ function newGame(){
 }
 
 /* =====================================
-   BUTTON EVENTS
+   버튼 이벤트
 ===================================== */
 
 $("startBtn").onclick=openGame;
@@ -2111,7 +2267,7 @@ $("recordBtn").onclick=()=>{
 };
 
 /* =====================================
-   TILE IMAGE RATIO
+   타일 이미지 비율
 ===================================== */
 
 const sample=new Image();
@@ -2127,7 +2283,7 @@ sample.onload=()=>{
 sample.src=imagePath(1);
 
 /* =====================================
-   INITIALIZE
+   실행
 ===================================== */
 
 buildHome();
